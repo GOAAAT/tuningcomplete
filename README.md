@@ -2,6 +2,19 @@
 
 A Visual Programming Language and Interface written using the Web Audio API.
 
+## Development
+
+To setup your system for development:
+
+ *  Install [Node and npm](http://nodejs.org)
+    *(Mac users can use [Homebrew](http://brew.sh): `brew install node`)*
+ *  Install [Bower](http://bower.io) `npm -g install bower`
+ *  Install [Brunch](http://brunch.io) `npm -g install brunch`
+ *  Clone this repository
+ *  In the root directory of the repository, run the following commands:
+     -  `npm install` to install the Brunch plugins.
+     -  `bower install` to install the app's dependencies.
+
 ## License
 
 Copyright (C) 2014 GOAAAT
