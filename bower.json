@@ -1,9 +1,10 @@
 {
-    "name": "tuningcomplete",
-    "private": true,
-    "dependencies": {
-        "leapjs": "0.4.1",
-        "bootstrap": "*",
-        "jquery": "*"
-    }
+  "name": "tuningcomplete",
+  "private": true,
+  "dependencies": {
+    "leapjs": "0.4.1",
+    "bootstrap": "*",
+    "jquery": "*",
+    "paper": "*"
+  }
 }
