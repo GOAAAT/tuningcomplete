@@ -15,6 +15,12 @@ To setup your system for development:
      -  `npm install` to install the Brunch plugins.
      -  `bower install` to install the app's dependencies.
 
+To start the development server:
+
+ *  Use the command: `brunch watch --server`. This server will recompile your code once changes are made.
+ *  The website will be available at [http://localhost:3333/].
+ *  The test suite can be run by visiting [http://localhost:3333/tests.html]
+
 ## License
 
 Copyright (C) 2014 GOAAAT
