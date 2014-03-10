@@ -18,8 +18,8 @@ To setup your system for development:
 To start the development server:
 
  *  Use the command: `brunch watch --server`. This server will recompile your code once changes are made.
- *  The website will be available at [http://localhost:3333/].
- *  The test suite can be run by visiting [http://localhost:3333/tests.html]
+ *  The website will be available at [http://localhost:3333/](http://localhost:3333/).
+ *  The test suite can be run by visiting [http://localhost:3333/tests.html](http://localhost:3333/tests.html).
 
 ## License
 
