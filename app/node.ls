@@ -1,1 +1,11 @@
-module.exports = class Node
+export class Node
+  ->
+
+export class Input
+  ->
+
+  connect: (wire) ->
+
+
+export class Output
+  ->
