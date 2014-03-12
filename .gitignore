@@ -3,3 +3,7 @@
 bower_components
 node_modules
 public
+
+test/vendor/mocha.js
+test/vendor/chai.js
+test/styles/mocha.css

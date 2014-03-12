@@ -21,6 +21,20 @@ To start the development server:
  *  The website will be available at [http://localhost:3333/](http://localhost:3333/).
  *  The test suite can be run by visiting [http://localhost:3333/tests.html](http://localhost:3333/tests.html).
 
+### Note for Windows Users
+
+ *  The following files will not work on your computer, by default (the tests will break):
+     -  `test/vendor/mocha.js`, `test/vendor/chai.js`, `test/styles/mocha.css`
+
+ *  To fix this, remove those files, and perform the following commands:
+     -  Whilst in the `test/vendor` folder (In the terminal):
+         *  `ln -s ../../node_modules/mocha/mocha.js mocha.js`
+         *  `ln -s ../../node_modules/chai/chai.js chai.js`
+     -  Whilst in the `test/styles` folder (In the terminal):
+         *  `ln -s ../../node_modules/mocha/mocha.css mocha.css`
+     -  Finally run the following command (from the tuningcomplete folder in the terminal):
+         *  `git update-index --assume-unchanged test/vendor/mocha.js test/vendor/chai.js test/styles/moch.css`
+
 ## License
 
 Copyright (C) 2014 GOAAAT
