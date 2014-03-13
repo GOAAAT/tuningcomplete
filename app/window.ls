@@ -7,11 +7,8 @@ module.exports = class Window extends CursorResponder
     @ctx.setup(canvas)
 
   activate: -> @ctx.activate!
-
-  view: -> @ctx?project?active-layer
-
   add-subview: (sub, pos = 0) ->
-    @view!add-subview sub, pos
+    @ctx?project?active-layer?insert-child sub, pos
 
   /** CursorResponder methods */
 
