@@ -3,9 +3,11 @@ Window     = require \window
 
 module.exports = class App
     (canvas) ->
-      @cursor = new LeapCursor
       @window = new Window canvas
+      @cursor = new LeapCursor
 
       @cursor.set-delegate @window
 
     init: ->
+      @window.activate!
+      @cursor.activate!
