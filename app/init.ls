@@ -1,4 +1,4 @@
 App = require \app
 
 <- $
-new App $(\#window) .init!
+new App $(\#window).0 .init!
