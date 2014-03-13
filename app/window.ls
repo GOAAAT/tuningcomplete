@@ -2,6 +2,11 @@ CursorResponder = require \cursor_responder
 {Node,Input,Output} = require \node
 
 module.exports = class Window extends CursorResponder
+  /** Window
+   *  canvas : HTMLCanvasElement
+   *
+   * View class for the entire app and entry point for cursor events.
+   */
   (canvas) ->
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
