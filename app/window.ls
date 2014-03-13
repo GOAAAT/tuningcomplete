@@ -12,15 +12,15 @@ module.exports = class Window extends CursorResponder
    */
   activate: !-> @ctx.activate!
 
-  /** add-subview : paper.Item
-   *  sub : paper.Item,
+  /** insert-children : paper.Item
+   *  sub : [paper.Item],
    *  pos : Int
    *
-   * Add subview `sub` at position `pos`, returns the inserted item, or null
-   * on failure
+   * Add children `sub` at position `pos`, returns the inserted items, or null
+   * on failure.
    */
-  add-subview: (sub, pos = 0) ->
-    @ctx?project?active-layer?insert-child sub, pos
+  insert-children: (pos = 0, ...sub) ->
+    @ctx?project?active-layer?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -53,7 +53,7 @@ module.exports = class Window extends CursorResponder
 
     if item instanceof Output
       @active-wire = new Wire(item)
-      @active-wire?view! |> @add-subview
+      @active-wire?view! |> @insert-children
 
   /** pointer-moved : void
    *  pt : paper.Point
