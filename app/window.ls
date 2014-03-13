@@ -30,7 +30,7 @@ module.exports = class Window extends CursorResponder
    * Notify the item nearest to the point that it has been selected.
    */
   select-at: (pt) !->
-    @_find-item pt ?.item?selected!
+    @_find-item pt ?.item?fire 'doubleclick'
 
   /** scale-by : void
    *  sf : Float,
