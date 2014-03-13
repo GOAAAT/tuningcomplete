@@ -6,7 +6,7 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
-  activate: -> @ctx.activate!
+  activate: !-> @ctx.activate!
   add-subview: (sub, pos = 0) ->
     @ctx?project?active-layer?insert-child sub, pos
 
