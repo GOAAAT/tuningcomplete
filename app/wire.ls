@@ -3,4 +3,6 @@ module.exports = class Wire
 
   view: ->
 
-  set-end: (input) ->
+  set-begin: (pt) ->
+
+  set-end: (pt) ->
