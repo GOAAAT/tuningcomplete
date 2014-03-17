@@ -33,7 +33,7 @@ To start the development server:
      -  Whilst in the `test/styles` folder (In the terminal):
          *  `ln -s ../../node_modules/mocha/mocha.css mocha.css`
      -  Finally run the following command (from the tuningcomplete folder in the terminal):
-         *  `git update-index --assume-unchanged test/vendor/mocha.js test/vendor/chai.js test/styles/moch.css`
+         *  `git update-index --assume-unchanged test/vendor/mocha.js test/vendor/chai.js test/styles/mocha.css`
 
 ## License
 
