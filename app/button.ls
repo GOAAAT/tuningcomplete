@@ -12,12 +12,12 @@ module.exports = class Button
    * whether the state of the button sticks or not.
    * `enabled` determines whether the button is initially on or not.
    */
-  (
+  ({
     name, @tag
     @sticky  = false,
     @enabled = false
     size     = 20,
-  ) ->
+  }) ->
     @label = new paper.PointText do
       content:     name
       font-family: \Helvetica
@@ -31,10 +31,10 @@ module.exports = class Button
     @group = new paper.Group [ @bg, @label ]
 
     # Recenter the label
-    @label.position = [0 0]
+    @label.position = [0, -size/40]
 
     # Set the initial state
-    if enabled then @_highlight! else @_reset!
+    if @enabled then @_highlight! else @_reset!
 
     # Setup the callbacks
     @group.on \mousedown !~> @_highlight!
