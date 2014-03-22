@@ -1,17 +1,19 @@
 module.exports = class Button
   /** Button
    *  name : String
+   *  tag : Object
    *  sticky : Boolean
    *  enabled : Boolean
    *  size : Integer
    *
    * Creates a button with the label `name`, with font size `size`.
+   * `tag` is an object that is passed on to listeners to identify the button.
    * `sticky` determines whether the button is a toggle button or not, i.e.
    * whether the state of the button sticks or not.
    * `enabled` determines whether the button is initially on or not.
    */
   (
-    name,
+    name, @tag
     @sticky  = false,
     @enabled = false
     size     = 20,
@@ -52,7 +54,7 @@ module.exports = class Button
    * (`method`) when the button is triggered.
    */
   set-listener: (target, method) !->
-    @_on-click = target[method] _
+    @_on-click = target[method] @tag, _
 
   /** trigger : void
    *  state : Boolean
