@@ -46,7 +46,7 @@ module.exports = class App
             name:    name
             tag:     i
             sticky:  true
-            enabled: i == DEFAULT_BTN
+            enabled: i == BTN_DEFAULT
             width:   BTN_WIDTH
 
           btn.view!position = [BTN_OFF + (i + 1) * (BTN_WIDTH + BTN_PAD), BTN_Y]
