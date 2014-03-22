@@ -37,10 +37,10 @@ module.exports = class Button
     @label.position = [0 0]
 
     # Set the initial state
-    if @enabled then @_highlight! else @_reset!
+    if @enabled then @highlight! else @reset!
 
     # Setup the callbacks
-    @group.on \mousedown !~> @_highlight!
+    @group.on \mousedown !~> @highlight!
     @group.on \mouseup   !~> @trigger !@sticky || !@enabled
 
   /** view : paper.Group
@@ -64,25 +64,25 @@ module.exports = class Button
    *
    * Update the state of the button, and notify the listener as such.
    */
-  trigger: (state) !->
-    if @sticky and state then @_highlight!
-    else                      @_reset!
+  trigger: (state, notify = true) !->
+    if @sticky and state then @highlight!
+    else                      @reset!
 
-    @_on-click? state
+    @_on-click? state if notify
     @enabled = state
 
-  /** (private) _highlight : void
+  /** highlight : void
    *
-   * Highlight the button's view.
+   * Highlight the button's view as if it were clicked.
    */
-  _highlight: !->
+  highlight: !->
     @label.fill-color = \#4A8200
     @bg.fill-color    = \#111
 
-  /** (private) _reset : void
+  /** reset : void
    *
    * Reset the button's view, to its unclicked state.
    */
-  _reset: !->
+  reset: !->
     @label.fill-color = \white
     @bg.fill-color    = \black
