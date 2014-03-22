@@ -13,9 +13,10 @@ module.exports = class Button
    * `enabled` determines whether the button is initially on or not.
    */
   ({
-    name, @tag, width
-    @sticky  = false,
-    @enabled = false
+    name, @tag, width,
+    @hl-color = \#999,
+    @sticky   = false,
+    @enabled  = false
   }) ->
     @label = new paper.PointText do
       content:     name
@@ -53,11 +54,10 @@ module.exports = class Button
    *  target : Object
    *  method : String
    *
-   * Sets the object (`target`) and the function to call on the object
-   * (`method`) when the button is triggered.
+   * Sets the function (`method`) to call when the button is triggered.
    */
-  set-listener: (target, method) !->
-    @_on-click = target[method] @tag, _
+  set-listener: (method) !->
+    @_on-click = method @tag, _
 
   /** trigger : void
    *  state : Boolean
@@ -76,7 +76,7 @@ module.exports = class Button
    * Highlight the button's view as if it were clicked.
    */
   highlight: !->
-    @label.fill-color = \#4A8200
+    @label.fill-color = @hl-color
     @bg.fill-color    = \#111
 
   /** reset : void

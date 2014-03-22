@@ -28,29 +28,39 @@ module.exports = class App
 
       # Node Palette Button
       @add-node-btn = new Button do
-        name:   \+
-        tag:    0
-        sticky: true
-        width:  BTN_WIDTH
+        name:     \+
+        tag:      0
+        sticky:   true
+        width:    BTN_WIDTH
+        hl-color: \#75C5FF
 
       @add-node-btn.view!position = [BTN_OFF, BTN_Y]
-      @add-node-btn.set-listener @, \addNode
+      @add-node-btn.set-listener @~add-node
+
+      modes =
+        * name:  \DESIGN
+          color: \#FF8072
+        * name:  \SETUP
+          color: \#FEDB77
+        * name:  \PERFORM
+          color: \#ABC843
 
       # Mode Toggle Buttons
       @current-mode = 0
       @mode-btns =
-        <[ DESIGN SETUP PERFORM ]>
+        modes
         |> (ns) -> zip [0 til ns.length] ns
-        |> map ([i, name]) ~>
+        |> map ([i, {name, color}]) ~>
           btn = new Button do
-            name:    name
-            tag:     i
-            sticky:  true
-            enabled: i == BTN_DEFAULT
-            width:   BTN_WIDTH
+            name:     name
+            tag:      i
+            sticky:   true
+            enabled:  i == BTN_DEFAULT
+            width:    BTN_WIDTH
+            hl-color: color
 
           btn.view!position = [BTN_OFF + (i + 1) * (BTN_WIDTH + BTN_PAD), BTN_Y]
-          btn.set-listener @, \changeMode
+          btn.set-listener @~change-mode
           btn
 
       [@add-node-btn] ++ @mode-btns
