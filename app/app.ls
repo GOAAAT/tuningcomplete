@@ -54,8 +54,8 @@ module.exports = class App
           btn
 
       [@add-node-btn] ++ @mode-btns
-        |> map (.view)
-        |> @window.insert-children
+        |> map (.view!)
+        |> @window.insert-ui
 
     /** Button properties */
     const BTN_DEFAULT = 0
