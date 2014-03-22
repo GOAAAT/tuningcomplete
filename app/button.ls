@@ -2,27 +2,30 @@ module.exports = class Button
   /** Button
    *  name : String
    *  tag : Object
+   *  width : Integer
    *  sticky : Boolean
    *  enabled : Boolean
-   *  size : Integer
    *
-   * Creates a button with the label `name`, with font size `size`.
+   * Creates a button with the label `name`, with width `width`.
    * `tag` is an object that is passed on to listeners to identify the button.
    * `sticky` determines whether the button is a toggle button or not, i.e.
    * whether the state of the button sticks or not.
    * `enabled` determines whether the button is initially on or not.
    */
   ({
-    name, @tag
+    name, @tag, width
     @sticky  = false,
     @enabled = false
-    size     = 20,
   }) ->
     @label = new paper.PointText do
       content:     name
       font-family: \Helvetica
       font-weight: \bold
-      font-size:   size
+      leading:     20
+      font-size:   20
+
+    # Ensure label is the correct size
+    @label.scale (width - 20) / @label.bounds.width if width?
 
     @bg = new paper.Shape.Circle do
       center: [0 0]
@@ -31,7 +34,7 @@ module.exports = class Button
     @group = new paper.Group [ @bg, @label ]
 
     # Recenter the label
-    @label.position = [0, -size/40]
+    @label.position = [0 0]
 
     # Set the initial state
     if @enabled then @_highlight! else @_reset!
