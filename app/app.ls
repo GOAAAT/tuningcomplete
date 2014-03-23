@@ -63,7 +63,7 @@ module.exports = class App
           btn.set-listener @~change-mode
           btn
 
-      [@add-node-btn] ++ @mode-btns
+      [ @add-node-btn, ...@mode-btns ]
         |> map (.view!)
         |> @window.insert-ui
 
