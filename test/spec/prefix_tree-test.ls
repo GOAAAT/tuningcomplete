@@ -68,7 +68,7 @@ describe 'PrefixTree' !->
 
     describe '#next' !->
       specify 'it maintains alphabetic order' !->
-        expect( elems |> map (_) -> subject.next! ).to.eql elems
+        expect( elems |> map (_) -> subject.next!0 ).to.eql elems
 
     describe '#is-done' !->
       specify 'returns false' !->
