@@ -13,7 +13,7 @@ export class Node
   inputs = 0
   send-list = []
   @active-view = new Node_View
-
+  draw-node @
 
 export class Input
   ->
@@ -53,7 +53,7 @@ export class Input
       to x == inputs draw-inputs x, inputs
       inputs = inputs - 1
 
-      
+
   /**
   * For a new wire:
   * - Receiving node should open new input and redraw
@@ -122,4 +122,5 @@ export class Output
   * get-input-pos (ref,total) : Returns position of port 'ref' if there are 'total' input ports
   * get-output-pos: Returns location of output port
   * draw-inputs (ref,total): Inform the view that inputs has been changed and should change on screen
+  * draw-node (Node): Adjusts the view to show the new node drawn
   */
