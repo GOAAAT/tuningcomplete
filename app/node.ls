@@ -5,15 +5,19 @@ View = require \node_view
   *
   * Connect and disconnect should always
   * be called on the receiving node
+  *
+  * Location should always be set on initialising
+  * a node
   */
 
 export class Node
   ->
 
   inputs = 0
+  location
   send-list = []
   @active-view = new Node_View
-  draw-node @
+  draw-node (location)
 
 export class Input
   ->
