@@ -1,3 +1,4 @@
+
 VS = require \view_style
 
 /** Public Methods Summary 

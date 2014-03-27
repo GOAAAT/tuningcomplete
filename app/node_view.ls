@@ -1,3 +1,4 @@
+
 VS = require \view_style
 
 /**  Public Methods Summary
@@ -276,6 +277,3 @@ export class Node_View
     path = new Path.Circle pos (@nodeSize / @portRatio)  
     path.style = sty
     path
-    
-
-  
