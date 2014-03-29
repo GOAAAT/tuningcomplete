@@ -1,130 +1,165 @@
-View = require \node_view
-
   /**
   * REQUIREMENT
   *
   * Connect and disconnect should always
   * be called on the receiving node
   *
-  * Location should always be set on initialising
+  * Location and total-inputs should always be set on initialising
   * a node
   */
 
 export class Node
   ->
 
-  inputs = 0
-  location
-  send-list = []
-  @active-view = new Node_View
-  draw-node (location)
+    @total-inputs
+    @location
+
+    @active-inputs = 0
+    @send-list = []
+    @receiving-wires = []
+    for i from 1 to total-inputs 
+      @receiving-wires = [null] ++ @receiving-wires
+    @active-view = new Node_View
+    @active-view?draw-node location, total-inputs
+
+    /** redraw-node : void
+    * 
+    * Requests node_view draws the node again
+    * and instructs all Wires to ask to be redrawn
+    */
+    redraw-node: ->
+      @active-view?draw-node location, total-inputs
+      for wire in @receiving-wires
+       if wire ~= null then wire?redraw location
 
 export class Input
   ->
 
-  /**
-  *  Pass position request onto view
-  * Passes information about intended input and number
-  * of total inputs
-  * Returns location of input
-  */
-  get-input-pos: (ref) ->
-    @active-view?get-input-pos ref, inputs
-
+    /** get-input-pos : paper.Point
+    *  ref : int
+    *
+    * Requests the position of port 'ref' from node_view
+    */
+    get-input-pos: (ref) ->
+      @active-view?get-input-pos ref
   
-  /**
-  *  Upon a wire connect, inform this node that it
-  * may receive data. Wire should remember this and
-  * input view should be updated
-  */
-  register-input: (ref, wire) ->
-    inputs = inputs + 1
-    wire?set-input
-    @active-view?draw-inputs ref, inputs
-
+    /** register-input : void
+    *  ref : int
+    * wire : Wire
+    *
+    *  - Inform the wire object which port it should draw to
+    *  - Inform the view that this port is now busy
+    */
+    register-input: (wire) !->
+      @active-inputs += 1
+      i = 0
+      until @receiving-wires[i] is null
+        i++
+      else
+        throw new Error 'No free ports to connect to'
+      wire?set-port i
+      @receiving-wires[i] = wire
+      @active-view?busy-port i
   
-  /**
-  *  Upon a wire disconnect, confirm this is a valid
-  * input and redraw the view of it -
-  * (Note: Actual data stopping is dealt with in output node)
-  */
-  rem-input: (ref) ->
-    if (ref > inputs) then throw new Error 'Input out of range'
-    else
-      x = 1
-      until x == ref draw-inputs x, inputs
-      x = x+1
-      to x == inputs draw-inputs x, inputs
-      inputs = inputs - 1
+    /** rem-input : void
+    *  ref : int
+    *  
+    *  Redraw port as it's no longer attached to a wire
+    * (Note: Actual data stopping is dealt with in output node)r
+    */
+    rem-input: (ref) ->
+      if (ref > @total-inputs) then throw new Error 'Input out of range'
+      else
+        @receiving-wires[ref-1] = null
+        @active-inputs -= 1 
+        @active-view?clear-port ref
 
+    /** connect : void
+    * wire : Wire
 
-  /**
-  * For a new wire:
-  * - Receiving node should open new input and redraw
-  * - Outputting node should adjust it's send-to list
-  *
-  *  NOTE:
-  *  Currently nothing stopping multiple wires
-  * joining the same nodes - feel this should
-  * be prohibited
-  */
-  connect: (wire) ->
-    register-input inputs, wire
-    wire.output-node?send-to (this)
+    * For a new wire:
+    * - Receiving node should find new input
+    * - Outputting node should adjust it's send-list
+    *
+    *  NOTE:
+    *  Currently nothing stopping multiple wires
+    * joining the same nodes - this should
+    * be prohibited in final edition
+    */
+    connect: (wire) !->
+      if active-inputs = total-inputs then throw new Error 'Connection failed'
+      else
+       register-input wire
+       wire.output-node?register-output (this)
 
 
 export class Output
   ->
 
-  /**
-  *  Pass request onto View - no parameters required
-  * as there is always only 1 output node
-  */
-  get-output-pos: ->
-    @active-view?get-output-pos
+   /** get-output-pos : paper.Point
+   *
+   *  Requests position of output port from node_view
+   */
+   get-output-pos: ->
+     @active-view?get-output-pos
 
 
-  /**
-  *  Update the send list upon a connect to the fact we have
-  * a new node that should receive data from this
-  */
-  send-to: (node) ->
-    send-list = [node] ++ send-list
+   /** register-output : void
+   * node : Node
+   *
+   *  Add to the send-list the node 'node'
+   */
+   register-output: (node) !->
+     send-list = [node] ++ send-list
 
-  /**
-  *  Update the send list upon a disconnect to the fact the
-  * node the wire was joined to is no longer receiving data
-  */
-  rem-output: (node) ->
-    rec-rem-output node, send-list
+   /** rem-output : void
+   * node : Node
+   *
+   *  Update the send list after a disconnect
+   */
+   rem-output: (node) !->
+     rec-rem-output node, send-list
 
-  rec-rem-output: (k, [x, ...xs]:list) -> 
-    |  k == x   => xs
-    |  xs == [] => throw new Error 'Remove send node not possible'
-    | otherwise => [x] ++ rec-rem-output k, xs
-
-
-  /**
-  * For a removed wire:
-  * - Outputting node should adjust it's send-to list
-  * - Receiving node should shut inputs and redraw
-  * remaining inputs
-  */
-  disconnect: (wire) ->
-    wire.output-node?rem-output (this)
-    rem-input (wire.input-ref)
+   rec-rem-output: (k, [x, ...xs]:list) -> 
+     |  k == x   => xs
+     |  xs == [] => throw new Error 'Remove send node not possible'
+     | otherwise => [x] ++ rec-rem-output k, xs
 
 
-  /**
-  * To implement elsewhere:
-  * WIRE:
-  * output-node : Returns value of node the the wire begins at
-  * set-input (ref) : Gives the wire an input port to attach to
-  * input-ref : Returns reference of input on the input node (i.e. wire connects to port 3)
-  *
-  * NODE_VIEW
-  * get-input-pos (ref,total) : Returns position of port 'ref' if there are 'total' input ports
-  * get-output-pos: Returns location of output port
-  * draw-inputs (ref,total): Inform the view that inputs has been changed and should change on screen
-  * draw-node (Node): Adjusts the view to show the new node drawn
-  */
+   /** disconnect : void
+   * wire : Wire
+   *
+   * For a removed wire:
+   * - Outputting node should adjust its send-list
+   * - Receiving node should free input port
+   *
+   *  NOTE:
+   * The wire should have already been informed of its inpending doom,
+   * the node does not need to tell it of its demise.
+   */
+   disconnect: (wire) !->
+     rem-input (wire?get-port)
+     wire.output-node?rem-output (this)
+
+   /**
+   * To implement elsewhere:
+   * WIRE:
+   * output-node : Returns value of source node
+   * set-port ref : Informs the wire which port it is assigned to
+   *    - This allows the wire then to be drawn from source node to destination node at this port
+   * get-port : Returns the value of the port on which the wire is attached to
+   *
+   * NODE_VIEW
+   * VARIABLES - Keeps track of number of inputs (as constant after drawn once)
+   *    - This allows node_view to make design decisions without requesting values from the node class
+   *
+   * draw-node location, total : Adjusts the view to show the new node at point 'location' with 'total' input ports
+   *    - This is called on creation of a node and should have all inputs marked as free
+   * get-input-pos ref : Returns position of port 'ref' if there are 'total' input ports
+   * get-output-pos: Returns location of output port
+   * busy-port ref : Inform the view that inputs has been changed and should change on screen
+   *     - This is called when a wire connects to this node. A free input port is passed as reference and should
+   *       be subsequently marked as busy
+   * clear-port ref : Inform the view that this input is now not attached and should change on screen
+   *     - This is called when a wire is disconnected from this node. The input should become free.
+   */
