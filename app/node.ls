@@ -30,7 +30,7 @@ export class Node
     redraw-node: ->
       @active-view?draw-node location, total-inputs
       for wire in @receiving-wires
-       if wire ~= null then wire?redraw location
+       if wire ~= null then wire?redraw
 
 export class Input
   ->
@@ -148,6 +148,8 @@ export class Output
    * set-port ref : Informs the wire which port it is assigned to
    *    - This allows the wire then to be drawn from source node to destination node at this port
    * get-port : Returns the value of the port on which the wire is attached to
+   * redraw : Informs the wire that it should redraw its end-point (found by calling node.get-input-pos ref)
+   *    - This is called when a node is moved and the wires should move with it
    *
    * NODE_VIEW
    * VARIABLES - Keeps track of number of inputs (as constant after drawn once)
