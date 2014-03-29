@@ -1,4 +1,5 @@
 {map, zip, each} = prelude
+Color      = require \color
 LeapCursor = require \leap_cursor
 Window     = require \window
 Button     = require \button
@@ -26,24 +27,47 @@ module.exports = class App
       @window.activate!
       @cursor.activate!
 
+      # New Node List
+      @node-list = new FilterList!
+
+      # Test Data only
+      data  = new PrefixTree!
+      nodes =
+        * name: \OSCILLATOR
+          node: { desc: "Generates a continuous tone of a given pitch" }
+        * name: \MIXER
+          node: { desc: "Mix two sources together" }
+        * name: \GAIN
+          node: { desc: "Control the amplitude of a signal" }
+        * name: \SEQUENCER
+          node: { desc: "Control properties of signals over time" }
+
+      nodes |> each ({name, node}) !-> data.insert name, node
+
+      @node-list.set-data data
+      @node-list.set-listener @~new-node
+
+      @node-list.view!position = [NL_X, NL_Y]
+      @node-list.expand NL_WIDTH
+
       # Node Palette Button
       @add-node-btn = new Button do
         name:     \+
         tag:      0
         sticky:   true
         width:    BTN_WIDTH
-        hl-color: \#75C5FF
+        hl-color: Color.blue
 
       @add-node-btn.view!position = [BTN_OFF, BTN_Y]
       @add-node-btn.set-listener @~add-node
 
       modes =
         * name:  \DESIGN
-          color: \#FF8072
+          color: Color.red
         * name:  \SETUP
-          color: \#FEDB77
+          color: Color.yellow
         * name:  \PERFORM
-          color: \#ABC843
+          color: Color.green
 
       # Mode Toggle Buttons
       @current-mode = 0

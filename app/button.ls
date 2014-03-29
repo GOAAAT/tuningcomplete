@@ -1,3 +1,5 @@
+Color = require \color
+
 module.exports = class Button
   /** Button
    *  name : String
@@ -14,7 +16,7 @@ module.exports = class Button
    */
   ({
     name, @tag, width,
-    @hl-color = \#999,
+    @hl-color = Color.light-grey,
     @sticky   = false,
     @enabled  = false
   }) ->
@@ -77,12 +79,12 @@ module.exports = class Button
    */
   highlight: !->
     @label.fill-color = @hl-color
-    @bg.fill-color    = \#111
+    @bg.fill-color    = Color.dark-grey
 
   /** reset : void
    *
    * Reset the button's view, to its unclicked state.
    */
   reset: !->
-    @label.fill-color = \white
-    @bg.fill-color    = \black
+    @label.fill-color = Color.white
+    @bg.fill-color    = Color.black
