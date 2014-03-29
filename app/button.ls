@@ -24,7 +24,7 @@ module.exports = class Button
       content:     name
       font-family: \Helvetica
       font-weight: \bold
-      leading:     20
+      leading:     10
       font-size:   20
 
     # Ensure label is the correct size
