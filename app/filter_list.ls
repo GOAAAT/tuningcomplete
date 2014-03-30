@@ -106,8 +106,18 @@ class SimpleRow
 
     @sub-title.position = [0px 30px]
 
-    @group = new paper.Group do
+    @text = new paper.Group do
       children: [ @title, @sub-title ]
+
+    @hit-box = new paper.Shape.Rectangle do
+      fill-color: Color.black
+      opacity: 0
+
+    @group = new paper.Group do
+      children: [ @text, @hit-box ]
+
+    @hit-box.on 'mouseenter' @~highlight
+    @hit-box.on 'mouseleave' @~reset
 
   view: -> @group
 
@@ -118,3 +128,12 @@ class SimpleRow
 
     @title.pivot      = @title.bounds.center-left
     @title.position.x = @group.parent.bounds.left
+
+    @hit-box.position = @text.bounds.center
+    @hit-box.size     = @text.bounds.size
+
+  highlight: !->
+    @text.fill-color = Color.blue
+
+  reset: !->
+    @text.fill-color = Color.white
