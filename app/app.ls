@@ -3,6 +3,8 @@ Color      = require \color
 LeapCursor = require \leap_cursor
 Window     = require \window
 Button     = require \button
+PrefixTree = require \prefix_tree
+FilterList = require \filter_list
 
 module.exports = class App
     /** App
@@ -21,6 +23,7 @@ module.exports = class App
      *
      * Set @window's context as the default graphics context,
      * Set the @cursor as the default handler for cursor events.
+     * Setup the list of nodes that can be added to the current screen.
      * Create and lay out the buttons for the user interface.
      */
     init: !->
@@ -28,27 +31,28 @@ module.exports = class App
       @cursor.activate!
 
       # New Node List
-      @node-list = new FilterList!
+      @node-list = new FilterList @window.ctx
 
       # Test Data only
       data  = new PrefixTree!
       nodes =
-        * name: \OSCILLATOR
-          node: { desc: "Generates a continuous tone of a given pitch" }
-        * name: \MIXER
+        * name: \oscillator
+          node: { desc: "Generates a continuous tone" }
+        * name: \mixer
           node: { desc: "Mix two sources together" }
-        * name: \GAIN
+        * name: \gain
           node: { desc: "Control the amplitude of a signal" }
-        * name: \SEQUENCER
+        * name: \sequencer
           node: { desc: "Control properties of signals over time" }
 
       nodes |> each ({name, node}) !-> data.insert name, node
 
-      @node-list.set-data data
+      @node-list.set-visible false
       @node-list.set-listener @~new-node
-
       @node-list.view!position = [NL_X, NL_Y]
       @node-list.expand NL_WIDTH
+
+      @node-list.set-data data
 
       # Node Palette Button
       @add-node-btn = new Button do
@@ -91,12 +95,19 @@ module.exports = class App
         |> map (.view!)
         |> @window.insert-ui
 
+      @window.insert-ui [ @node-list.view! ]
+
     /** Button properties */
     const BTN_DEFAULT = 0
-    const BTN_WIDTH   = 80
-    const BTN_OFF     = 70
-    const BTN_PAD     = 20
-    const BTN_Y       = 70
+    const BTN_WIDTH   = 80px
+    const BTN_OFF     = 70px
+    const BTN_PAD     = 20px
+    const BTN_Y       = 70px
+
+    /** Node List Properties */
+    const NL_WIDTH    = BTN_WIDTH * 4 + BTN_PAD * 3
+    const NL_X        = BTN_OFF - BTN_WIDTH/2 + NL_WIDTH/2
+    const NL_Y        = BTN_Y + BTN_WIDTH + 50px
 
     /** Button Callbacks */
 
@@ -105,8 +116,8 @@ module.exports = class App
      * Callback for the Node Palette Button (@add-node-btn). Brings up the list
      * of nodes that can be accessed at this time.
      */
-    add-node: !->
-      console.log 'Add Node'
+    add-node: (_, state) !->
+      @node-list.set-visible state
 
     /** change-mode : void
      *  mode : Integer
@@ -121,3 +132,5 @@ module.exports = class App
 
       @mode-btns |> each (btn) !~>
         btn.trigger btn.tag == @current-mode, false
+
+    new-node: (_, [name, Node]) ->
