@@ -2,7 +2,7 @@ Wire = require \wire
 
 export class Wire_View
   
-  ->
+  (start = new Point 0 0, end = new Point 0 0) ->
     /* Set up constants:
      * 
      * lineColor : Color -- colour of the line
@@ -10,19 +10,27 @@ export class Wire_View
      */
      
     lineColor = '#000000';
+    startpos = start
+    endpos = end
     
   /* draw-wire (startpos : Paper.Point, endpos : Paper.Point) : void
    * 
-   *  wirePath : Path.Line -- The line for the wire
-   *  
-   *  Presumably this needs a canvas to draw on?
+   *  Return a group of the line to be drawn
    *
    */  
   
-  draw-wire: (startpos, endpos) ->
+  draw-wire: (start, end) ->
     
-    wirePath = new Path.Line startpos endpos
-    wirePath.strokeColor = 'black'
+    result = new Group
     
-    return new Group([wirePath])
+    startpos = start
+    endpos = end
+    
+    wirePath = new Path.Line start end
+    wirePath.strokeColor = lineColor
+    
+    result.addChild wirePath
+    
+    result
+  
   
