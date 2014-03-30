@@ -1,4 +1,4 @@
-Wire = require \wire
+Colour = require \color
 
 export class Wire_View
   
@@ -9,7 +9,9 @@ export class Wire_View
      *
      */
      
-    lineColor = '#000000';
+    lineColor = Colour.black
+    lineWidth = 5
+    
     startpos = start
     endpos = end
     
@@ -28,6 +30,7 @@ export class Wire_View
     
     wirePath = new Path.Line start end
     wirePath.strokeColor = lineColor
+    wirePath.strokeWidth = lineWidth
     
     result.addChild wirePath
     
