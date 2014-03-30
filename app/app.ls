@@ -130,7 +130,10 @@ module.exports = class App
     change-mode: (mode, state) !->
       @current-mode = if state then mode else BTN_DEFAULT
 
+      @add-node-btn.trigger false
       @mode-btns |> each (btn) !~>
         btn.trigger btn.tag == @current-mode, false
 
     new-node: (_, [name, Node]) ->
+      @add-node-btn.trigger false
+      console.log "New Node #name, #{Node.desc}"

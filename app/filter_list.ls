@@ -68,8 +68,12 @@ module.exports = class FilterList
         row.height * (@rows.length + 0.5) + PAD
       ]
 
+    row.set-listener @~_did-select-row-with-data
+
     @rows.push row
     @row-group.add-child row.view!
+
+  _did-select-row-with-data: (data) !-> @_on-select? data
 
 class RowFactory
   const MAX_POOL = 10
@@ -116,13 +120,17 @@ class SimpleRow
     @group = new paper.Group do
       children: [ @text, @hit-box ]
 
-    @hit-box.on 'mouseenter' @~highlight
-    @hit-box.on 'mouseleave' @~reset
+    @hit-box.on 'mouseenter' @~_on-mouse-enter
+    @hit-box.on 'mouseleave' @~_on-mouse-leave
+    @hit-box.on 'mousedown'  @~_on-mouse-down
+    @hit-box.on 'mouseup'    @~_on-mouse-up
 
   view: -> @group
 
+  set-listener: (@_on-select) !->
+
   build: ([name, {desc}:obj]) !->
-    @obj               = obj
+    @data              = [name, obj]
     @title.content     = name.to-upper-case!
     @sub-title.content = desc
 
@@ -132,8 +140,15 @@ class SimpleRow
     @hit-box.position = @text.bounds.center
     @hit-box.size     = @text.bounds.size
 
-  highlight: !->
+  _on-mouse-enter: !->
     @text.fill-color = Color.blue
 
-  reset: !->
+  _on-mouse-leave: !->
     @text.fill-color = Color.white
+
+  _on-mouse-down: !->
+    @text.fill-color = Color.green
+
+  _on-mouse-up: !->
+    @_on-mouse-leave!
+    @_on-select? @data
