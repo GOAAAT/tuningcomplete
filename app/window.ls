@@ -16,10 +16,13 @@ module.exports = class Window extends CursorResponder
     @wire-layer = @ctx.project.active-layer
     @view-layer = new @ctx.Layer!
     @ui-layer   = new @ctx.Layer!
-    
+    @cursor-layer = new @ctx.Layer!
+
     @moveable-layers = [@wire-layer, @view-layer]
 
     @view-layer.activate!
+
+
 
   /** activate : void
    *
@@ -43,6 +46,10 @@ module.exports = class Window extends CursorResponder
   insert-ui: (sub, pos = 0) ->
     @ui-layer?insert-children pos, sub
 
+# for @cursor-layer
+  insert-cursor: (sub, pos = 0) ->
+    @cursor-layer?insert-children pos, sub
+
   /** insert-children : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -52,12 +59,12 @@ module.exports = class Window extends CursorResponder
    */
   insert-children: (sub, pos = 0) ->
     @view-layer?insert-children pos, sub
-    
+
   /** insert-wire : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
    *
-   * On the wire layer, add children `sub` at position `pos`, 
+   * On the wire layer, add children `sub` at position `pos`,
    * returns the inserted items, or null on failure.
    */
   insert-wire: (sub, pos = 0) ->
@@ -81,8 +88,8 @@ module.exports = class Window extends CursorResponder
    */
   scale-by: (sf, pt) !->
     delta = @moveable-layers.0.position.subtract pt .multiply 1 - sf
-    @moveable-layers 
-      |> map (l) -> 
+    @moveable-layers
+      |> map (l) ->
         l.scale sf, sf
         l.translate delta.negate!
     @force-update!
@@ -116,8 +123,8 @@ module.exports = class Window extends CursorResponder
   pointer-up: (pt) !->
     item = @_snap-item pt ?.item
 
-    @active-wire?view?remove! unless item instanceof Input and 
-    @active-wire? and 
+    @active-wire?view?remove! unless item instanceof Input and
+    @active-wire? and
     @active-wire.connect item
 
   /** pan-by : void
@@ -161,3 +168,19 @@ module.exports = class Window extends CursorResponder
       fill:      true
       stroke:    true
       tolerance: tol
+
+
+
+  pointers-changed: (pts) !->
+    @cursor-layer.remove-children()
+    a = [];
+    for i from 0 til pts.length
+      a[i]= new paper.Shape.Circle(pts[i],10)
+      a[i].fillColor = 'red'
+    a[pts.length] = new paper.Shape.Circle(new paper.Point(100,100),10)
+    a[pts.length].fillColor = 'red'
+    @cursor-layer.insert-children a.length,a
+    @force-update
+
+
+
