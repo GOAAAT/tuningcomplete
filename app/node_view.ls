@@ -96,7 +96,6 @@ export class Node_View
        @inputs = [false] ++ @inputs
        i++
     
-    
   /*  DrawNode(location : Paper.Point, noinputs : Int) : Group
    *  
    *  Given the location and number of inputs to the node,

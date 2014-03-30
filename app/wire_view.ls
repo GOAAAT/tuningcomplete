@@ -32,6 +32,7 @@ export class Wire_View
    */
   
   (start = new Point 0 0, end = new Point 0 0, style = VS.line_idle) ->
+
     /* Set up constants:
      * 
      * lineStyle : VS -- the style of the line
