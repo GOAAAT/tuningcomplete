@@ -1,4 +1,4 @@
-Node = require \node
+Colour = require \color
 
 export class Node_View
   
@@ -35,11 +35,14 @@ export class Node_View
     nodePos = location.clone
     outportPos = new paper.Point 0 0
     
-    nodeFillColor = '#111111'
-    outportFillColor = '#111111'
-    inportBusyFillColor = '#00ff00'
-    inportClearFillColor = '#ff0000'
-    lineColor = '#000000'
+    nodeFillColor = Colour.white
+    outportFillColor = Colour.white
+    inportBusyFillColor = Colour.green
+    inportClearFillColor = Colour.red
+    lineColor = Colour.black
+    
+    nodeLineWidth = 5
+    portLineWidth = 3
     
     noinputs = noinputs
     inputs = []
@@ -73,11 +76,13 @@ export class Node_View
     # Set up paths
     nodePath = new Path.Circle nodePos nodeSize
     nodePath.strokeColor = lineColor
+    nodePath.strokeWidth = nodeLineWidth
     nodePath.nodeFillColor = fillColor
     result.addChild nodePath
     
     outportPath = new Path.Circle outportPos (nodeSize / 4)
     outportPath.strokeColor = lineColor
+    outportPath.strokeWidth = portLineWidth
     outportPath.fillColor = outportFillColor
     result.addChild outportPath
     
@@ -88,6 +93,7 @@ export class Node_View
     while i < noinputs
       inportPath = new Path.Circle (_get-input-pos i) (nodeSize / 4)
       inportPath.strokeColor = lineColor
+      inportPath.strokeWidth = portLineWidth
       if inputs[i]
         inportPath.fillColor = inportBusyFillColor
       else
