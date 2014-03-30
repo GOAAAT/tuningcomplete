@@ -126,6 +126,9 @@ module.exports = class App
      * Callback for Mode Toggle Buttons (@mode-btns). Takes the `mode` that is
      * being changed from/to, and the direction (`state`). If you are leaving
      * a mode without one to go to, you end up at the default mode.
+     *
+     * Also ensures that the "Add Node" button is in the off position (i.e. the
+     * Node List is not visible) when the mode is changed.
      */
     change-mode: (mode, state) !->
       @current-mode = if state then mode else BTN_DEFAULT
@@ -134,6 +137,15 @@ module.exports = class App
       @mode-btns |> each (btn) !~>
         btn.trigger btn.tag == @current-mode, false
 
+    /** new-node : void
+     *  _    : Object
+     *  name : String
+     *  Node : Class
+     *
+     * Callback for the @node-list FilterList. When a row is selected, this
+     * method gets called with the name of the node, and the class from which
+     * to construct the new Node.
+     */
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
       console.log "New Node #name, #{Node.desc}"
