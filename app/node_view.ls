@@ -126,6 +126,7 @@ export class Node_View
     
     # Draw each individual input
     i = 0
+
     while i < @noinputs
       if @inputs[i]
         result.addChild (_make-port (get-input-pos i) VS.inport_busy)
