@@ -1,4 +1,3 @@
-
 VS = require \view_style
 
 /**  Public Methods Summary
@@ -75,8 +74,7 @@ export class Node_View
      */
     
     @nodeSize     = 20
-    @portRatio    = 6
-    
+    @portRatio    = 6    
     @nodePos      = location.clone
     @outportPos   = new paper.Point 0 0
     
