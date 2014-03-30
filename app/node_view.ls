@@ -11,25 +11,35 @@ export class Node_View
   
   (location = new Point 0 0, noinputs = 1) ->
     /* Set up constants:
+     * 
      * nodeSize : Int -- radius of a node
+     * portRatio : Int -- n s.t. a port has radius nodeSize / n
+     *
      * nodePos : Point -- position of the node
      * outportPos : Point -- position of the output port
-     * fillColor : Color
+     *
+     * nodeFillColor : Color
+     * outportFillColor : Color
+     * inportBusyFillColor : Color -- the colour of a busy input port
+     * inportClearFillColor : Color -- the colour of a clear output port
      * lineColor : Color
+     *
      * noinputs : Int -- number of inputs to this node
      * inputs : List[Int] -- list of busy (true) and clear (false) for nodes
+     * angle : Int -- the angle the input ports are distributed by on the LHS
      */
     
     nodeSize = 20
+    portRatio = 6
+    
+    nodePos = location.clone
+    outportPos = new paper.Point 0 0
     
     nodeFillColor = '#111111'
     outportFillColor = '#111111'
     inportBusyFillColor = '#00ff00'
     inportClearFillColor = '#ff0000'
     lineColor = '#000000'
-    
-    nodePos = location.clone
-    outportPos = new paper.Point 0 0
     
     noinputs = noinputs
     inputs = []
@@ -98,11 +108,10 @@ export class Node_View
     _get-input-pos ref
   
   _get-input-pos: (ref) ->
-    _angle = (ref+1) * angle
+    _angle = ((ref+1) * angle) + 90
+    _angle = _angle * (Math.PI / 180)
     dx = nodeSize * (Math.cos _angle)
-    dx = dx * -1
     dy = nodeSize * (Math.sin _angle)
-    dy = dy * -1
     ipx = nodePos.x + dx
     ipy = nodePos.y + dy
     result = new Point ipx ipy
@@ -136,5 +145,5 @@ export class Node_View
     inputs[ref] = false
     
   _set-input-angle !->
-    angle = 180 / @noinputs
+    angle = 180 / (noinputs + 1)
   
