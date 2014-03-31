@@ -1,4 +1,4 @@
-Colour = require \color
+VS = require \view_style
 
 export class Node_View
   
@@ -9,7 +9,7 @@ export class Node_View
    *
    */
   
-  (location = new Point 0 0, noinputs = 1) ->
+  (location = new Point 0 0, noinputs = 1, style = VS.standard) ->
     /* Set up constants:
      * 
      * nodeSize : Int -- radius of a node
@@ -18,40 +18,36 @@ export class Node_View
      * nodePos : Point -- position of the node
      * outportPos : Point -- position of the output port
      *
-     * nodeFillColor : Color
-     * outportFillColor : Color
-     * inportBusyFillColor : Color -- the colour of a busy input port
-     * inportClearFillColor : Color -- the colour of a clear output port
-     * lineColor : Color
+     * nodeStyle : VS -- the style of the node
+     * inportBusyStyle : VS
+     * inportClearStyle : VS
+     * outportStyle : VS
      *
      * noinputs : Int -- number of inputs to this node
      * inputs : List[Int] -- list of busy (true) and clear (false) for nodes
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
     
-    nodeSize = 20
-    portRatio = 6
+    @nodeSize     = 20
+    @portRatio    = 6
     
-    nodePos = location.clone
-    outportPos = new paper.Point 0 0
+    @nodePos      = location.clone
+    @outportPos   = new paper.Point 0 0
     
-    nodeFillColor = Colour.white
-    outportFillColor = Colour.white
-    inportBusyFillColor = Colour.green
-    inportClearFillColor = Colour.red
-    lineColor = Colour.black
+    @nodeStyle    = style
+        
+    @outportStyle     = VS.outport
+    @inportBusyStyle  = VS.inport_busy
+    @inportClearStyle = VS.inport_clear
     
-    nodeLineWidth = 5
-    portLineWidth = 3
+    @noinputs     = noinputs
+    @inputs       = []
+    @angle        = _set-input-angle
     
-    noinputs = noinputs
-    inputs = []
-    angle = _set-input-angle
-    
-    # Set up input list of true/false (busy/clear)
+    /** Set up input list of true/false (busy/clear) **/
     i = 0
-    while i < noinputs
-       inputs = [false] ++ inputs
+    while i < @noinputs
+       @inputs = [false] ++ @inputs
        i++
     
     
@@ -67,38 +63,31 @@ export class Node_View
     # Set up the group to be returned
     result = new Group
   
-    # Set up preliminary info
-    nodePos = location
+    # Set up position info
+    @nodePos = location
     
-    outportPos = new Point nodePos
-    outportPos.x = outportPos.x + nodeSize
-    
-    # Set up paths
-    nodePath = new Path.Circle nodePos nodeSize
-    nodePath.strokeColor = lineColor
-    nodePath.strokeWidth = nodeLineWidth
-    nodePath.nodeFillColor = fillColor
-    result.addChild nodePath
-    
-    outportPath = new Path.Circle outportPos (nodeSize / 4)
-    outportPath.strokeColor = lineColor
-    outportPath.strokeWidth = portLineWidth
-    outportPath.fillColor = outportFillColor
-    result.addChild outportPath
+    @outportPos = new Point @nodePos
+    @outportPos.x = outportPos.x + @nodeSize
     
     _set-input-angle
     
+    # Set up paths
+    nodePath = new Path.Circle @nodePos @nodeSize
+    nodePath.style = style
+    
+    # Add node
+    result.addChild nodePath
+    
+    # Add outport
+    result.addChild (_make-port @outportPos VS.outport)
+    
     # Draw each individual input
     i = 0
-    while i < noinputs
-      inportPath = new Path.Circle (_get-input-pos i) (nodeSize / 4)
-      inportPath.strokeColor = lineColor
-      inportPath.strokeWidth = portLineWidth
-      if inputs[i]
-        inportPath.fillColor = inportBusyFillColor
+    while i < @noinputs
+      if @inputs[i]
+        result.addChild (_make-port (_get-input-pos i) VS.inport_busy)
       else
-        inportPath.fillColor = inportClearFillColor
-      result.addChild inportPath
+        result.addChild (_make-port (_get-input-pos i) VS.inport_clear)
       
     result
   
@@ -113,15 +102,7 @@ export class Node_View
   get-input-pos: (ref, total) ->
     _get-input-pos ref
   
-  _get-input-pos: (ref) ->
-    _angle = ((ref+1) * angle) + 90
-    _angle = _angle * (Math.PI / 180)
-    dx = nodeSize * (Math.cos _angle)
-    dy = nodeSize * (Math.sin _angle)
-    ipx = nodePos.x + dx
-    ipy = nodePos.y + dy
-    result = new Point ipx ipy
-    result
+  
   
   /* getOutputPos : Paper.Point
    *
@@ -130,16 +111,16 @@ export class Node_View
    */
   
   get-output-pos: ->
-    outportPos
-  	
+    @outportPos
+    
   /* busyPort(ref : Int) : void
    *
    * Set port ref as busy
    *
-   */  	
+   */    
 
   busy-port: (ref) !->
-    inputs[ref] = true
+    @inputs[ref] = true
 
   /* clearPort(ref : Int) : void 
    *
@@ -148,8 +129,34 @@ export class Node_View
    */
    
   clear-port: (ref) !->
-    inputs[ref] = false
+    @inputs[ref] = false
+    
+  /*  private set-input-angle
+   *  
+   *  Sets the angle to offset inputs by on the node
+   *
+   */
     
   _set-input-angle !->
-    angle = 180 / (noinputs + 1)
+    @angle = 180 / (@noinputs + 1)
   
+  /*  private make-port(pos : Paper.Point, sty : VS) : Paper.Path
+   *
+   *  Makes a port path
+   *
+   */
+   
+  _make-port: (pos, sty) ->
+    path = new Path.Circle pos (@nodeSize / @portRatio)  
+    path.style = sty
+    path
+    
+  _get-input-pos: (ref) ->
+    _angle = ((ref+1) * @angle) + 90
+    _angle = _angle * (Math.PI / 180)
+    dx = @nodeSize * (Math.cos _angle)
+    dy = @nodeSize * (Math.sin _angle)
+    ipx = @nodePos.x + dx
+    ipy = @nodePos.y + dy
+    result = new Point ipx ipy
+    result
