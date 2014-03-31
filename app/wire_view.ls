@@ -1,19 +1,20 @@
-Colour = require \color
+VS = require \view_style
 
 export class Wire_View
   
-  (start = new Point 0 0, end = new Point 0 0) ->
+  (start = new Point 0 0, end = new Point 0 0, style = VS.line_idle) ->
     /* Set up constants:
      * 
-     * lineColor : Color -- colour of the line
-     *
+     * lineStyle : VS -- the style of the line
+     * 
+     * startpos : Paper.Point
+     * endpos : Paper.Point
      */
      
-    lineColor = Colour.black
-    lineWidth = 5
+    @lineStyle = style
     
-    startpos = start
-    endpos = end
+    @startpos = start
+    @endpos = end
     
   /* draw-wire (startpos : Paper.Point, endpos : Paper.Point) : void
    * 
@@ -25,12 +26,11 @@ export class Wire_View
     
     result = new Group
     
-    startpos = start
-    endpos = end
+    @startpos = start
+    @endpos = end
     
     wirePath = new Path.Line start end
-    wirePath.strokeColor = lineColor
-    wirePath.strokeWidth = lineWidth
+    wirePath.style = @lineStyle
     
     result.addChild wirePath
     
