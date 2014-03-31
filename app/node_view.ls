@@ -1,11 +1,56 @@
 VS = require \view_style
 
+/**  Public Methods Summary
+ * (Square brackets denote optional parameters)
+ *
+ *
+ * Node_View([location], [noinputs], [style])
+ * -- constructor method
+ *
+ * draw-node(location, noinputs) : Group
+ * -- draws a node at specified location with specified number of inputs
+ *
+ * get-input-pos(ref, total) : Paper.Point
+ * -- returns the position of input port ref out of total
+ *
+ * get-output-pos : Paper.Point
+ * -- returns the position of the output port
+ *
+ * busy-port(ref)
+ * -- marks input port ref as busy
+ * 
+ * clear-port(ref)
+ * -- marks input port ref as clear
+ *
+ * redraw : Group
+ * -- redraws the node without resetting anything
+ *
+ * set-node-style(style)
+ * -- sets the style of the node
+ * 
+ * set-port-style(style, port)
+ * -- sets the style of a given node type ("outport", "inport_busy", "inport_clear")
+ *
+ * set-node-pos(location)
+ * -- sets the node position
+ *
+ * set-node-fill-color(col)
+ * -- sets the fill colour of the node
+ *
+ * set-node-line-color(col)
+ * -- sets the line colour of the node
+ *
+ * set-node-line-width(width)
+ * -- sets the line width of the node
+ *
+ **/
+
 export class Node_View
   
-  /* Node_View(location : Paper.Point, noinputs : int) : void
+  /* Node_View([location : Paper.Point], [noinputs : int], [style : VS]) : void
    *
    * Instantiates instance variables
-   * Default (0, 0) with 1 input 
+   * Default (0, 0) with 1 input and standard style
    *
    */
   
@@ -85,24 +130,32 @@ export class Node_View
     i = 0
     while i < @noinputs
       if @inputs[i]
-        result.addChild (_make-port (_get-input-pos i) VS.inport_busy)
+        result.addChild (_make-port (get-input-pos i) VS.inport_busy)
       else
-        result.addChild (_make-port (_get-input-pos i) VS.inport_clear)
-      
+        result.addChild (_make-port (get-input-pos i) VS.inport_clear)
+    
+    # Return the group
     result
   
-  /* getInputPos(ref : Int, total : Int) : Paper.Point
+  /* getInputPos(ref : Int) : Paper.Point
    *
-   * Returns position of port 'ref' if there are 'total' input ports
+   * Returns position of port ref
    *
-   *
-   * Private version exists for interior use
    */
     
-  get-input-pos: (ref, total) ->
-    _get-input-pos ref
-  
-  
+  get-input-pos: (ref) ->
+    _angle = ((ref+1) * @angle) + 90
+    _angle = _angle * (Math.PI / 180)
+    
+    dx = @nodeSize * (Math.cos _angle)
+    dy = @nodeSize * (Math.sin _angle)
+    
+    ipx = @nodePos.x + dx
+    ipy = @nodePos.y + dy
+    
+    result = new Point ipx ipy
+    
+    result
   
   /* getOutputPos : Paper.Point
    *
@@ -121,6 +174,7 @@ export class Node_View
 
   busy-port: (ref) !->
     @inputs[ref] = true
+    redraw
 
   /* clearPort(ref : Int) : void 
    *
@@ -130,7 +184,79 @@ export class Node_View
    
   clear-port: (ref) !->
     @inputs[ref] = false
+    redraw
     
+  /* redraw : Group
+   * 
+   * Calls draw-node with parameters the same
+   *
+   */
+    
+  redraw ->
+    draw-node @nodePos @noinputs
+    
+  /* set-node-style(style : VS) : void
+   *
+   * Sets the style of the node
+   *
+   */
+   
+  set-node-style: (style = VS.standard) !->
+    @nodeStyle = style
+    redraw
+    
+  /* set-port-style(style : VS, port : String) : void
+   *
+   * Sets the style of a port style
+   *
+   *  "outport", "inport_busy", "inport_clear" only accepted ports
+   *
+   */
+   
+  set-port-style: (style = VS.standard, port = "N/A") !->
+    if port == "outport" 
+      @outportStyle = style
+    else if port == "inport_busy"
+      @inportBusyStyle = style
+    else if port == "inport_clear"
+      @inportClearStyle = style
+    redraw
+
+  /* set-node-pos(location : Paper.Point) : void
+   *
+   * Sets the position of the node
+   *
+   */
+   
+  set-node-pos: (location) !->
+    @nodePos = location
+
+  /* set-node-fill-color(col : Colour) :void
+   * 
+   * Sets the fill colour of the node
+   */
+    
+  set-node-fill-color: (col) !->
+    @nodeStyle.fillColor = col
+
+  /* set-node-line-color(col : Colour) : void
+   *
+   * Sets the line colour of the node
+   */
+    
+  set-node-line-color: (col) !->
+    @nodeStyle.strokeColor = col
+    
+  /* set-node-line-width(width : Int) : void
+   *
+   * Sets the line width of the node
+   */    
+
+  set-node-line-width: (width) !->
+    @nodeStyle.strokeWidth = width
+      
+  /** PRIVATE METHODS **/
+     
   /*  private set-input-angle
    *  
    *  Sets the angle to offset inputs by on the node
@@ -151,12 +277,5 @@ export class Node_View
     path.style = sty
     path
     
-  _get-input-pos: (ref) ->
-    _angle = ((ref+1) * @angle) + 90
-    _angle = _angle * (Math.PI / 180)
-    dx = @nodeSize * (Math.cos _angle)
-    dy = @nodeSize * (Math.sin _angle)
-    ipx = @nodePos.x + dx
-    ipy = @nodePos.y + dy
-    result = new Point ipx ipy
-    result
+
+  
