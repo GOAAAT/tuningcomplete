@@ -74,7 +74,8 @@ export class Node_View
      */
     
     @nodeSize     = 20
-    @portRatio    = 6    
+    @portRatio    = 6
+    
     @nodePos      = location.clone
     @outportPos   = new paper.Point 0 0
     
@@ -108,7 +109,7 @@ export class Node_View
   
     # Set up position info
     @nodePos = location
-    
+
     @outportPos = new Point @nodePos
     @outportPos.x = outportPos.x + @nodeSize
     
