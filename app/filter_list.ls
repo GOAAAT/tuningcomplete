@@ -1,5 +1,6 @@
 {each,empty} = prelude
 Color      = require \color
+TextBox    = require \text_box
 PrefixTree = require \prefix_tree
 
 module.exports = class FilterList
@@ -30,8 +31,16 @@ module.exports = class FilterList
       children: [ @clip-mask ]
       clipped: true
 
+    @text-box = new TextBox do
+      content: "Testing"
+      font-size: \30pt
+      width: 200px
+
+    @text-box.view!position =
+      @bg.bounds.top-center.add [0 PAD + @text-box.view!bounds.height / 2 ]
+
     @group = new paper.Group do
-      children: [ @bg, @row-group ]
+      children: [ @bg, @row-group, @text-box.view! ]
 
     # List resize with window callback
     ctx.view.on 'resize' @~_resize
@@ -81,6 +90,7 @@ module.exports = class FilterList
   expand: (w = @bg.bounds.width, h = @_height!) !->
     { top-center: tc, width: old-w, height: old-h } = @bg.bounds
     [ @clip-mask, @bg ] |> each (.scale w/old-w, h/old-h, tc)
+    @text-box.expand w - 2 * PAD
 
   /** (private) _resize : void
    *
@@ -133,7 +143,8 @@ module.exports = class FilterList
     row.view!position =
       @bg.bounds.top-center.add [
         (row.view!bounds.width - @bg.bounds.width) / 2 + PAD,
-        row.height * (@rows.length + 0.5) + PAD
+        @text-box.view!bounds.height +
+          row.height * (@rows.length + 0.5) + PAD
       ]
 
     row.set-listener @~_did-select-row-with-data
@@ -252,6 +263,9 @@ class SimpleRow
 
     @title.pivot      = @title.bounds.center-left
     @title.position.x = @group.parent.bounds.left
+
+    @sub-title.pivot      = @sub-title.bounds.center-left
+    @sub-title.position.x = @group.parent.bounds.left
 
     @hit-box.position = @text.bounds.center
     @hit-box.size     = @text.bounds.size

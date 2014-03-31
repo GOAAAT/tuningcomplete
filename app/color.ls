@@ -7,5 +7,6 @@ export yellow = \#FEDB77
 
 export black      = \#000
 export dark-grey  = \#111
+export grey       = \#222
 export light-grey = \#999
 export white      = \#FFF
