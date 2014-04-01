@@ -159,14 +159,14 @@ module.exports = class FilterList
     @rows.push row
     @row-group.add-child row.view!
 
-  /** _did-select-row-with-data : void
+  /** (private) _did-select-row-with-data : void
    *  data : Object
    *
    * Method called by a row when it is selected.
    */
   _did-select-row-with-data: (data) !-> @_on-select? data
 
-  /** _filter-did-change : void
+  /** (private) _filter-did-change : void
    *  filter-str : String
    *
    * Callback called when the textbox's value changes. It is used to update the
