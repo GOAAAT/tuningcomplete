@@ -6,6 +6,7 @@ module.exports = class TextBox
     content   = '',
     font-size = \20pt,
     width     = 100px,
+    @window
   }) ->
     size = [ width, 2 * parse-int font-size ]
 

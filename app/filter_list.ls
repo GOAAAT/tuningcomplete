@@ -5,13 +5,13 @@ PrefixTree = require \prefix_tree
 
 module.exports = class FilterList
   /** FilterList
-   *  ctx : paper.PaperScope
+   *  win : Window
    *  tag : Object
    *  size : Size
    *
    * View class for a table view that can be filtered by prefixes.
    */
-  (ctx, @tag, size = [100px 100px]) ->
+  (win, @tag, size = [100px 100px]) ->
     @factory = new RowFactory SimpleRow
     @rows    = []
 
@@ -32,7 +32,8 @@ module.exports = class FilterList
       clipped: true
 
     @text-box = new TextBox do
-      content: "Testing"
+      window: win
+      content: ''
       font-size: \30pt
       width: 200px
 
@@ -43,7 +44,7 @@ module.exports = class FilterList
       children: [ @bg, @row-group, @text-box.view! ]
 
     # List resize with window callback
-    ctx.view.on 'resize' @~_resize
+    win.ctx.view.on 'resize' @~_resize
 
   /** view : paper.Item
    *

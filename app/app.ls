@@ -31,7 +31,7 @@ module.exports = class App
       @cursor.activate!
 
       # New Node List
-      @node-list = new FilterList @window.ctx
+      @node-list = new FilterList @window
 
       # Test Data only
       data  = new PrefixTree!
