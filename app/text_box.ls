@@ -1,4 +1,4 @@
-{each} = prelude
+{each, slice} = prelude
 Color = require \color
 
 module.exports = class TextBox
@@ -35,6 +35,23 @@ module.exports = class TextBox
     { top-center: tc, width: old-w, height: old-h } = @bg.bounds
     [ @clip-mask, @bg ] |> each (.scale w/old-w, 1, tc)
     @_fix-text-align!
+
+  set-first-responder: !->
+    $ document .bind \keydown (e) !~>
+      content = @text.content
+      if e.key-code == 8 # Backspace
+        e.prevent-default!
+        content.slice 0 -1
+          |> @set-text
+      else
+        char = String.from-char-code e.key-code .to-lower-case!
+        if \a <= char <= \z
+          @set-text content + char
+
+      @window.force-update!
+
+  relieve-first-responder: !->
+    $ document .unbind \keydown
 
   set-text: (content) !->
     @text.content  = content

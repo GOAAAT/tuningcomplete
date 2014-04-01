@@ -79,6 +79,10 @@ module.exports = class FilterList
    * Set whether the list is visible or not.
    */
   set-visible: (@group.visible) !->
+    if @group.visible
+      @text-box.set-first-responder!
+    else
+      @text-box.relieve-first-responder!
 
   /** expand : void
    *  w : Int
