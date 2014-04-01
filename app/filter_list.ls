@@ -200,7 +200,7 @@ class RowFactory
     row
 
   /** The maximum number of row instances to keep in the cache */
-  const MAX_POOL = 10
+  const MAX_POOL = 0
 
   /** recycle : void
    *  row : @Row
