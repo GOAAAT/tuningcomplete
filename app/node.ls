@@ -20,17 +20,17 @@ export class Node
     for i from 1 to total-inputs 
       @receiving-wires = [null] ++ @receiving-wires
     @active-view = new Node_View
-    @active-view?draw-node location, total-inputs
 
-    /** redraw-node : void
+    /** view : Group
     * 
     * Requests node_view draws the node again
     * and instructs all Wires to ask to be redrawn
     */
-    redraw-node: ->
-      @active-view?draw-node location, total-inputs
+    view: ->
       for wire in @receiving-wires
        if wire ~= null then wire?redraw
+      @active-view?draw-node location, total-inputs
+
 
 export class Input
   ->
