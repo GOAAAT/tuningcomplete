@@ -22,6 +22,12 @@ module.exports = class Window extends CursorResponder
    */
   activate: !-> @ctx.activate!
 
+  /** force-update : void
+   *
+   * Make the renderer force a screen refresh.
+   */
+  force-update: !-> @ctx.view.draw!
+
   /** insert-ui : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int

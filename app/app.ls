@@ -97,6 +97,8 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
 
+      @window.force-update!
+
     /** Button properties */
     const BTN_DEFAULT = 0
     const BTN_WIDTH   = 80px
