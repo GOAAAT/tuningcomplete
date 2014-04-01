@@ -23,11 +23,11 @@ module.exports = class TextBox
       font-size: font-size
       fill-color: Color.white
 
-    @set-text content
-
     @group = new paper.Group do
       children: [ @clip-mask, @bg, @text ]
       clipped: true
+
+    @set-text content
 
   view: -> @group
 
@@ -40,10 +40,13 @@ module.exports = class TextBox
     @text.content  = content
     @_fix-text-align!
 
-  _fix-text-align: !->
-    @text.position =
-      [
-        @bg.bounds.left + @text.bounds.width / 2 + 20,
-        @bg.bounds.centerY
-      ]
+  const PAD = 20px
 
+  _fix-text-align: !->
+    x-coord =
+      if @text.bounds.width < @bg.bounds.width
+        @bg.bounds.left + @text.bounds.width / 2 + PAD
+      else
+        @bg.bounds.right - @text.bounds.width / 2 - PAD
+
+    @text.position = [ x-coord, @bg.bounds.centerY ]
