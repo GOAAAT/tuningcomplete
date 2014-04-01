@@ -5,11 +5,11 @@
 export class Wire
   (node) ->
     origin = node
-    active-view.set-start(origin.location)
+    active-view.set-start(origin.location) # not actually necessary
 
   var dest
   var dest-port
-  active-view = new Wire_View # TODO need to specify (start, end, style)
+  active-view = new Wire_View
 
   /** origin-node: node
   * Returns node which is putting data onto wire
@@ -17,7 +17,7 @@ export class Wire
   */
   origin-node: -> origin
   
-  /** set-dest: void
+  /** set-dest (i.e. connect): void
   * node: Node
   * port: int
   * Set where the wire is going to.
@@ -25,7 +25,7 @@ export class Wire
   set-dest: (node, port) !->
     dest = node
     dest-port = port
-    active-view.set-end(dest.location)
+    active-view.draw-wire(origin.location, dest.location)
   
   /** get-dest-port: int
   * Returns port that wire is connected to at destination
