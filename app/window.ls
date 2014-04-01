@@ -11,21 +11,42 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
+    @view-layer = @ctx.project.active-layer
+    @ui-layer   = new @ctx.Layer!
+
+    @view-layer.activate!
+
   /** activate : void
    *
    * Make this window the active (default) one
    */
   activate: !-> @ctx.activate!
 
-  /** insert-children : paper.Item
+  /** force-update : void
+   *
+   * Make the renderer force a screen refresh.
+   */
+  force-update: !-> @ctx.view.draw!
+
+  /** insert-ui : [paper.Item]
+   *  sub : [paper.Item],
+   *  pos : Int
+   *
+   * Adds children `sub` to the UI layer (above the view layer), returning the
+   * inserted items, or null on failure.
+   */
+  insert-ui: (sub, pos = 0) ->
+    @ui-layer?insert-children pos, sub
+
+  /** insert-children : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
    *
    * Add children `sub` at position `pos`, returns the inserted items, or null
    * on failure.
    */
-  insert-children: (pos = 0, ...sub) ->
-    @ctx?project?active-layer?insert-children pos, sub
+  insert-children: (sub, pos = 0) ->
+    @view-layer?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -58,7 +79,7 @@ module.exports = class Window extends CursorResponder
 
     if item instanceof Output
       @active-wire = new Wire(item)
-      @active-wire?view! |> @insert-children
+      [ @active-wire?view! ] |> @insert-children
 
   /** pointer-moved : void
    *  pt : paper.Point
