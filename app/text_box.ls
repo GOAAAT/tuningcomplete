@@ -31,6 +31,8 @@ module.exports = class TextBox
 
   view: -> @group
 
+  set-on-change: (@_on-change) !->
+
   expand: (w) !->
     { top-center: tc, width: old-w, height: old-h } = @bg.bounds
     [ @clip-mask, @bg ] |> each (.scale w/old-w, 1, tc)
@@ -48,6 +50,7 @@ module.exports = class TextBox
         if \a <= char <= \z
           @set-text content + char
 
+      @_on-change? @text.content
       @window.force-update!
 
   relieve-first-responder: !->

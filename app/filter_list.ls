@@ -40,6 +40,8 @@ module.exports = class FilterList
     @text-box.view!position =
       @bg.bounds.top-center.add [0 PAD + @text-box.view!bounds.height / 2 ]
 
+    @text-box.set-on-change @~_filter-did-change
+
     @group = new paper.Group do
       children: [ @bg, @row-group, @text-box.view! ]
 
@@ -163,6 +165,16 @@ module.exports = class FilterList
    * Method called by a row when it is selected.
    */
   _did-select-row-with-data: (data) !-> @_on-select? data
+
+  /** _filter-did-change : void
+   *  filter-str : String
+   *
+   * Callback called when the textbox's value changes. It is used to update the
+   * filtered list of items, based on the prefix provided
+   */
+  _filter-did-change: (filter-str) !->
+    @subset = @data.filter filter-str or @data
+    @_refresh!
 
 class RowFactory
   /** (private) RowFactory
