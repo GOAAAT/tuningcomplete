@@ -17,50 +17,41 @@ Colour = require \color
  *	Maths Nodes
  */
  
-maths =
+export maths =
   strokeColor: Colour.black,
   strokeWidth: 5,
   fillColor: Colour.blue
   
-instrument =
+export instrument =
   strokeColor: Colour.black,
   strokeWidth: 5,
   fillColor: Colour.beeYellow
 
-oscillator = 
+export oscillator = 
   strokeColor: Colour.black,
   strokeWidth: 5,
   fillColor: Colour.purpleMonster
   
-standard =
+export standard =
   strokeColor: Colour.black,
   strokeWidth: 5,
   fillColor: Colour.cyan
 
-inport_busy  = 
+export inport-busy  = 
     strokeColor: Colour.black,
     strokeWidth: 3,
     fillColor: Colour.green
-inport_clear = 
+    
+export inport-clear = 
     strokeColor: Colour.black,
     strokeWidth: 3,
     fillColor: Colour.red
-outport      = 
+    
+export outport = 
     strokeColor: Colour.black,
     strokeWidth: 3,
     fillColor: Colour.white
 
-wire_idle =
+export wire-idle =
   strokeColor: Colour.black,
   strokeWidth: 3
-
-export maths
-export instrument
-export oscillator
-export standard
-
-export wire_idle
-
-export inport_busy
-export inport_clear
-export outport
