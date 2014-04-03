@@ -3,7 +3,6 @@ VS = require \view_style
 /**  Public Methods Summary
  * (Square brackets denote optional parameters)
  *
- *
  * NodeView([location], [noinputs], [style])
  * -- constructor method
  *
@@ -21,9 +20,6 @@ VS = require \view_style
  * 
  * clear-port(ref)
  * -- marks input port ref as clear
- *
- * redraw : Group
- * -- redraws the node without resetting anything
  *
  * set-node-style(style)
  * -- sets the style of the node
@@ -86,8 +82,7 @@ module.exports = class NodeView
     @inport-busy-style  = VS.inport-busy
     @inport-clear-style = VS.inport-clear
     
-    @noinputs     = noinputs
-    @inputs       = []
+    @inputs = []
     _set-input-angle!
     
     /** Set up input list of true/false (busy/clear) **/
@@ -96,7 +91,7 @@ module.exports = class NodeView
        @inputs = [false] * @inputs
        i++
     
-    _draw-node!
+    _make-node!
     
   /*  group() : Group
    *  returns a group to go to the canvas
@@ -142,7 +137,7 @@ module.exports = class NodeView
 
   busy-port: (ref) !->
     @inputs[ref] = true
-    redraw!
+    @inports[ref].style = @inport-busy-style
 
   /* clearPort(ref : Int) : void 
    *
@@ -152,26 +147,16 @@ module.exports = class NodeView
    
   clear-port: (ref) !->
     @inputs[ref] = false
-    redraw!
-    
-  /* redraw : Group
-   * 
-   * Calls draw-node with parameters the same
-   *
-   */
-    
-  redraw: ->
-    _draw-node!
-    
+    @inports[ref].style = @inport-clear-style
+        
   /* set-node-style(style : VS) : void
    *
    * Sets the style of the node
    *
    */
    
-  set-node-style: (style = VS.standard) !->
+  set-node-style: (@node-path.style = VS.standard) !->
     @node-style = style
-    redraw!
     
   /* set-port-style(style : VS, port : String) : void
    *
@@ -182,16 +167,19 @@ module.exports = class NodeView
    */
    
   set-port-style: (style = VS.standard, port = "N/A") !->
-    | port == "outport"     => @outport-style = style
-    | port == "inport-busy" => @inport-busy-style = style
-    | port == "inport-clear"=> @inport-clear-style = style
-    if port == "outport" 
+    | port == "outport"     => 
+      @outport-path.style = style
       @outport-style = style
-    else if port == "inport_busy"
-      @inport-busy-style = style
-    else if port == "inport_clear"
-      @inport-clear-style = style
-    redraw!
+    | port == "inport-busy" => 
+      [0 til #noinputs]
+        |> each (i)
+          if inputs[i] inports[i].style = style
+          @inport-busy-style = style
+    | port == "inport-clear"=> 
+      [0 til #noinputs]
+        |> each (i)
+          if !inputs[i] inports[i].style = style
+          @inport-clear-style = style
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -199,28 +187,28 @@ module.exports = class NodeView
    *
    */
    
-  set-node-pos: (@node-pos) !->
+  set-node-pos: (@node-path.position) !->
 
   /* set-node-fill-color(col : Colour) :void
    * 
    * Sets the fill colour of the node
    */
     
-  set-node-fill-color: (@node-style.fillColor) !->
+  set-node-fill-color: (@node-path.fillColor) !->
 
   /* set-node-line-color(col : Colour) : void
    *
    * Sets the line colour of the node
    */
     
-  set-node-line-color: (@node-style.strokeColor) !->
+  set-node-line-color: (@node-path.strokeColor) !->
     
   /* set-node-line-width(width : Int) : void
    *
    * Sets the line width of the node
    */    
 
-  set-node-line-width: (@node-style.strokeWidth) !->
+  set-node-line-width: (@node-path.strokeWidth) !->
       
   /** PRIVATE METHODS **/
      
@@ -256,19 +244,22 @@ module.exports = class NodeView
     _set-input-angle!
     
     # Set up paths
-    node-path = new paper.Path.Circle @node-pos, NODE_SIZE
-    node-path.style = style
+    @node-path = new paper.Path.Circle @node-pos, NODE_SIZE
+    @node-path.style = style
     
     # Add node
-    @node-group.addChild node-path
+    @node-group.addChild @node-path
     
+    @outport-path = @_make-port @outport-pos, VS.outport
     # Add outport
-    @node-group.addChild (@_make-port @outport-pos, VS.outport)
+    @node-group.addChild @outport-path
     
+    @inports = []
     # Draw each individual input
     i = 0
     [0 til #noinputs]
       |> each (i)
-        @node-group.addChild (@_make-port @get-input-post i,
-          @inputs[i] ? VS.inport-busy : VS.inport-clear
+        @inports[i] = @_make-port @get-input-post i,
+          @inputs[i] ? VS.inport-busy : VS.inport-clear     
+        @node-group.addChild inports[i]
   
