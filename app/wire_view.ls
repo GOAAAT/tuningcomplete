@@ -30,8 +30,7 @@ export class Wire_View
    *
    */
   
-  (start = new Point 0 0, end = new Point 0 0, style = VS.line_idle) ->
-
+  (start = (new Point 0, 0), end = (new Point 0, 0), style = VS.line_idle) ->
     /* Set up constants:
      * 
      * lineStyle : VS -- the style of the line
@@ -53,12 +52,12 @@ export class Wire_View
   
   draw-wire: (start, end) ->
     
-    result = new Group
+    result = new paper.Group
     
     @startpos = start
     @endpos = end
     
-    wirePath = new Path.Line start end
+    wirePath = new paper.Path.Line start, end
     wirePath.style = @lineStyle
     
     result.addChild wirePath
@@ -71,8 +70,8 @@ export class Wire_View
    *
    */
    
-  redraw !->
-    draw-wire @startpos @endpos
+  redraw: !->
+    @draw-wire @startpos @endpos
     
   /* set-line-style (style : VS) : void
    *

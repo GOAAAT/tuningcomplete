@@ -2,6 +2,8 @@
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
 */
 
+Wire_View = require \wire_view
+
 export class Wire
   (node) ->
     origin = node

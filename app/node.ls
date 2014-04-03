@@ -7,6 +7,8 @@
   * Location and total-inputs should always be set on initialising
   * a node
   */
+  
+Node_View = require \node_view
 
 export class Node
   ->
