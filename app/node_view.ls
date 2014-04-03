@@ -4,11 +4,11 @@ VS = require \view_style
  * (Square brackets denote optional parameters)
  *
  *
- * Node_View([location], [noinputs], [style])
+ * NodeView([location], [noinputs], [style])
  * -- constructor method
  *
- * draw-node(location, noinputs) : Group
- * -- draws a node at specified location with specified number of inputs
+ * group() : Group
+ * -- returns the group to be drawn, public
  *
  * get-input-pos(ref, total) : Paper.Point
  * -- returns the position of input port ref out of total
@@ -45,7 +45,10 @@ VS = require \view_style
  *
  **/
 
-export class Node_View
+const NODE_SIZE = 20
+const PORT_RATIO = 6
+
+module.exports = class NodeView
   
   /* Node_View([location : Paper.Point], [noinputs : int], [style : VS]) : void
    *
@@ -54,89 +57,54 @@ export class Node_View
    *
    */
   
-  (location = (new paper.Point 0, 0), noinputs = 1, style = VS.standard) ->
+  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard) ->
     /* Set up constants:
      * 
-     * nodeSize : Int -- radius of a node
-     * portRatio : Int -- n s.t. a port has radius nodeSize / n
+     * node-size : Int -- radius of a node
+     * port-ratio : Int -- n s.t. a port has radius NODE_SIZE / n
      *
-     * nodePos : Point -- position of the node
-     * outportPos : Point -- position of the output port
+     * node-pos : Point -- position of the node
+     * outport-pos : Point -- position of the output port
      *
-     * nodeStyle : VS -- the style of the node
-     * inportBusyStyle : VS
-     * inportClearStyle : VS
-     * outportStyle : VS
+     * node-style : VS -- the style of the nodeNodeView
+     * inport-busy-style : VS
+     * inport-clear-style : VS
+     * outpor-style : VS
      *
      * noinputs : Int -- number of inputs to this node
      * inputs : List[Int] -- list of busy (true) and clear (false) for nodes
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
+     
+    # Set up the group to be returned
+    @node-group = new Group
     
-    @nodeSize     = 20
-    @portRatio    = 6
+    @outport-pos = new paper.Point @node-pos
+    @outport-pos.x = @outport-pos.x + NODE_SIZE
     
-    @nodePos      = location.clone
-    @outportPos   = new paper.Point 0, 0
-    
-    @nodeStyle    = style
-        
-    @outportStyle     = VS.outport
-    @inportBusyStyle  = VS.inport_busy
-    @inportClearStyle = VS.inport_clear
+    @outport-style     = VS.outport
+    @inport-busy-style  = VS.inport-busy
+    @inport-clear-style = VS.inport-clear
     
     @noinputs     = noinputs
     @inputs       = []
-    @angle        = @_set-input-angle
+    _set-input-angle!
     
     /** Set up input list of true/false (busy/clear) **/
     i = 0
     while i < @noinputs
-       @inputs = [false] ++ @inputs
+       @inputs = [false] * @inputs
        i++
     
-  /*  DrawNode(location : Paper.Point, noinputs : Int) : Group
-   *  
-   *  Given the location and number of inputs to the node,
-   *  return a group to be drawn of the node.
-   *
+    _draw-node!
+    
+  /*  group() : Group
+   *  returns a group to go to the canvas
    */
-  
-  draw-node: (location, noinputs) ->
-  
-    # Set up the group to be returned
-    result = new Group
-  
-    # Set up position info
-    @nodePos = location
-
-    @outportPos = new Point @nodePos
-    @outportPos.x = outportPos.x + @nodeSize
-    
-    _set-input-angle
-    
-    # Set up paths
-    nodePath = new paper.Path.Circle @nodePos, @nodeSize
-    nodePath.style = style
-    
-    # Add node
-    result.addChild nodePath
-    
-    # Add outport
-    result.addChild (@_make-port @outportPos, VS.outport)
-    
-    # Draw each individual input
-    i = 0
-
-    while i < @noinputs
-      if @inputs[i]
-        result.addChild (@_make-port (@get-input-pos i), VS.inport_busy)
-      else
-        result.addChild (@_make-port (@get-input-pos i), VS.inport_clear)
-    
-    # Return the group
-    result
-  
+   
+   group: ->
+     @node-group
+      
   /* getInputPos(ref : Int) : Paper.Point
    *
    * Returns position of port ref
@@ -145,13 +113,13 @@ export class Node_View
     
   get-input-pos: (ref) ->
     _angle = ((ref+1) * @angle) + 90
-    _angle = _angle * (Math.PI / 180)
+    _angle *= Math.PI / 180
     
-    dx = @nodeSize * (Math.cos _angle)
-    dy = @nodeSize * (Math.sin _angle)
+    dx = NODE_SIZE * (Math.cos _angle)
+    dy = NODE_SIZE * (Math.sin _angle)
     
-    ipx = @nodePos.x + dx
-    ipy = @nodePos.y + dy
+    ipx = @node-pos.x + dx
+    ipy = @node-pos.y + dy
     
     result = new paper.Point ipx, ipy
     
@@ -164,7 +132,7 @@ export class Node_View
    */
   
   get-output-pos: ->
-    @outportPos
+    @outport-pos
     
   /* busyPort(ref : Int) : void
    *
@@ -174,7 +142,7 @@ export class Node_View
 
   busy-port: (ref) !->
     @inputs[ref] = true
-    @redraw
+    redraw!
 
   /* clearPort(ref : Int) : void 
    *
@@ -184,7 +152,7 @@ export class Node_View
    
   clear-port: (ref) !->
     @inputs[ref] = false
-    @redraw
+    redraw!
     
   /* redraw : Group
    * 
@@ -193,7 +161,7 @@ export class Node_View
    */
     
   redraw: ->
-    @draw-node @nodePos @noinputs
+    _draw-node!
     
   /* set-node-style(style : VS) : void
    *
@@ -202,8 +170,8 @@ export class Node_View
    */
    
   set-node-style: (style = VS.standard) !->
-    @nodeStyle = style
-    @redraw
+    @node-style = style
+    redraw!
     
   /* set-port-style(style : VS, port : String) : void
    *
@@ -214,13 +182,16 @@ export class Node_View
    */
    
   set-port-style: (style = VS.standard, port = "N/A") !->
+    | port == "outport"     => @outport-style = style
+    | port == "inport-busy" => @inport-busy-style = style
+    | port == "inport-clear"=> @inport-clear-style = style
     if port == "outport" 
-      @outportStyle = style
+      @outport-style = style
     else if port == "inport_busy"
-      @inportBusyStyle = style
+      @inport-busy-style = style
     else if port == "inport_clear"
-      @inportClearStyle = style
-    redraw
+      @inport-clear-style = style
+    redraw!
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -228,32 +199,28 @@ export class Node_View
    *
    */
    
-  set-node-pos: (location) !->
-    @nodePos = location
+  set-node-pos: (@node-pos) !->
 
   /* set-node-fill-color(col : Colour) :void
    * 
    * Sets the fill colour of the node
    */
     
-  set-node-fill-color: (col) !->
-    @nodeStyle.fillColor = col
+  set-node-fill-color: (@node-style.fillColor) !->
 
   /* set-node-line-color(col : Colour) : void
    *
    * Sets the line colour of the node
    */
     
-  set-node-line-color: (col) !->
-    @nodeStyle.strokeColor = col
+  set-node-line-color: (@node-style.strokeColor) !->
     
   /* set-node-line-width(width : Int) : void
    *
    * Sets the line width of the node
    */    
 
-  set-node-line-width: (width) !->
-    @nodeStyle.strokeWidth = width
+  set-node-line-width: (@node-style.strokeWidth) !->
       
   /** PRIVATE METHODS **/
      
@@ -273,6 +240,34 @@ export class Node_View
    */
    
   _make-port: (pos, sty) ->
-    path = new paper.Path.Circle pos, (@nodeSize / @portRatio)  
+    path = new paper.Path.Circle pos, (NODE_SIZE / PORT_RATIO)  
     path.style = sty
     path
+    
+  /*  private DrawNode() : Group
+   *  
+   *  Given the location and number of inputs to the node,
+   *  return a group to be drawn of the node.
+   *
+   */
+  
+  _draw-node: !->
+    
+    _set-input-angle!
+    
+    # Set up paths
+    node-path = new paper.Path.Circle @node-pos, NODE_SIZE
+    node-path.style = style
+    
+    # Add node
+    @node-group.addChild node-path
+    
+    # Add outport
+    @node-group.addChild (@_make-port @outport-pos, VS.outport)
+    
+    # Draw each individual input
+    i = 0
+    [0 til #noinputs]
+      |> each (i)
+        @node-group.addChild (@_make-port @get-input-post i,
+          @inputs[i] ? VS.inport-busy : VS.inport-clear

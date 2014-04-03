@@ -2,7 +2,7 @@ VS = require \view_style
 
 /** Public Methods Summary 
  *
- * Wire_View([start], [end], [style])
+ * WireView([start], [end], [style])
  * -- sets up initial values of the wire
  *
  * draw-wire(startpos, endpos) : Group
@@ -22,15 +22,15 @@ VS = require \view_style
  *
  */
 
-export class Wire_View
+module.exports = class WireView
 
-  /* Wire_View(start : Paper.Point, end : Paper.Point, style : VS) : void
+  /* WireView(start : Paper.Point, end : Paper.Point, style : VS) : void
    *
    * Sets up initial values of the wire
    *
    */
   
-  (start = (new Point 0, 0), end = (new Point 0, 0), style = VS.line_idle) ->
+  (@startpos = [0px 0px], @endpos = [0px 0px], @line-style = VS.line_idle) ->
     /* Set up constants:
      * 
      * lineStyle : VS -- the style of the line
@@ -39,10 +39,10 @@ export class Wire_View
      * endpos : Paper.Point
      */
      
-    @lineStyle = style
+    @wire-group = new paper.Group
     
-    @startpos = start
-    @endpos = end
+  group: ->
+    @wire-group
     
   /* draw-wire (startpos : Paper.Point, endpos : Paper.Point) : Group
    * 
@@ -50,19 +50,12 @@ export class Wire_View
    *
    */  
   
-  draw-wire: (start, end) ->
+  _draw-wire: !->
     
-    result = new paper.Group
+    wire-path = new paper.Path.Line start, end
+    wire-path.style = @line-style
     
-    @startpos = start
-    @endpos = end
-    
-    wirePath = new paper.Path.Line start, end
-    wirePath.style = @lineStyle
-    
-    result.addChild wirePath
-    
-    result
+    @wire-group.addChild wire-path
   
   /* redraw : void
    *
@@ -71,7 +64,7 @@ export class Wire_View
    */
    
   redraw: !->
-    @draw-wire @startpos @endpos
+    _draw-wire!
     
   /* set-line-style (style : VS) : void
    *
@@ -79,8 +72,7 @@ export class Wire_View
    *
    */
    
-  set-line-style: (style) !->
-    @lineStyle = style
+  set-line-style: (@line-style) !->
     
   /* set-start (location : Paper.Point) : void
    *
@@ -88,14 +80,12 @@ export class Wire_View
    *
    */
    
-  set-start: (location) !->
-    @startpos = location
+  set-start: (@startpos) !->
     
   /* set-end (location : Paper.Point) : void
    *
    * Sets the wire end point
    *
    */
-   
-  set-end: (location) !->
-    @endpos = location
+
+  set-end: (@endpos) !->
