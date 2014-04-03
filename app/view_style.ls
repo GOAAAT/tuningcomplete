@@ -37,21 +37,18 @@ standard =
   strokeWidth: 5,
   fillColor: Colour.cyan
 
-/* make-port (col : Colour)
- *
- * Makes a port of a given colour
- *
- */
-
-_make-port: (col) ->
-  res = 
+inport_busy  = 
     strokeColor: Colour.black,
     strokeWidth: 3,
-    fillColor: col
-
-inport_busy  = _make-port Colour.green 
-inport_clear = _make-port Colour.red
-outport      = _make-port Colour.white
+    fillColor: Colour.green
+inport_clear = 
+    strokeColor: Colour.black,
+    strokeWidth: 3,
+    fillColor: Colour.red
+outport      = 
+    strokeColor: Colour.black,
+    strokeWidth: 3,
+    fillColor: Colour.white
 
 wire_idle =
   strokeColor: Colour.black,
