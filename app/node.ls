@@ -19,7 +19,7 @@ export class Node
     @active-inputs = 0
     @send-list = []
     @receiving-wires = []
-    for i from 1 to total-inputs 
+    for i from 1 to @total-inputs 
       @receiving-wires = [null] ++ @receiving-wires
     @active-view = new Node_View
 
