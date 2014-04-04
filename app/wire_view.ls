@@ -77,6 +77,8 @@ module.exports = class WireView
   
   _make-wire: !->
     
+    # Fancy wires to follow in the future!
+    
     @wire-path = new paper.Path.Line start, end
     @wire-path.style = @line-style
     
