@@ -5,9 +5,6 @@ VS = require \view_style
  * WireView([start], [end], [style])
  * -- sets up initial values of the wire
  *
- * draw-wire(startpos, endpos) : Group
- * -- returns a group for drawing representing the wire
- *
  * set-line-style(style)
  * -- sets the line style
  *
@@ -40,21 +37,12 @@ module.exports = class WireView
     
     _make-wire!
     
+  /* group () : Group
+   * return a group to be drawn
+   */
+    
   group: ->
     @wire-group
-    
-  /* draw-wire (startpos : Paper.Point, endpos : Paper.Point) : Group
-   * 
-   *  Return a group of the line to be drawn
-   *
-   */  
-  
-  _make-wire: !->
-    
-    @wire-path = new paper.Path.Line start, end
-    @wire-path.style = @line-style
-    
-    @wire-group.addChild @wire-path
       
   /* set-line-style (style : VS) : void
    *
@@ -80,3 +68,16 @@ module.exports = class WireView
    */
    
   set-end: (@endpos) !->
+  
+  /* private make-wire 
+   * 
+   *  Return a group of the line to be drawn
+   *
+   */  
+  
+  _make-wire: !->
+    
+    @wire-path = new paper.Path.Line start, end
+    @wire-path.style = @line-style
+    
+    @wire-group.add-child @wire-path
