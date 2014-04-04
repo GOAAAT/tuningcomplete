@@ -90,14 +90,14 @@ module.exports = class NodeView
     while i < @noinputs
        @inputs = [false] * @inputs
        i++
-    
+
     _make-node!
-    
+  
   /*  group() : Group
    *  returns a group to go to the canvas
    */
    
-   group: ->
+  group: ->
      @node-group
       
   /* getInputPos(ref : Int) : Paper.Point
@@ -167,19 +167,21 @@ module.exports = class NodeView
    */
    
   set-port-style: (style = VS.standard, port = "N/A") !->
-    | port == "outport"     => 
+    switch port
+    | "outport"     => 
       @outport-path.style = style
       @outport-style = style
-    | port == "inport-busy" => 
-      [0 til #noinputs]
-        |> each (i)
-          if inputs[i] inports[i].style = style
-          @inport-busy-style = style
-    | port == "inport-clear"=> 
-      [0 til #noinputs]
-        |> each (i)
-          if !inputs[i] inports[i].style = style
-          @inport-clear-style = style
+    | "inport-busy" => 
+      @inport-busy-style = style
+    | "inport-clear" => 
+      @inport-clear-style = style
+    for i from 0 to @noinputs
+      if @inputs[i]
+        @inports[i].style = @inport-busy-style
+      else
+        @inports[i].style = @inport-clear-style
+        
+    # Not as clean as it should be but I was getting too many errors from trying to neaten it
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -194,21 +196,21 @@ module.exports = class NodeView
    * Sets the fill colour of the node
    */
     
-  set-node-fill-color: (@node-path.fillColor) !->
+  set-node-fill-color: (@node-path.fill-color) !->
 
   /* set-node-line-color(col : Colour) : void
    *
    * Sets the line colour of the node
    */
     
-  set-node-line-color: (@node-path.strokeColor) !->
+  set-node-line-color: (@node-path.stroke-color) !->
     
   /* set-node-line-width(width : Int) : void
    *
    * Sets the line width of the node
    */    
 
-  set-node-line-width: (@node-path.strokeWidth) !->
+  set-node-line-width: (@node-path.stroke-width) !->
       
   /** PRIVATE METHODS **/
      
@@ -248,16 +250,17 @@ module.exports = class NodeView
     @node-path.style = style
     
     # Add node
-    @node-group.addChild @node-path
+    @node-group.add-child @node-path
     
     @outport-path = @_make-port @outport-pos, VS.outport
     # Add outport
-    @node-group.addChild @outport-path
+    @node-group.add-child @outport-path
     
     @inports = []
     # Draw each individual input
     i = 0
-    [0 til #noinputs]
-      |> each (i)
-        @node-group.addChild (@_make-port @get-input-post i,
-          @inputs[i] ? VS.inport-busy : VS.inport-clear
+
+    for i from 0 to @noinputs
+        @inports[i] = @_make-port @get-input-post i,
+          @inputs[i] ? VS.inport-busy : VS.inport-clear     
+        @node-group.add-child inports[i]
