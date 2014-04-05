@@ -85,8 +85,12 @@ module.exports = class Wire
   * delete the wire
   * The destination node is (at present) told of the disconnection by the origin node.
   */
+<<<<<<< HEAD
   remove: !-> @origin?disconnect! @
 >>>>>>> Controller: Wire: renamed delete-wire to remove
+=======
+  remove: !-> @origin?disconnect @
+>>>>>>> Controller: Wire: Minor change
   
   /** redraw: void
   * Informs the wire that it should redraw its end-point
