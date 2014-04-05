@@ -10,7 +10,6 @@ WireView = require \WireView
 >>>>>>> Controller: Wire: Made changes from pull request comments
 
 /* Wire(node : Node) : void
- *
  * Constructor
  */
 <<<<<<< HEAD
@@ -18,20 +17,21 @@ WireView = require \WireView
 
 module.exports = class Wire
   (@origin) ->
+<<<<<<< HEAD
 >>>>>>> Controller: Wire: Made changes from pull request comments
 
 module.exports = class Wire
   (@origin) ->
+=======
+>>>>>>> Controller: Wire: Added View function
   
   /* view () : Group
-   *
    * Return a group to draw on canvas
    */
   view: -> @active-view?group!
   
   /** origin-node: node
   * Returns node which is putting data onto wire
-  *
   */
   origin-node: -> @origin
   
@@ -78,7 +78,6 @@ module.exports = class Wire
 >>>>>>> Controller: Wire: Made changes from pull request comments
 
   /** set-end (location : paper.Point) : void
-   *
    * Sets the end of the wire to a position on the canvas
    */
    
