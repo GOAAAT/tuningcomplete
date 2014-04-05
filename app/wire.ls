@@ -63,6 +63,7 @@ module.exports = class Wire
   get-dest-port: -> @dest-port
   
 <<<<<<< HEAD
+<<<<<<< HEAD
   /** remove: void
   * delete the wire
   * The destination node is (at present) told of the disconnection by the origin node.
@@ -79,6 +80,13 @@ module.exports = class Wire
 =======
   delete-wire: !-> @origin?disconnect! @
 >>>>>>> Controller: Wire: Implemented set-end function
+=======
+  /** remove: void
+  * delete the wire
+  * The destination node is (at present) told of the disconnection by the origin node.
+  */
+  remove: !-> @origin?disconnect! @
+>>>>>>> Controller: Wire: renamed delete-wire to remove
   
   /** redraw: void
   * Informs the wire that it should redraw its end-point
