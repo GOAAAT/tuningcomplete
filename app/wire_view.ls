@@ -14,6 +14,8 @@ VS = require \view_style
  * set-end(location)
  * -- sets the end position
  *
+ * remove()
+ * -- removes the wire
  */
 
 module.exports = class WireView
@@ -68,6 +70,13 @@ module.exports = class WireView
    */
 
   set-end: (@endpos) !->
+  
+  /* remove () : void
+   *
+   * Removes the wire from being drawn
+   */
+   
+  remove: !-> @wire-group.remove-children
   
   /* private make-wire 
    * 

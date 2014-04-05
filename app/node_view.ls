@@ -39,6 +39,8 @@ VS = require \view_style
  * set-node-line-width(width)
  * -- sets the line width of the node
  *
+ * remove()
+ * -- removes the node
  **/
 
 const NODE_SIZE = 20
@@ -211,6 +213,12 @@ module.exports = class NodeView
    */    
 
   set-node-line-width: (@node-path.stroke-width) !->
+  
+  /* remove() : void
+   * removes the node
+   */
+   
+  remove: !-> @node-group.remove-children
       
   /** PRIVATE METHODS **/
      
