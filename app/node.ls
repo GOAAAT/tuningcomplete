@@ -8,7 +8,7 @@
   * a node
   */
   
-Node_View = require \node_view
+NodeView = require \NodeView
 
 export class Node
   ->
@@ -21,11 +21,11 @@ export class Node
     @receiving-wires = []
     for i from 1 to @total-inputs 
       @receiving-wires = [null] ++ @receiving-wires
-    @active-view = new Node_View
+    @active-view = new NodeView
 
     /** view : Group
     * 
-    * Requests node_view draws the node again
+    * Requests NodeView draws the node again
     * and instructs all Wires to ask to be redrawn
     */
     view: ->
@@ -40,7 +40,7 @@ export class Input
     /** get-input-pos : paper.Point
     *  ref : int
     *
-    * Requests the position of port 'ref' from node_view
+    * Requests the position of port 'ref' from NodeView
     */
     get-input-pos: (ref) ->
       @active-view?get-input-pos ref
@@ -100,7 +100,7 @@ export class Output
 
    /** get-output-pos : paper.Point
    *
-   *  Requests position of output port from node_view
+   *  Requests position of output port from NodeView
    */
    get-output-pos: ->
      @active-view?get-output-pos
@@ -153,9 +153,9 @@ export class Output
    * redraw : Informs the wire that it should redraw its end-point (found by calling node.get-input-pos ref)
    *    - This is called when a node is moved and the wires should move with it
    *
-   * NODE_VIEW
+   * NodeView
    * VARIABLES - Keeps track of number of inputs (as constant after drawn once)
-   *    - This allows node_view to make design decisions without requesting values from the node class
+   *    - This allows NodeView to make design decisions without requesting values from the node class
    *
    * draw-node location, total : Adjusts the view to show the new node at point 'location' with 'total' input ports
    *    - This is called on creation of a node and should have all inputs marked as free
