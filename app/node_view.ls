@@ -46,7 +46,7 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* Node_View([location : Paper.Point], [noinputs : int], [style : VS]) : void
+  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
@@ -234,7 +234,7 @@ module.exports = class NodeView
     path.style = sty
     path
     
-  /*  private DrawNode() : Group
+  /*  private draw-node() : Group
    *  
    *  Given the location and number of inputs to the node,
    *  return a group to be drawn of the node.
