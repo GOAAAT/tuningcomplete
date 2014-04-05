@@ -2,7 +2,8 @@
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
 */
 
-WireView = require \WireView
+WireView = require \wire_view
+Node = require \node
 
 /* Wire(node : Node) : void
  *
@@ -28,10 +29,10 @@ module.exports = class Wire
   * i.e. connect
   * node: Node
   * port: int
-  * Set where the wire is going to.
+  * Set where the wire is going to - should be getting get-input-pos??
   */  
   set-dest: (@dest, @dest-port) !->
-    @active-view = new NodeView @origin.location!, @dest.get-location!
+    @active-view = new NodeView @origin?location!, @dest?get-location!
   
   /** get-dest-port: int
   * Returns port that wire is connected to at destination
@@ -43,11 +44,18 @@ module.exports = class Wire
   * delete the wire
   * The destination node is (at present) told of the disconnection by the origin node.
   */
-  delete-wire: !-> @origin.disconnect! @
+  delete-wire: !-> @origin?disconnect! @
   
   /** redraw: void
   * Informs the wire that it should redraw its end-point
   *  (called when a node is moved, so the wires can move with it)
   */
-  redraw: !-> @active-view.set-end! @dest.get-location!
+  redraw: !-> @active-view?set-end! @dest?get-location!
 
+  /** set-end (location : paper.Point) : void
+   *
+   * Sets the end of the wire to a position on the canvas
+   */
+   
+  set-end: (pos) !->
+    @active-view?set-end! pos
