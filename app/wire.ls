@@ -11,7 +11,13 @@ WireView = require \WireView
 
 module.exports = class Wire
   (@origin) ->
-
+  
+  /* view () : Group
+   *
+   * Return a group to draw on canvas
+   */
+  view: -> @active-view?group!
+  
   /** origin-node: node
   * Returns node which is putting data onto wire
   *
