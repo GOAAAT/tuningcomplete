@@ -44,7 +44,7 @@ module.exports = class Wire
   * delete the wire
   * The destination node is (at present) told of the disconnection by the origin node.
   */
-  remove: !-> @origin?disconnect! @
+  remove: !-> @origin?disconnect @
   
   /** redraw: void
   * Informs the wire that it should redraw its end-point
