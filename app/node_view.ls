@@ -24,8 +24,11 @@ VS = require \view_style
  * set-node-style(style)
  * -- sets the style of the node
  * 
- * set-port-style(style, port)
- * -- sets the style of a given node type ("outport", "inport_busy", "inport_clear")
+ * set-outport-style(style)
+ * -- sets the style of the output port
+ *
+ * set-inport-style(style, ref)
+ * -- sets the style of inport ref
  *
  * set-node-pos(location)
  * -- sets the node position
@@ -48,14 +51,14 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS]) : void
+  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS], [outport-style : VS], [input-styles : [VS]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
-   *
+   * Input Styles is a list of styles
    */
   
-  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard) ->
+  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard, @outport-style = VS.outport, input-styles = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -70,7 +73,7 @@ module.exports = class NodeView
      * outpor-style : VS
      *
      * noinputs : Int -- number of inputs to this node
-     * inputs : List[Int] -- list of busy (true) and clear (false) for nodes
+     * input-styles : List[Int] -- list of inport styles
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
      
@@ -80,17 +83,18 @@ module.exports = class NodeView
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
     
-    @outport-style     = VS.outport
     @inport-busy-style  = VS.inport-busy
-    @inport-clear-style = VS.inport-clear
     
-    @inputs = []
+    @input-styles = []
     _set-input-angle!
     
     /** Set up input list of true/false (busy/clear) **/
     i = 0
     while i < @noinputs
-       @inputs = [false] * @inputs
+       if input-styles == []
+         @input-styles = [VS.inport-clear] * @input-styles
+       else
+         @input-styles = [input-styles[i]] * @input-styles
        i++
 
     _make-node!
@@ -138,7 +142,6 @@ module.exports = class NodeView
    */    
 
   busy-port: (ref) !->
-    @inputs[ref] = true
     @inports[ref].style = @inport-busy-style
 
   /* clearPort(ref : Int) : void 
@@ -148,8 +151,7 @@ module.exports = class NodeView
    */
    
   clear-port: (ref) !->
-    @inputs[ref] = false
-    @inports[ref].style = @inport-clear-style
+    @inports[ref].style = @input-styles[ref]
         
   /* set-node-style(style : VS) : void
    *
@@ -160,30 +162,14 @@ module.exports = class NodeView
   set-node-style: (@node-path.style = VS.standard) !->
     @node-style = style
     
-  /* set-port-style(style : VS, port : String) : void
+  /* set-outport-style(style : VS) : void
    *
-   * Sets the style of a port style
-   *
-   *  "outport", "inport_busy", "inport_clear" only accepted ports
+   * Sets the style of output port
    *
    */
    
-  set-port-style: (style = VS.standard, port = "N/A") !->
-    switch port
-    | "outport"     => 
-      @outport-path.style = style
-      @outport-style = style
-    | "inport-busy" => 
-      @inport-busy-style = style
-    | "inport-clear" => 
-      @inport-clear-style = style
-    for i from 0 to @noinputs
-      if @inputs[i]
-        @inports[i].style = @inport-busy-style
-      else
-        @inports[i].style = @inport-clear-style
-        
-    # Not as clean as it should be but I was getting too many errors from trying to neaten it
+  set-outport-style: (@outport-style = VS.outport) !->
+    @outport-path.style = @outport-style
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -191,6 +177,15 @@ module.exports = class NodeView
    *
    */
    
+  /* set-inport-style (style : VS, ref : Int) : void
+   * 
+   * Sets the style of input port ref
+   */
+   
+  set-inport-style: (style, ref) !->
+    @input-styles[ref] = style
+    @inports[ref].style = style
+
   set-node-pos: (@node-path.position) !->
 
   /* set-node-fill-color(col : Colour) :void
@@ -269,6 +264,5 @@ module.exports = class NodeView
     i = 0
 
     for i from 0 to @noinputs
-        @inports[i] = @_make-port @get-input-post i,
-          @inputs[i] ? VS.inport-busy : VS.inport-clear     
+        @inports[i] = @_make-port @get-input-pos i, @input-styles[i]
         @node-group.add-child inports[i]
