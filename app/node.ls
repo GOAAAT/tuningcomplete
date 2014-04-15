@@ -1,11 +1,8 @@
   /**
   * REQUIREMENT
   *
-  * Connect and disconnect should always
-  * be called on the receiving node
-  *
-  * Location and total-inputs should always be set on initialising
-  * a node
+  * Numerical, audio are lists of Booleans of size x where x is the number of inputs required
+  * Location and type should also be set on initialisation
   */
   
 NodeView = require \NodeView
