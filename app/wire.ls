@@ -4,44 +4,34 @@
 
 export class Wire
   (node) ->
-    origin = node
-    active-view.set-start(origin.location) # not actually necessary
+    @origin = node
 
-  var dest
-  var dest-port
-  active-view = new Wire_View
 
-  /** origin-node: node
-  * Returns node which is putting data onto wire
-  *  TODO: not convinced this is needed?
-  */
-  origin-node: -> origin
-  
-  /** set-dest (i.e. connect): void
-  * node: Node
-  * port: int
-  * Set where the wire is going to.
-  */  
-  set-dest: (node, port) !->
-    dest = node
-    dest-port = port
-    active-view.draw-wire(origin.location, dest.location)
-  
-  /** get-dest-port: int
-  * Returns port that wire is connected to at destination
-  * TODO: not convinced this needed?
-  */
-  get-dest-port: -> dest-port
-  
-  /** delete: void
-  * delete the wire
-  * The destination node is (at present) told of the disconnection by the origin node.
-  */
-  delete: !-> origin.disconnect(@)
+  @origin
+  @dest
+  @dest-port
+  @wire-type = @origin.type
+  @active-view = new Wire_View
+  @active-view.set-start(node.get-output-pos!) # not actually necessary
+
   
   /** redraw: void
   * Informs the wire that it should redraw its end-point
   *  (called when a node is moved, so the wires can move with it)
   */
-  redraw: !-> active-view.redraw
+   redraw: !-> active-view.redraw
 
+   connect: (node) !->
+     @dest-port = node.register-input (@wire-type)
+     if (@dest-port == -1)
+XX     @active-view.remove!
+     else 
+       @dest = node
+       @origin?register-output node
+XX     @active-view.set-end(node.get-output-pos!)
+    
+
+   disconnect: !->
+     @dest?rem-input (@wire-type, @dest-port)
+     @orgin?rem-output @dest
+XX   @active-view.remove!
