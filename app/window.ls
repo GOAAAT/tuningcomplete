@@ -99,7 +99,7 @@ module.exports = class Window extends CursorResponder
     item = @_snap-item pt ?.item
 
     if item instanceof Input and @active-wire?
-      item.connect @active-wire
+      @active-wire.connect item
     else
       @active-wire?view?remove!
 
