@@ -72,15 +72,14 @@ module.exports = class Window extends CursorResponder
    *  pt : paper.Point
    *
    * If the pointer is released near an Input of a Node, then connect
-   * the wire to it.
+   * on the wire to this Node
    */
   pointer-up: (pt) !->
     item = @_snap-item pt ?.item
 
-    if item instanceof Input and @active-wire?
-      @active-wire.connect item
-    else
-      @active-wire?view?remove!
+    @active-wire?view?remove! unless item instanceof Input and 
+    @active-wire? and 
+    @active-wire.connect item
 
   /** pan-by : void
    *  delta : paper.Point

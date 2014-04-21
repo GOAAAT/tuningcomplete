@@ -1,92 +1,72 @@
-  /**
-  * REQUIREMENT
-  *
-  * Numerical, audio are lists of Booleans of size x where x is the number of inputs required
-  * Location and type should also be set on initialisation
-  */
 
 export class Node
-  ->
-
-    @location
-    @type
+  (@output-type, audio, numerical) ->
+    @inputs = []
+    for i from 1 to audio
+      new Input "Audio" |> @inputs.push
+    for i from 1 to numerical
+      new Input "Numerical" |> @inputs.push
 
     @send-list = []
-    @numerical = []
-    @audio = []
-    @active-view = new Node_View
+    @sending-wires = []
+    @active-view = new Node_View    
 
-
-export class Input
-  ->
-
-    /** get-input-pos : paper.Point
-    *  ref : int
-    *
-    * Requests the position of port 'ref' from node_view
-    */
-    get-input-pos: (ref) ->
-      @active-view?get-input-pos ref
   
-    /** register-input : int
+    /** find-input : int
     * nodetype : NodeType
     *
     *  - Update the list of free ports
     *  - Inform the wire object which port it should draw to
     *  - Inform the view that this port is now busy
     */
-    register-input: (nodetype) ->
-      i = 0
-      while (i < @nodetype.length && @nodetype[i] isnt true)
-        i++
-      if @nodetype[i] isnt true  
-        return -1
-      @"nodetype"[i] = false
-      overall-port = i
-      if (nodetype == numerical)
-        overall-port += @audio.length
-      @active-view?busy-port overall-port
-      i
+    find-input: (nodetype) ->
+      @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
   
-    /** rem-input : void
-    *  nodetype : NodeType
-    *  ref : int
-    *  
-    *  - Update the list of free ports
-    *  - Inform the wire that this port is now free
+    /** get-output-pos : paper.Point
+    *
+    *  Requests position of output port from node_view
     */
-    rem-input: (nodetype, ref) ->
-      @nodetype[ref] = true
-      overall-port = i
-      if (nodetype == numerical)
-        overall-port += @audio.length
-      @active-view?clear-port overall-port
+    get-output-pos: ->
+      @active-view?get-output-pos
 
+
+    /** register-output : void
+    * node : Node
+    *
+    *  Add to the send-list the node 'node'
+    */
+    register-output: (node) !->
+      @send-list.push node
+
+    /** rem-output : void
+    * node : Node
+    *
+    *  Update the send list after a disconnect
+    */
+    rem-output: (node) !->
+      @send-list = filter (!= node), @send-list
+
+
+
+
+export class Input
+  (@type) ->
+    @busy = false
+    @input-view = new Input-View
+
+    view: -> @input-view?item!
+
+    register-input: (wire) !-> 
+      @busy = true
+      @input-view?busy-port
+      @wire = wire
+
+    remove-input: !->
+      @busy = false
+      @input-view?free-port
+      @wire = null
+   
 
 
 export class Output
   ->
-
-   /** get-output-pos : paper.Point
-   *
-   *  Requests position of output port from node_view
-   */
-   get-output-pos: ->
-     @active-view?get-output-pos
-
-
-   /** register-output : void
-   * node : Node
-   *
-   *  Add to the send-list the node 'node'
-   */
-   register-output: (node) !->
-     @send-list.push node
-
-   /** rem-output : void
-   * node : Node
-   *
-   *  Update the send list after a disconnect
-   */
-   rem-output: (node) !->
-     @send-list = filter (!= node), @send-list
