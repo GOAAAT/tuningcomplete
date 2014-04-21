@@ -51,14 +51,14 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS], [outport-style : VS], [input-styles : [VS]]) : void
+  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS], [outport-style : VS], [input-views : [InputView]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
    * Input Styles is a list of styles
    */
   
-  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard, @outport-style = VS.outport, input-styles = []) ->
+  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard, @outport-style = VS.outport, @input-views = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -85,9 +85,9 @@ module.exports = class NodeView
     
     @inport-busy-style  = VS.inport-busy
     
-    @input-styles = []
     _set-input-angle!
     
+    /** FIXME : INPUT VIEWS
     /** Set up input list of true/false (busy/clear) **/
     i = 0
     while i < @noinputs
