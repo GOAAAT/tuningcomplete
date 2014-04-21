@@ -2,36 +2,31 @@
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
 */
 
-export class Wire
-  (node) ->
-    @origin = node
+export class Wire 
+   (@origin) ->
+   @wire-type = @origin.output-type
+   @active-view = new Wire_View
+   @active-view.set-start(node.get-output-pos!) # not actually necessary
 
-
-  @origin
-  @dest
-  @dest-port
-  @wire-type = @origin.type
-  @active-view = new Wire_View
-  @active-view.set-start(node.get-output-pos!) # not actually necessary
   
-  /** redraw: void
-  * Informs the wire that it should redraw its end-point
-  *  (called when a node is moved, so the wires can move with it)
-  */
-  redraw: !-> active-view.redraw
+   /** redraw: void 
+   * Informs the wire that it should redraw its end-point
+   *  (called when a node is moved, so the wires can move with it)
+   */
+   redraw: !-> active-view.redraw
 
-   connect: (node) !->
-     @dest-port = node.register-input (@wire-type)
-     if (@dest-port == -1)
-XX     @active-view.remove!
-     else 
-       @dest = node
+   connect: (node) ->
+     input = node.find-input (@wire-type)
+     if input?
+       @dest = input 
        @origin?register-output node
-XX     @active-view.set-end(node.get-output-pos!)
+       @active-view.set-end(input?view!position) 
+       true
+     else 
+       false
     
 
    disconnect: !->
-     @dest?rem-input (@wire-type, @dest-port)
-     @orgin?rem-output @dest
-XX   @active-view.remove!
-
+     @input?remove-input
+     @origin?rem-output @input
+     @active-view.remove!
