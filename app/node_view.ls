@@ -3,7 +3,7 @@ VS = require \view_style
 /**  Public Methods Summary
  * (Square brackets denote optional parameters)
  *
- * NodeView([location], [noinputs], [style])
+ * NodeView([location], [type], [output-type], [inputs])
  * -- constructor method
  *
  * group() : Group
@@ -21,26 +21,14 @@ VS = require \view_style
  * clear-port(ref)
  * -- marks input port ref as clear
  *
- * set-node-style(style)
- * -- sets the style of the node
+ * set-node-type(type)
+ * -- sets the type of the node
  * 
- * set-outport-style(style)
- * -- sets the style of the output port
- *
- * set-inport-style(style, ref)
- * -- sets the style of inport ref
+ * set-outport-type(type)
+ * -- sets the type of the output port
  *
  * set-node-pos(location)
  * -- sets the node position
- *
- * set-node-fill-color(col)
- * -- sets the fill colour of the node
- *
- * set-node-line-color(col)
- * -- sets the line colour of the node
- *
- * set-node-line-width(width)
- * -- sets the line width of the node
  *
  * remove()
  * -- removes the node
@@ -51,14 +39,14 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS], [outport-style : VS], [input-views : [InputView]]) : void
+  /* NodeView([location : Paper.Point], [type : string], [output-type : VS], [inputs : [input_view]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
-   * Input Styles is a list of styles
+   * Inputs is a list of input_views
    */
   
-  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard, @outport-style = VS.outport, @input-views = []) ->
+  (@node-pos = [0px 0px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -68,34 +56,23 @@ module.exports = class NodeView
      * outport-pos : Point -- position of the output port
      *
      * node-style : VS -- the style of the nodeNodeView
-     * inport-busy-style : VS
-     * inport-clear-style : VS
-     * outpor-style : VS
+     * outport-style : VS
      *
-     * noinputs : Int -- number of inputs to this node
-     * input-styles : List[Int] -- list of inport styles
+     * inputs : [input_view] -- list of inputs to be added
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
      
     # Set up the group to be returned
-    @node-group = new Group
+    @node-group = new paper.Group
+    
+    @_find-node-style!
     
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
     
-    @inport-busy-style  = VS.inport-busy
+    @_find-outport-style!
     
     _set-input-angle!
-    
-    /** FIXME : INPUT VIEWS
-    /** Set up input list of true/false (busy/clear) **/
-    i = 0
-    while i < @noinputs
-       if input-styles == []
-         @input-styles = [VS.inport-clear] * @input-styles
-       else
-         @input-styles = [input-styles[i]] * @input-styles
-       i++
 
     _make-node!
   
@@ -142,7 +119,7 @@ module.exports = class NodeView
    */    
 
   busy-port: (ref) !->
-    @inports[ref].style = @inport-busy-style
+    @inputs[ref]?busy-port!
 
   /* clearPort(ref : Int) : void 
    *
@@ -150,67 +127,36 @@ module.exports = class NodeView
    *
    */
    
-  clear-port: (ref) !->
-    @inports[ref].style = @input-styles[ref]
+  free-port: (ref) !->
+    @inputs[ref]?free-port
         
-  /* set-node-style(style : VS) : void
+  /* set-node-type(type : String) : void
    *
-   * Sets the style of the node
+   * Sets the type of the node
    *
    */
    
-  set-node-style: (@node-path.style = VS.standard) !->
-    @node-style = style
+  set-node-type: (@node-type = "Standard") !-> @_find-node-style!
     
-  /* set-outport-style(style : VS) : void
+  /* set-outport-type(type : String) : void
    *
    * Sets the style of output port
    *
    */
    
-  set-outport-style: (@outport-style = VS.outport) !->
-    @outport-path.style = @outport-style
+  set-output-type: (@output-type = "Standard") !-> @_find-outport-style!
 
   /* set-node-pos(location : Paper.Point) : void
    *
    * Sets the position of the node
    *
    */
-   
-  /* set-inport-style (style : VS, ref : Int) : void
-   * 
-   * Sets the style of input port ref
-   */
-   
-  set-inport-style: (style, ref) !->
-    @input-styles[ref] = style
-    @inports[ref].style = style
 
   set-node-pos: (@node-path.position) !->
 
   /* set-node-fill-color(col : Colour) :void
    * 
    * Sets the fill colour of the node
-   */
-    
-  set-node-fill-color: (@node-path.fill-color) !->
-
-  /* set-node-line-color(col : Colour) : void
-   *
-   * Sets the line colour of the node
-   */
-    
-  set-node-line-color: (@node-path.stroke-color) !->
-    
-  /* set-node-line-width(width : Int) : void
-   *
-   * Sets the line width of the node
-   */    
-
-  set-node-line-width: (@node-path.stroke-width) !->
-  
-  /* remove() : void
-   * removes the node
    */
    
   remove: !-> @node-group.remove-children
@@ -224,7 +170,7 @@ module.exports = class NodeView
    */
     
   _set-input-angle: !->
-    @angle = 180 / (@noinputs + 1)
+    @angle = 180 / (@inputs.length + 1)
   
   /*  private make-port(pos : Paper.Point, sty : VS) : Paper.Path
    *
@@ -250,19 +196,43 @@ module.exports = class NodeView
     
     # Set up paths
     @node-path = new paper.Path.Circle @node-pos, NODE_SIZE
-    @node-path.style = style
+    @node-path.style = @node-style
     
     # Add node
     @node-group.add-child @node-path
     
-    @outport-path = @_make-port @outport-pos, VS.outport
+    @outport-path = @_make-port @outport-pos, @outport-style
     # Add outport
     @node-group.add-child @outport-path
     
-    @inports = []
     # Draw each individual input
     i = 0
-    for i from 0 to @noinputs
-        @inports[i] = @_make-port @get-input-pos i, @input-styles[i]
-        @node-group.add-child inports[i]
+    for i from 0 to @inputs.length
+      @inputs[i]?set-pos @get-input-pos i
+      @inputs[i]?set-size (NODE_SIZE / PORT_RATIO)
+      @node-group.add-child @inputs[i]?item!
   
+  /* private find-node-style() : void
+   *
+   * Finds the node style from its type
+   */
+  
+  _find-node-style: !->
+  
+  switch @node-type
+  | "Maths" => @node-style = VS.maths
+  | "Oscillator" => @node-style = VS.oscillator
+  | "Instrument" => @node-style = VS.instrument
+  | otherwise => @node-style = VS.standard
+  
+  /* private find-outport-style() : void
+   *
+   * Finds the outport style from its type
+   */
+  
+  _find-outport-style: !->
+  
+  switch @output-type
+  | "Numerical" => @outport-style = VS.numerical-out
+  | "Audio" => @outport-style = VS.audio-out
+  | otherwise => @outport-style = VS.standard-out

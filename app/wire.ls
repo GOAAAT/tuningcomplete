@@ -2,60 +2,31 @@
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
 */
 
-WireView = require \wire_view
-Node = require \node
+export class Wire 
+   (@origin) ->
+   @wire-type = @origin.output-type
+   @active-view = new Wire_View
+   @active-view.set-start(node.get-output-pos!) # not actually necessary
 
-/* Wire(node : Node) : void
- *
- * Constructor
- */
+  
+   /** redraw: void 
+   * Informs the wire that it should redraw its end-point
+   *  (called when a node is moved, so the wires can move with it)
+   */
+   redraw: !-> active-view.redraw
 
-module.exports = class Wire
-  (@origin) ->
-  
-  /* view () : Group
-   *
-   * Return a group to draw on canvas
-   */
-  view: -> @active-view?group!
-  
-  /** origin-node: node
-  * Returns node which is putting data onto wire
-  *
-  */
-  origin-node: -> @origin
-  
-  /** set-dest (node : Node, port : Int): void
-  * i.e. connect
-  * node: Node
-  * port: int
-  * Set where the wire is going to - should be getting get-input-pos??
-  */
-  set-dest: (@dest, @dest-port) !->
-    @active-view = new NodeView @origin?location!, @dest?get-location!
-  
-  /** get-dest-port: int
-  * Returns port that wire is connected to at destination
-  *
-  */
-  get-dest-port: -> @dest-port
-  
-  /** remove: void
-  * delete the wire
-  * The destination node is (at present) told of the disconnection by the origin node.
-  */
-  remove: !-> @origin?disconnect @
-  
-  /** redraw: void
-  * Informs the wire that it should redraw its end-point
-  *  (called when a node is moved, so the wires can move with it)
-  */
-  redraw: !-> @active-view?set-end! @dest?get-location!
-  
-  /** set-end (location : paper.Point) : void
-   *
-   * Sets the end of the wire to a position on the canvas
-   */
-   
-  set-end: (pos) !->
-    @active-view?set-end! pos
+   connect: (node) ->
+     input = node.find-input (@wire-type)
+     if input?
+       @dest = input 
+       @origin?register-output node
+       @active-view.set-end(input?view!position) 
+       true
+     else 
+       false
+    
+
+   disconnect: !->
+     @input?remove-input
+     @origin?rem-output @input
+     @active-view.remove!
