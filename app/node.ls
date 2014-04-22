@@ -61,7 +61,7 @@ export class Input
 
     remove-input: !->
       @busy = false
-      @input-view?free-port
+      @input-view?clear-port
       @wire = null
    
 export class Output
