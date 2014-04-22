@@ -1,7 +1,7 @@
 InputView = require \input_view
 NodeView = require \node_view
 
-export class Node
+module.exports = class Node
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio

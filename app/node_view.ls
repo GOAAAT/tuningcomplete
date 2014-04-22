@@ -192,7 +192,7 @@ module.exports = class NodeView
   
   _draw-node: !->
     
-    _set-input-angle!
+    @_set-input-angle!
     
     # Set up paths
     @node-path = new paper.Path.Circle @node-pos, NODE_SIZE
