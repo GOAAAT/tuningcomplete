@@ -12,10 +12,6 @@ Colour = require \color
  *  Inport and outport styles
  *
  */
-
-/*
- *	Maths Nodes
- */
  
 export maths =
   strokeColor: Colour.black,
