@@ -16,6 +16,7 @@ module.exports = class Node
     
     @active-view = new NodeView pos, @type, @output-type, @inputs
 
+    view: -> @active-view?group!
   
     /** find-input : int
     * nodetype : NodeType
@@ -58,7 +59,7 @@ module.exports = class Node
    
   get-output-type: !-> @output-type
   
-export class Input
+module.exports = class Input
 
   (@type="Standard") ->
     @busy = false

@@ -5,6 +5,8 @@ Window     = require \window
 Button     = require \button
 PrefixTree = require \prefix_tree
 FilterList = require \filter_list
+Node       = require \node
+Wire       = require \wire
 
 module.exports = class App
     /** App
@@ -97,7 +99,13 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
 
-      @window.force-update!
+      
+      /* Node test stuff */
+      @n1 = new Node "Standard", 1, 0, [100, 100]
+      @window?insert-children [ @n1?view! ], 0
+      
+      @window?force-update!
+
 
     /** Button properties */
     const BTN_DEFAULT = 0

@@ -46,7 +46,7 @@ module.exports = class NodeView
    * Inputs is a list of input_views
    */
   
-  (@node-pos = [0px 0px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
+  (@node-pos = [100px 100px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -72,9 +72,9 @@ module.exports = class NodeView
     
     @_find-outport-style!
     
-    _set-input-angle!
+    @_set-input-angle!
 
-    _make-node!
+    @_make-node!
   
   /*  group() : Group
    *  returns a group to go to the canvas
@@ -183,14 +183,14 @@ module.exports = class NodeView
     path.style = sty
     path
     
-  /*  private draw-node() : Group
+  /*  private make-node() : Group
    *  
    *  Given the location and number of inputs to the node,
    *  return a group to be drawn of the node.
    *
    */
   
-  _draw-node: !->
+  _make-node: !->
     
     @_set-input-angle!
     
@@ -208,10 +208,10 @@ module.exports = class NodeView
     # Draw each individual input
     i = 0
 
-    for i from 0 to @inputs.length
-      @inputs[i]?set-pos @get-input-pos i
-      @inputs[i]?set-size (NODE_SIZE / PORT_RATIO)
-      @node-group.add-child @inputs[i]?item!
+    for i from 0 to (@inputs.length - 1)
+      @inputs[i]?view.position = (@get-input-pos i)
+      @inputs[i]?view.radius = (NODE_SIZE / PORT_RATIO)
+      @node-group.add-child @inputs[i]?view!
 
   /* private find-node-style() : void
    *
