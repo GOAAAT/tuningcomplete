@@ -4,50 +4,89 @@ Colour = require \color
  *  for nodes.
  *  Please do expand it!
  *
+ *  **Node Styles**
+ *
  *  Maths Nodes
  *  Instrument Nodes
  *  Oscillator Nodes
  *  Standard Nodes
  *
- *  Inport and outport styles
+ *  **Inport and outport styles**
+ *  Audio
+ *  Numerical
+ *  Standard
  *
+ *  **Wire Styles**
+ *  Standard Idle
  */
- 
+
+/** Nodes **/
+
 export maths =
-  strokeColor: Colour.black,
-  strokeWidth: 5,
-  fillColor: Colour.blue
+  stroke-color: Colour.black,
+  stroke-width: 5,
+  fill-color: Colour.blue
   
 export instrument =
-  strokeColor: Colour.black,
-  strokeWidth: 5,
-  fillColor: Colour.beeYellow
+  stroke-color: Colour.black,
+  stroke-width: 5,
+  fill-color: Colour.bee-yellow
 
 export oscillator = 
-  strokeColor: Colour.black,
-  strokeWidth: 5,
-  fillColor: Colour.purpleMonster
+  stroke-color: Colour.black,
+  stroke-width: 5,
+  fill-color: Colour.purpleMonster
   
 export standard =
-  strokeColor: Colour.black,
-  strokeWidth: 5,
-  fillColor: Colour.cyan
+  stroke-color: Colour.black,
+  stroke-width: 5,
+  fill-color: Colour.cyan
 
-export inport-busy  = 
-    strokeColor: Colour.black,
-    strokeWidth: 3,
-    fillColor: Colour.green
+/** Numerical Inports **/
+
+export numerical-busy =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.love-red
+
+export numerical-clear =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.dark-blue
+  
+/** Audio Inports **/
+
+export audio-busy =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: love-red
+  
+export audio-clear =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.purple-monster
+
+/** Standard Inports **/
+
+export standard-busy  = 
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.green
     
-export inport-clear = 
-    strokeColor: Colour.black,
-    strokeWidth: 3,
-    fillColor: Colour.red
+export standard-free = 
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.red
+  
+/** Outports **/
     
-export outport = 
-    strokeColor: Colour.black,
-    strokeWidth: 3,
-    fillColor: Colour.white
+export standard-out = 
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.white
+  
+/** Wires **/
 
 export wire-idle =
-  strokeColor: Colour.black,
-  strokeWidth: 3
+  stroke-color: Colour.black,
+  stroke-width: 3
