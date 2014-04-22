@@ -52,7 +52,7 @@ export class Node
 
 export class Input
 
-  (@type) ->
+  (@type="Standard") ->
     @busy = false
     @input-view = new InputView @type
 
