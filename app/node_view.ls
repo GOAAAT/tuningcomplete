@@ -3,7 +3,7 @@ VS = require \view_style
 /**  Public Methods Summary
  * (Square brackets denote optional parameters)
  *
- * NodeView([location], [noinputs], [style])
+ * NodeView([location], [type], [output-type], [inputs])
  * -- constructor method
  *
  * group() : Group
@@ -21,23 +21,14 @@ VS = require \view_style
  * clear-port(ref)
  * -- marks input port ref as clear
  *
- * set-node-style(style)
- * -- sets the style of the node
+ * set-node-type(type)
+ * -- sets the type of the node
  * 
- * set-outport-style(style)
- * -- sets the style of the output port
+ * set-outport-type(type)
+ * -- sets the type of the output port
  *
  * set-node-pos(location)
  * -- sets the node position
- *
- * set-node-fill-color(col)
- * -- sets the fill colour of the node
- *
- * set-node-line-color(col)
- * -- sets the line colour of the node
- *
- * set-node-line-width(width)
- * -- sets the line width of the node
  *
  * remove()
  * -- removes the node
@@ -48,14 +39,14 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [style : VS], [outport-style : VS], [inputs : [input_view]]) : void
+  /* NodeView([location : Paper.Point], [type : string], [output-type : VS], [inputs : [input_view]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
    * Inputs is a list of input_views
    */
   
-  (@node-pos = [0px 0px], @node-style = VS.standard, @outport-style = VS.outport, @inputs = []) ->
+  (@node-pos = [0px 0px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -74,8 +65,12 @@ module.exports = class NodeView
     # Set up the group to be returned
     @node-group = new paper.Group
     
+    @_find-node-style!
+    
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
+    
+    @_find-outport-style!
     
     _set-input-angle!
 
@@ -135,23 +130,21 @@ module.exports = class NodeView
   free-port: (ref) !->
     @inputs[ref]?free-port
         
-  /* set-node-style(style : VS) : void
+  /* set-node-type(type : String) : void
    *
-   * Sets the style of the node
+   * Sets the type of the node
    *
    */
    
-  set-node-style: (@node-path.style = VS.standard) !->
-    @node-style = style
+  set-node-type: (@node-type = "Standard") !-> @_find-node-style!
     
-  /* set-outport-style(style : VS) : void
+  /* set-outport-type(type : String) : void
    *
    * Sets the style of output port
    *
    */
    
-  set-outport-style: (@outport-style = VS.outport) !->
-    @outport-path.style = @outport-style
+  set-output-type: (@output-type = "Standard") !-> @_find-outport-style!
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -164,26 +157,6 @@ module.exports = class NodeView
   /* set-node-fill-color(col : Colour) :void
    * 
    * Sets the fill colour of the node
-   */
-    
-  set-node-fill-color: (@node-path.fill-color) !->
-
-  /* set-node-line-color(col : Colour) : void
-   *
-   * Sets the line colour of the node
-   */
-    
-  set-node-line-color: (@node-path.stroke-color) !->
-    
-  /* set-node-line-width(width : Int) : void
-   *
-   * Sets the line width of the node
-   */    
-
-  set-node-line-width: (@node-path.stroke-width) !->
-  
-  /* remove() : void
-   * removes the node
    */
    
   remove: !-> @node-group.remove-children
@@ -223,12 +196,12 @@ module.exports = class NodeView
     
     # Set up paths
     @node-path = new paper.Path.Circle @node-pos, NODE_SIZE
-    @node-path.style = style
+    @node-path.style = @node-style
     
     # Add node
     @node-group.add-child @node-path
     
-    @outport-path = @_make-port @outport-pos, VS.outport
+    @outport-path = @_make-port @outport-pos, @outport-style
     # Add outport
     @node-group.add-child @outport-path
     
@@ -239,3 +212,27 @@ module.exports = class NodeView
       @inputs[i]?set-size (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]
   
+  /* private find-node-style() : void
+   *
+   * Finds the node style from its type
+   */
+  
+  _find-node-style: !->
+  
+  switch @node-type
+  | "Maths" => @node-style = VS.maths
+  | "Oscillator" => @node-style = VS.oscillator
+  | "Instrument" => @node-style = VS.instrument
+  | otherwise => @node-style = VS.standard
+  
+  /* private find-outport-style() : void
+   *
+   * Finds the outport style from its type
+   */
+  
+  _find-outport-style: !->
+  
+  switch @output-type
+  | "Numerical" => @outport-style = VS.numerical-out
+  | "Audio" => @outport-style = VS.audio-out
+  | otherwise => @outport-style = VS.standard-out
