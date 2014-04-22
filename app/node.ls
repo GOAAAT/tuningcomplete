@@ -1,3 +1,4 @@
+InputView = require \input_view
 
 export class Node
   (@output-type, audio, numerical) ->
@@ -50,9 +51,10 @@ export class Node
 
 
 export class Input
+
   (@type) ->
     @busy = false
-    @input-view = new Input-View
+    @input-view = new InputView @type
 
     view: -> @input-view?item!
 
