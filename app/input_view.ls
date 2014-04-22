@@ -11,18 +11,9 @@ module.exports = class InputView
   
   (@type="Standard") ->
     
-    switch @type
-    | "Audio"     => 
-      @free-style = VS.audio-free
-      @busy-style = VS.audio-busy
-    | "Numerical" =>
-      @free-style = VS.numerical-free
-      @busy-style = VS.numerical-busy
-    | "Standard"  =>
-      @free-style = VS.standard-free
-      @busy-style = VS.standard-busy
+    @_find-port-style!
       
-    @make!
+    @_make!
   
   /* item() : Paper.Group
    * 
@@ -59,17 +50,7 @@ module.exports = class InputView
    * Sets the style of input port ref
    */
    
-  set-inport-style: (@type) !->
-    switch @type
-    | "Audio"     => 
-      @free-style = VS.audio-free
-      @busy-style = VS.audio-busy
-    | "Numerical" =>
-      @free-style = VS.numerical-free
-      @busy-style = VS.numerical-busy
-    | "Standard"  =>
-      @free-style = VS.standard-free
-      @busy-style = VS.standard-busy
+  set-inport-style: (@type) !-> @_find-port-style!
       
   /* setPos(pos : Paper.Point) : void
    *
@@ -92,3 +73,20 @@ module.exports = class InputView
   _make: !->
     @inport-path = new paper.Path.Circle [0px, 0px], 20
     @inport-path.style = @free-style
+    
+  /* private find-port-style() : void
+   *
+   * Finds the port style from the type
+   */
+   
+  _find-port-style: !->
+    switch @type
+    | "Audio"     => 
+      @free-style = VS.audio-free
+      @busy-style = VS.audio-busy
+    | "Numerical" =>
+      @free-style = VS.numerical-free
+      @busy-style = VS.numerical-busy
+    | "Standard"  =>
+      @free-style = VS.standard-free
+      @busy-style = VS.standard-busy
