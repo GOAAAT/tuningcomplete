@@ -27,9 +27,6 @@ VS = require \view_style
  * set-outport-style(style)
  * -- sets the style of the output port
  *
- * set-inport-style(style, ref)
- * -- sets the style of inport ref
- *
  * set-node-pos(location)
  * -- sets the node position
  *
@@ -51,14 +48,14 @@ const PORT_RATIO = 6
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [noinputs : int], [style : VS], [outport-style : VS], [input-styles : [VS]]) : void
+  /* NodeView([location : Paper.Point], [style : VS], [outport-style : VS], [inputs : [input_view]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
-   * Input Styles is a list of styles
+   * Inputs is a list of input_views
    */
   
-  (@node-pos = [0px 0px], @noinputs = 1, @node-style = VS.standard, @outport-style = VS.outport, input-styles = []) ->
+  (@node-pos = [0px 0px], @node-style = VS.standard, @outport-style = VS.outport, @inputs = []) ->
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
@@ -68,34 +65,19 @@ module.exports = class NodeView
      * outport-pos : Point -- position of the output port
      *
      * node-style : VS -- the style of the nodeNodeView
-     * inport-busy-style : VS
-     * inport-clear-style : VS
-     * outpor-style : VS
+     * outport-style : VS
      *
-     * noinputs : Int -- number of inputs to this node
-     * input-styles : List[Int] -- list of inport styles
+     * inputs : [input_view] -- list of inputs to be added
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
      
     # Set up the group to be returned
-    @node-group = new Group
+    @node-group = new paper.Group
     
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
     
-    @inport-busy-style  = VS.inport-busy
-    
-    @input-styles = []
     _set-input-angle!
-    
-    /** Set up input list of true/false (busy/clear) **/
-    i = 0
-    while i < @noinputs
-       if input-styles == []
-         @input-styles = [VS.inport-clear] * @input-styles
-       else
-         @input-styles = [input-styles[i]] * @input-styles
-       i++
 
     _make-node!
   
@@ -142,7 +124,7 @@ module.exports = class NodeView
    */    
 
   busy-port: (ref) !->
-    @inports[ref].style = @inport-busy-style
+    @inputs[ref]?busy-port!
 
   /* clearPort(ref : Int) : void 
    *
@@ -150,8 +132,8 @@ module.exports = class NodeView
    *
    */
    
-  clear-port: (ref) !->
-    @inports[ref].style = @input-styles[ref]
+  free-port: (ref) !->
+    @inputs[ref]?free-port
         
   /* set-node-style(style : VS) : void
    *
@@ -176,15 +158,6 @@ module.exports = class NodeView
    * Sets the position of the node
    *
    */
-   
-  /* set-inport-style (style : VS, ref : Int) : void
-   * 
-   * Sets the style of input port ref
-   */
-   
-  set-inport-style: (style, ref) !->
-    @input-styles[ref] = style
-    @inports[ref].style = style
 
   set-node-pos: (@node-path.position) !->
 
@@ -224,7 +197,7 @@ module.exports = class NodeView
    */
     
   _set-input-angle: !->
-    @angle = 180 / (@noinputs + 1)
+    @angle = 180 / (@inputs.length + 1)
   
   /*  private make-port(pos : Paper.Point, sty : VS) : Paper.Path
    *
@@ -259,10 +232,10 @@ module.exports = class NodeView
     # Add outport
     @node-group.add-child @outport-path
     
-    @inports = []
     # Draw each individual input
     i = 0
-    for i from 0 to @noinputs
-        @inports[i] = @_make-port @get-input-pos i, @input-styles[i]
-        @node-group.add-child inports[i]
+    for i from 0 to @inputs.length
+      @inputs[i]?set-pos @get-input-pos i
+      @inputs[i]?set-size (NODE_SIZE / PORT_RATIO)
+      @node-group.add-child @inputs[i]
   
