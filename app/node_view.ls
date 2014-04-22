@@ -211,7 +211,7 @@ module.exports = class NodeView
     for i from 0 to @inputs.length
       @inputs[i]?set-pos @get-input-pos i
       @inputs[i]?set-size (NODE_SIZE / PORT_RATIO)
-      @node-group.add-child @inputs[i]
+      @node-group.add-child @inputs[i]?item!
 
   /* private find-node-style() : void
    *
