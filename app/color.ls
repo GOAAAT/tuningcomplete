@@ -10,6 +10,8 @@ export yellow = \#FEDB77
 export cyan    = \#00FFFF
 export magenta = \#FF00FF
 
+export dark-blue = \#0000A0
+
 /** "Film Noire" colours **/
 
 export black      = \#000
@@ -26,4 +28,5 @@ export white      = \#FFF
 
 export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
+export love-red       = \#E41B17
 
