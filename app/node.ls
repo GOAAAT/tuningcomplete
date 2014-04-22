@@ -2,7 +2,7 @@ InputView = require \input_view
 NodeView = require \node_view
 
 export class Node
-  (@output-type, audio, numerical) ->
+  (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
       new Input "Audio" |> @inputs.push
@@ -12,7 +12,9 @@ export class Node
     @send-list = []
 
     @sending-wires = []
-    @active-view = new NodeView    
+    @type = "Standard"
+    
+    @active-view = new NodeView pos, @type, @outport-type, @inputs
 
   
     /** find-input : int
