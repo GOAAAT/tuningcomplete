@@ -27,7 +27,6 @@ export class Wire
      else 
        false
     
-
   disconnect: !->
      @input?remove-input!
      @origin?rem-output @input

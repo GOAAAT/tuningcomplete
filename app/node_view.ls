@@ -46,7 +46,9 @@ module.exports = class NodeView
    * Inputs is a list of input_views
    */
   
+
   (@node-pos = [100px 100px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
+
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node

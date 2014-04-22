@@ -92,4 +92,3 @@ module.exports = class WireView
     @wire-path.style = @line-style
     
     @wire-group.add-child @wire-path
-

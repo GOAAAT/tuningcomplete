@@ -59,7 +59,11 @@ export numerical-clear =
 export audio-busy =
   stroke-color: Colour.black,
   stroke-width: 3,
+<<<<<<< HEAD
   fill-color: Colour.love-red
+=======
+  fill-color: love-red
+>>>>>>> d866df6c61df6c7c92a8d0ff11f2e4da3ebb55d3
   
 export audio-clear =
   stroke-color: Colour.black,
