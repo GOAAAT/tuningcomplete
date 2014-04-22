@@ -63,7 +63,7 @@ export class Input
 
     remove-input: !->
       @busy = false
-      @input-view?clear-port
+      @input-view?free-port
       @wire = null
    
 
