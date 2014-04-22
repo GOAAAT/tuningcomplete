@@ -23,6 +23,6 @@ export white      = \#FFF
  * 
 **/
 
-export beeYellow     = \#E9AB17
-export purpleMonster = \#461B7E
+export bee-yellow     = \#E9AB17
+export purple-monster = \#461B7E
 
