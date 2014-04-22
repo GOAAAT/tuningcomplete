@@ -50,7 +50,14 @@ export class Node
     */
     rem-output: (node) !->
       @send-list = filter (!= node), @send-list
-
+      
+  /** get-output-type() : String
+   *
+   * Returns output type
+   */
+   
+  get-output-type: !-> @output-type
+  
 export class Input
 
   (@type="Standard") ->

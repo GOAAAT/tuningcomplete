@@ -1,22 +1,24 @@
+WireView = require \wire_view
+
 /**
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
 */
 
 export class Wire 
-   (@origin) ->
-   @wire-type = @origin.output-type
-   @active-view = new Wire_View
-   @active-view.set-start(node.get-output-pos!) # not actually necessary
+  (@origin) ->
+    @wire-type = @origin?get-output-type!
+    @active-view = new WireView
+    @active-view.set-start(node.get-output-pos!) # not actually necessary
 
   
-   /** redraw: void 
-   * Informs the wire that it should redraw its end-point
-   *  (called when a node is moved, so the wires can move with it)
-   */
-   redraw: !-> active-view.redraw
+    /** redraw: void 
+    * Informs the wire that it should redraw its end-point
+    *  (called when a node is moved, so the wires can move with it)
+    */
+  redraw: !-> active-view?redraw!
 
-   connect: (node) ->
-     input = node.find-input (@wire-type)
+  connect: (node) ->
+     input = node?find-input (@wire-type)
      if input?
        @dest = input 
        @origin?register-output node
@@ -26,7 +28,7 @@ export class Wire
        false
     
 
-   disconnect: !->
-     @input?remove-input
+  disconnect: !->
+     @input?remove-input!
      @origin?rem-output @input
-     @active-view.remove!
+     @active-view?remove!
