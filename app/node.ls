@@ -14,7 +14,7 @@ export class Node
     @sending-wires = []
     @type = "Standard"
     
-    @active-view = new NodeView pos, @type, @outport-type, @inputs
+    @active-view = new NodeView pos, @type, @output-type, @inputs
 
   
     /** find-input : int
