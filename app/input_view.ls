@@ -54,6 +54,36 @@ module.exports = class InputView
       @busy = false
       @inport-path.style = @free-style
       
+  /* set-inport-type (type : String) : void
+   * 
+   * Sets the style of input port ref
+   */
+   
+  set-inport-style: (@type) !->
+    switch @type
+    | "Audio"     => 
+      @free-style = VS.audio-free
+      @busy-style = VS.audio-busy
+    | "Numerical" =>
+      @free-style = VS.numerical-free
+      @busy-style = VS.numerical-busy
+    | "Standard"  =>
+      @free-style = VS.standard-free
+      @busy-style = VS.standard-busy
+      
+  /* setPos(pos : Paper.Point) : void
+   *
+   * set port position
+   */
+   
+  set-pos: (@inport-path.position) !->
+  
+  /* setSize(r : Int) : void
+   * set port radius
+   */
+   
+  set-size: (@inport-path.radius) !->
+      
   /* private make() : void
    *
    * makes the inport
