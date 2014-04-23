@@ -61,7 +61,7 @@ export audio-busy =
   stroke-width: 3,
   fill-color: Colour.love-red
   
-export audio-clear =
+export audio-free =
   stroke-color: Colour.black,
   stroke-width: 3,
   fill-color: Colour.purple-monster
