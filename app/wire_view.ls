@@ -39,6 +39,7 @@ module.exports = class WireView
     console.log @line-style
     
     @wire-path = new paper.Path
+    @wire-path.add @startpos
     
   /* group () : Group
    * return a group to be drawn
@@ -94,4 +95,4 @@ module.exports = class WireView
     # Fancy wires to come!
     
     @wire-path = new paper.Path @startpos, @endpos
-    @wire-path.stroke-color = \#FFF
+    @wire-path.style = @line-style

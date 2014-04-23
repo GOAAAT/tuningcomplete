@@ -105,6 +105,7 @@ module.exports = class App
       @n2 = new Node "Standard", 2, 1, [200, 250]
       @n3 = new Node "Numerical", 1, 1, [100, 300]
       @w = new Wire @n1
+      console.log "Wire Init"
       if @w?connect @n2
         console.log "Connected!"
       else

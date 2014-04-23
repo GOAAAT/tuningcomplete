@@ -79,7 +79,17 @@ export standard-free =
   fill-color: Colour.red
   
 /** Outports **/
-    
+
+export numerical-out =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.white
+
+export audio-out =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.white
+
 export standard-out = 
   stroke-color: Colour.black,
   stroke-width: 3,
@@ -88,5 +98,6 @@ export standard-out =
 /** Wires **/
 
 export wire-idle =
-  stroke-color: Colour.black,
-  stroke-width: 3
+  stroke-color: Colour.white,
+  stroke-width: 3,
+  stroke-cape: "round"

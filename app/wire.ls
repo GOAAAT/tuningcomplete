@@ -14,7 +14,7 @@ module.exports = class Wire
      input = node?find-input (@wire-type)
      if input?
        @dest = input
-       input?register-input @ 
+       @dest?register-input @ 
        @origin?register-output node
        @active-view?set-end input?input-view?item!position
        true
