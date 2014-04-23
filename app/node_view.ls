@@ -35,8 +35,8 @@ Input = require \input
  * -- removes the node
  **/
 
-const NODE_SIZE = 20
-const PORT_RATIO = 6
+const NODE_SIZE = 30
+const PORT_RATIO = 4
 
 module.exports = class NodeView
   
@@ -68,12 +68,19 @@ module.exports = class NodeView
     # Set up the group to be returned
     #@node-group = new paper.Group
     
-    @_find-node-style!
-    
+    switch @node-type
+    | "Maths" => @node-style = VS.maths
+    | "Oscillator" => @node-style = VS.oscillator
+    | "Instrument" => @node-style = VS.instrument
+    | otherwise => @node-style = VS.standard
+        
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
     
-    @_find-outport-style!
+    switch @output-type
+    | "Numerical" => @outport-style = VS.numerical-out
+    | "Audio" => @outport-style = VS.audio-out
+    | otherwise => @outport-style = VS.standard-out
     
     @_set-input-angle!
 
@@ -216,28 +223,3 @@ module.exports = class NodeView
       @inputs[i]?input-view?set-pos = (@get-input-pos i)
       @inputs[i]?input-view?set-size = (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?input-view?item!
-
-  /* private find-node-style() : void
-   *
-   * Finds the node style from its type
-   */
-  
-  _find-node-style: !->
-  
-  switch @node-type
-  | "Maths" => @node-style = VS.maths
-  | "Oscillator" => @node-style = VS.oscillator
-  | "Instrument" => @node-style = VS.instrument
-  | otherwise => @node-style = VS.standard
-  
-  /* private find-outport-style() : void
-   *
-   * Finds the outport style from its type
-   */
-  
-  _find-outport-style: !->
-  
-  switch @output-type
-  | "Numerical" => @outport-style = VS.numerical-out
-  | "Audio" => @outport-style = VS.audio-out
-  | otherwise => @outport-style = VS.standard-out

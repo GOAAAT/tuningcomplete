@@ -100,11 +100,12 @@ module.exports = class App
 
       
       /* Node test stuff */
-      @n1 = new Node "Standard", 1, 0, [100, 100]
+      @n1 = new Node "Standard", 1, 0, [100, 200]
+      console.log "n1"
       console.log @n1
       @foo = @n1?active-view?group!
       console.log @foo
-      @window?insert-children [ @foo ], 1
+      @window?insert-children [ @foo ]
       
       @window?force-update!
 
