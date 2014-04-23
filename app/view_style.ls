@@ -79,7 +79,17 @@ export standard-free =
   fill-color: Colour.red
   
 /** Outports **/
-    
+
+export numerical-out =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.white
+
+export audio-out =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.white
+
 export standard-out = 
   stroke-color: Colour.black,
   stroke-width: 3,

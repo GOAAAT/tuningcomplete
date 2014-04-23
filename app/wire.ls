@@ -13,8 +13,11 @@ module.exports = class Wire
      input = node?find-input (@wire-type)
      if input?
        @dest = input 
+       console.log input
        @origin?register-output node
-       @active-view?set-end input?item!position
+       console.log @active-view
+       @active-view?set-end input?input-path.position
+       console.log "Drawn"
        true
      else 
        false

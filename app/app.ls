@@ -101,15 +101,17 @@ module.exports = class App
 
       
       /* Node test stuff */
-      @n1 = new Node "Standard", 1, 1, [100, 200]
-      @n2 = new Node "Standard", 2, 1, [200, 250]
+      @n1 = new Node "Numerical", 1, 1, [100, 200]
+      @n2 = new Node "Numerical", 2, 1, [200, 250]
+      console.log @n1
+      console.log @n2
+
       @w = new Wire @n1
+      console.log "Wire Init"
       if @w?connect @n2
         console.log "Connected!"
       else
         console.log "Failed to connect."
-      console.log @n1
-      console.log @n2
       console.log @w
       @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w? ]
       
