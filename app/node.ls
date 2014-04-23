@@ -1,7 +1,8 @@
-InputView = require \input_view
+Input = require \input
 NodeView = require \node_view
 
 module.exports = class Node
+
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
@@ -16,41 +17,44 @@ module.exports = class Node
     
     @active-view = new NodeView pos, @type, @output-type, @inputs
 
-    view: -> @active-view?group!
+  /**view
+  **/
+
+  view: (n) -> @active-view?group!
   
-    /** find-input : int
-    * nodetype : NodeType
-    *
-    *  - Update the list of free ports
-    *  - Inform the wire object which port it should draw to
-    *  - Inform the view that this port is now busy
-    */
-    find-input: (nodetype) ->
-      @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
+  /** find-input : int
+  * nodetype : NodeType
+  *
+  *  - Update the list of free ports
+  *  - Inform the wire object which port it should draw to
+  *  - Inform the view that this port is now busy
+  */
+  find-input: (nodetype) ->
+    @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
   
-    /** get-output-pos : paper.Point
-    *
-    *  Requests position of output port from node_view
-    */
-    get-output-pos: ->
-      @active-view?get-output-pos
+  /** get-output-pos : paper.Point
+  *
+  *  Requests position of output port from node_view
+  */
+  get-output-pos: ->
+    @active-view?get-output-pos
 
 
-    /** register-output : void
-    * node : Node
-    *
-    *  Add to the send-list the node 'node'
-    */
-    register-output: (node) !->
-      @send-list.push node
+  /** register-output : void
+  * node : Node
+  *
+  *  Add to the send-list the node 'node'
+  */
+  register-output: (node) !->
+    @send-list.push node
 
-    /** rem-output : void
-    * node : Node
-    *
-    *  Update the send list after a disconnect
-    */
-    rem-output: (node) !->
-      @send-list = filter (!= node), @send-list
+  /** rem-output : void
+  * node : Node
+  *
+  *  Update the send list after a disconnect
+  */
+  rem-output: (node) !->
+    @send-list = filter (!= node), @send-list
       
   /** get-output-type() : String
    *
@@ -58,24 +62,3 @@ module.exports = class Node
    */
    
   get-output-type: !-> @output-type
-  
-module.exports = class Input
-
-  (@type="Standard") ->
-    @busy = false
-    @input-view = new InputView @type
-
-    view: -> @input-view?item!
-
-    register-input: (wire) !-> 
-      @busy = true
-      @input-view?busy-port
-      @wire = wire
-
-    remove-input: !->
-      @busy = false
-      @input-view?free-port
-      @wire = null
-   
-export class Output
-  ->

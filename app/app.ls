@@ -5,8 +5,7 @@ Window     = require \window
 Button     = require \button
 PrefixTree = require \prefix_tree
 FilterList = require \filter_list
-Node       = require \node
-Wire       = require \wire
+Node = require \node
 
 module.exports = class App
     /** App
@@ -102,7 +101,9 @@ module.exports = class App
       
       /* Node test stuff */
       @n1 = new Node "Standard", 1, 0, [100, 100]
-      @window?insert-children [ @n1?view! ], 0
+      console.log @n1
+      @foo = @n1?active-view?group!
+      @window?insert-children [ @foo ], 0
       
       @window?force-update!
 

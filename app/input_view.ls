@@ -57,7 +57,7 @@ module.exports = class InputView
    * set port position
    */
    
-  set-pos: (@inport-path.position) !->
+  set-pos: (pos) !-> @inport-path.set-position pos
   
   /* setSize(r : Int) : void
    * set port radius
@@ -71,7 +71,7 @@ module.exports = class InputView
    */
    
   _make: !->
-    @inport-path = new paper.Path.Circle [0px, 0px], 20
+    @inport-path = new paper.Path.Circle [0, 0], 20
     @inport-path.style = @free-style
     
   /* private find-port-style() : void

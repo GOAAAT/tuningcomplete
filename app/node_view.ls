@@ -1,4 +1,5 @@
 VS = require \view_style
+Input = require \input
 
 /**  Public Methods Summary
  * (Square brackets denote optional parameters)
@@ -65,7 +66,7 @@ module.exports = class NodeView
      */
      
     # Set up the group to be returned
-    @node-group = new paper.Group
+    #@node-group = new paper.Group
     
     @_find-node-style!
     
@@ -201,7 +202,7 @@ module.exports = class NodeView
     @node-path.style = @node-style
     
     # Add node
-    @node-group.add-child @node-path
+    @node-group = new paper.Group [ @node-path ]
     
     @outport-path = @_make-port @outport-pos, @outport-style
     # Add outport
@@ -211,6 +212,7 @@ module.exports = class NodeView
     i = 0
 
     for i from 0 to (@inputs.length - 1)
+      console.log @inputs[i]
       @inputs[i]?view.position = (@get-input-pos i)
       @inputs[i]?view.radius = (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?view!
