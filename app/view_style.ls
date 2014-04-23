@@ -98,5 +98,6 @@ export standard-out =
 /** Wires **/
 
 export wire-idle =
-  stroke-color: Colour.black,
-  stroke-width: 3
+  stroke-color: Colour.white,
+  stroke-width: 3,
+  stroke-cape: "round"
