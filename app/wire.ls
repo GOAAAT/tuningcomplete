@@ -15,9 +15,7 @@ module.exports = class Wire
        @dest = input 
        console.log input
        @origin?register-output node
-       console.log @active-view
-       @active-view?set-end input?input-path.position
-       console.log "Drawn"
+       @active-view?set-end input?input-view?item!position
        true
      else 
        false

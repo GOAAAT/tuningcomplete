@@ -74,6 +74,7 @@ module.exports = class WireView
    */
 
   set-end: (@endpos) !-> 
+    console.log "Found function 'set-end'"
     @_make-wire!
   
   /* remove () : void

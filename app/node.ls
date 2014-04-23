@@ -48,6 +48,7 @@ module.exports = class Node
   */
   register-output: (node) !->
     @send-list.push node
+    console.log "Successful register"
 
   /** rem-output : void
   * node : Node
