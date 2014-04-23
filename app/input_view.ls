@@ -11,6 +11,8 @@ module.exports = class InputView
   
   (@type="Standard") ->
     
+    @size = 20
+    
     switch @type
     | "Audio"     => 
       @free-style = VS.audio-free
@@ -82,7 +84,11 @@ module.exports = class InputView
    * set port radius
    */
    
-  set-size: (@inport-path.radius) !->
+  set-size: (new-size) !->
+    sf = new-size / @size
+    @size = new-size
+    @inport-path.scale sf
+    
       
   /* private make() : void
    *
@@ -90,7 +96,7 @@ module.exports = class InputView
    */
    
   _make: !->
-    @inport-path = new paper.Path.Circle [0, 0], 20
+    @inport-path = new paper.Path.Circle [0, 0], @size
     @inport-path.style = @free-style
     
     

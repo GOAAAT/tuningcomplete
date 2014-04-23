@@ -49,10 +49,10 @@ export numerical-busy =
   stroke-width: 3,
   fill-color: Colour.love-red
 
-export numerical-clear =
+export numerical-free =
   stroke-color: Colour.black,
   stroke-width: 3,
-  fill-color: Colour.dark-blue
+  fill-color: Colour.yellow
   
 /** Audio Inports **/
 
@@ -64,7 +64,7 @@ export audio-busy =
 export audio-free =
   stroke-color: Colour.black,
   stroke-width: 3,
-  fill-color: Colour.purple-monster
+  fill-color: Colour.green
 
 /** Standard Inports **/
 

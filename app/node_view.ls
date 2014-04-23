@@ -48,14 +48,14 @@ module.exports = class NodeView
    */
   
 
-  (@node-pos = [100px 100px], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
+  (pos = [100, 100], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
 
     /* Set up constants:
      * 
      * node-size : Int -- radius of a node
      * port-ratio : Int -- n s.t. a port has radius NODE_SIZE / n
      *
-     * node-pos : Point -- position of the node
+     * pos : [int, int] -- position of the node
      * outport-pos : Point -- position of the output port
      *
      * node-style : VS -- the style of the nodeNodeView
@@ -67,6 +67,8 @@ module.exports = class NodeView
      
     # Set up the group to be returned
     #@node-group = new paper.Group
+    
+    @node-pos = new paper.Point pos[0], pos[1]
     
     switch @node-type
     | "Maths" => @node-style = VS.maths
@@ -103,8 +105,8 @@ module.exports = class NodeView
     _angle = ((ref+1) * @angle) + 90
     _angle *= Math.PI / 180
     
-    dx = NODE_SIZE * (Math.cos _angle)
-    dy = NODE_SIZE * (Math.sin _angle)
+    dx = Math.round (NODE_SIZE * (Math.cos _angle))
+    dy = Math.round (NODE_SIZE * (Math.sin _angle))
     
     ipx = @node-pos.x + dx
     ipy = @node-pos.y + dy
@@ -112,6 +114,7 @@ module.exports = class NodeView
     result = new paper.Point ipx, ipy
     
     result
+    
   
   /* getOutputPos : Paper.Point
    *
@@ -146,7 +149,12 @@ module.exports = class NodeView
    *
    */
    
-  set-node-type: (@node-type = "Standard") !-> @_find-node-style!
+  set-node-type: (@node-type = "Standard") !->
+    switch @node-type
+      | "Maths" => @node-style = VS.maths
+      | "Oscillator" => @node-style = VS.oscillator
+      | "Instrument" => @node-style = VS.instrument
+      | otherwise => @node-style = VS.standard
     
   /* set-outport-type(type : String) : void
    *
@@ -154,7 +162,11 @@ module.exports = class NodeView
    *
    */
    
-  set-output-type: (@output-type = "Standard") !-> @_find-outport-style!
+  set-output-type: (@output-type = "Standard") !->
+    switch @output-type
+    | "Numerical" => @outport-style = VS.numerical-out
+    | "Audio" => @outport-style = VS.audio-out
+    | otherwise => @outport-style = VS.standard-out
 
   /* set-node-pos(location : Paper.Point) : void
    *
@@ -219,7 +231,7 @@ module.exports = class NodeView
     i = 0
 
     for i from 0 to (@inputs.length-1)
-      console.log @inputs[i]
-      @inputs[i]?input-view?set-pos = (@get-input-pos i)
-      @inputs[i]?input-view?set-size = (NODE_SIZE / PORT_RATIO)
+      console.log @get-input-pos i
+      @inputs[i]?input-view?set-pos (@get-input-pos i)
+      @inputs[i]?input-view?set-size (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?input-view?item!
