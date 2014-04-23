@@ -1,5 +1,6 @@
 Input = require \input
 NodeView = require \node_view
+{head, filter} = prelude
 
 module.exports = class Node
 
@@ -37,7 +38,7 @@ module.exports = class Node
   *  Requests position of output port from node_view
   */
   get-output-pos: ->
-    @active-view?get-output-pos
+    @active-view?get-output-pos!
 
 
   /** register-output : void

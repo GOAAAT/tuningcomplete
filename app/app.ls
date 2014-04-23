@@ -6,6 +6,7 @@ Button     = require \button
 PrefixTree = require \prefix_tree
 FilterList = require \filter_list
 Node = require \node
+Wire = require \wire
 
 module.exports = class App
     /** App
@@ -101,11 +102,16 @@ module.exports = class App
       
       /* Node test stuff */
       @n1 = new Node "Standard", 1, 1, [100, 200]
-      console.log "n1"
+      @n2 = new Node "Standard", 2, 1, [200, 250]
+      @w = new Wire @n1
+      if @w?connect @n2
+        console.log "Connected!"
+      else
+        console.log "Failed to connect."
       console.log @n1
-      @foo = @n1?active-view?group!
-      console.log @foo
-      @window?insert-children [ @foo ]
+      console.log @n2
+      console.log @w
+      @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w? ]
       
       @window?force-update!
 

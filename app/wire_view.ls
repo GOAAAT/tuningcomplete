@@ -2,7 +2,7 @@ VS = require \view_style
 
 /** Public Methods Summary 
  *
- * WireView([start], [end], [style])
+ * WireView(start, type)
  * -- sets up initial values of the wire
  *
  * set-line-style(style)
@@ -20,31 +20,32 @@ VS = require \view_style
 
 module.exports = class WireView
 
-  /* WireView(start : Paper.Point, end : Paper.Point, style : VS) : void
+  /* WireView(start : Paper.Point, type : String) : void
    *
    * Sets up initial values of the wire
    *
    */
   
-  (@startpos = [0px 0px], @endpos = [0px 0px], @line-style = VS.line_idle) ->
+  (@startpos, @type = "Standard") ->
     /* Set up constants:
      * 
      * lineStyle : VS -- the style of the line
      * 
      * startpos : Paper.Point
-     * endpos : Paper.Point
      */
      
-    @wire-group = new paper.Group
+    switch @type
+    | "Standard" => @line-style = VS.wire-idle
+    console.log @line-style
     
-    _make-wire!
+    @wire-path = new paper.Path
     
   /* group () : Group
    * return a group to be drawn
    */
     
   group: ->
-    @wire-group
+    @wire-path
       
   /* set-line-style (style : VS) : void
    *
@@ -52,7 +53,9 @@ module.exports = class WireView
    *
    */
    
-  set-line-style: (@line-style) !->
+  set-line-style: (@type) !->
+    switch type
+    | "Standard" => @line-style = VS.wire-idle
     @wire-path.style = @line-style
     
   /* set-start (location : Paper.Point) : void
@@ -69,14 +72,15 @@ module.exports = class WireView
    *
    */
 
-  set-end: (@endpos) !->
+  set-end: (@endpos) !-> 
+    @_make-wire!
   
   /* remove () : void
    *
    * Removes the wire from being drawn
    */
    
-  remove: !-> @wire-group.remove-children
+  remove: !-> @wire-path.remove
   
   /* private make-wire 
    * 
@@ -88,7 +92,5 @@ module.exports = class WireView
     
     # Fancy wires to come!
     
-    @wire-path = new paper.Path start, end
-    @wire-path.style = @line-style
-    
-    @wire-group.add-child @wire-path
+    @wire-path = new paper.Path @startpos, @endpos
+    @wire-path.stroke-color = \#FFF
