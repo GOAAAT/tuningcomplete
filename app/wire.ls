@@ -14,7 +14,7 @@ module.exports = class Wire
      if input?
        @dest = input 
        @origin?register-output node
-       @active-view?set-end input?item!position
+       @active-view?set-end input?input-view?item!position
        true
      else 
        false

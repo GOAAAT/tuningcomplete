@@ -101,7 +101,7 @@ module.exports = class App
 
       
       /* Node test stuff */
-      @n1 = new Node "Standard", 1, 1, [100, 200]
+      @n1 = new Node "Numerical", 1, 1, [100, 200]
       @n2 = new Node "Standard", 2, 1, [200, 250]
       @w = new Wire @n1
       if @w?connect @n2
