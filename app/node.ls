@@ -7,9 +7,9 @@ module.exports = class Node
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
-      new Input "Audio" |> @inputs.push
+      new Input "Audio", i |> @inputs.push
     for i from 1 to numerical
-      new Input "Numerical" |> @inputs.push
+      new Input "Numerical", (i+audio) |> @inputs.push
 
     @send-list = []
 

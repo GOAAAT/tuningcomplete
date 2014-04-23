@@ -1,4 +1,5 @@
 WireView = require \wire_view
+Input = require \input
 
 /**
 * Wires connect nodes, transferring data from an 'origin' to a 'destination' 
@@ -12,7 +13,8 @@ module.exports = class Wire
   connect: (node) ->
      input = node?find-input (@wire-type)
      if input?
-       @dest = input 
+       @dest = input
+       input?register-input @ 
        @origin?register-output node
        @active-view?set-end input?input-view?item!position
        true

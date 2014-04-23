@@ -101,13 +101,17 @@ module.exports = class App
 
       
       /* Node test stuff */
-      @n1 = new Node "Numerical", 1, 1, [100, 200]
+      @n1 = new Node "Standard", 1, 1, [100, 200]
       @n2 = new Node "Standard", 2, 1, [200, 250]
+      @n3 = new Node "Numerical", 1, 1, [100, 300]
       @w = new Wire @n1
       if @w?connect @n2
         console.log "Connected!"
       else
         console.log "Failed to connect."
+      @w2 = new Wire @n3
+      if @w2?connect @n2
+        console.log "GREAT SUCCESS!"
       console.log @n1
       console.log @n2
       console.log @w
