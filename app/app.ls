@@ -103,7 +103,8 @@ module.exports = class App
       @n1 = new Node "Standard", 1, 0, [100, 100]
       console.log @n1
       @foo = @n1?active-view?group!
-      @window?insert-children [ @foo ], 0
+      console.log @foo
+      @window?insert-children [ @foo ], 1
       
       @window?force-update!
 

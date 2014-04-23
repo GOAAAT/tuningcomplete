@@ -211,11 +211,11 @@ module.exports = class NodeView
     # Draw each individual input
     i = 0
 
-    for i from 0 to (@inputs.length - 1)
+    for i from 0 to (@inputs.length-1)
       console.log @inputs[i]
-      @inputs[i]?view.position = (@get-input-pos i)
-      @inputs[i]?view.radius = (NODE_SIZE / PORT_RATIO)
-      @node-group.add-child @inputs[i]?view!
+      @inputs[i]?input-view?set-pos = (@get-input-pos i)
+      @inputs[i]?input-view?set-size = (NODE_SIZE / PORT_RATIO)
+      @node-group.add-child @inputs[i]?input-view?item!
 
   /* private find-node-style() : void
    *
