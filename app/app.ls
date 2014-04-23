@@ -100,7 +100,7 @@ module.exports = class App
       @window.insert-ui [ @node-list.view! ]
 
       
-      /* Node test stuff */
+      /* Testing stuff - REMOVE WHEN NODE ADDING IS IMPLEMENTED */
       @n1 = new Node "Numerical", 1, 1, [100, 200]
       @n2 = new Node "Standard", 2, 1, [200, 250]
       @n3 = new Node "Audio", 1, 1, [100, 300]
