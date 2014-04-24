@@ -1,4 +1,5 @@
 VS = require \view_style
+Colour = require \color
 
 /** Public Methods Summary 
  *
@@ -81,8 +82,8 @@ module.exports = class WireView
    * Removes the wire from being drawn
    */
    
-  remove: !-> @wire-path.remove!
-  
+  remove: !-> @wire-path.remove-segment 1
+    
   /* private make-wire 
    * 
    *  Return a group of the line to be drawn
