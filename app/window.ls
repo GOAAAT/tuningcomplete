@@ -1,5 +1,6 @@
 CursorResponder = require \cursor_responder
-{Node,Input,Output} = require \node
+Node = require \node
+Input = require \input
 
 module.exports = class Window extends CursorResponder
   /** Window
@@ -77,9 +78,9 @@ module.exports = class Window extends CursorResponder
   pointer-down: (pt) !->
     item = @_snap-item pt ?.item
 
-    if item instanceof Output
+    if item instanceof Node
       @active-wire = new Wire(item)
-      [ @active-wire?view! ] |> @insert-children
+      [ @active-wire?active-view! ] |> @insert-children
 
   /** pointer-moved : void
    *  pt : paper.Point
