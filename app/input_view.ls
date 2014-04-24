@@ -34,25 +34,25 @@ module.exports = class InputView
   
   item: -> @inport-path
   
-  /* busy-port(ref : Int) : void
+  /* busy-port : void
    *
-   * Set port ref as busy and change style appropriately
+   * Set port as busy and change style appropriately
    *
    */    
 
-  busy-port: (ref) !->
-    if !@busy 
+  busy-port: !->
+    if !@busy
       @busy = true
       @inport-path.style = @busy-style
 
-  /* free-port(ref : Int) : void 
+  /* free-port : void 
    *
    * Set port ref as free and change style appropriately
    *
    */
    
-  free-port: (ref) !->
-    if busy
+  free-port: !->
+    if @busy
       @busy = false
       @inport-path.style = @free-style
       

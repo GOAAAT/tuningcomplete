@@ -105,17 +105,16 @@ module.exports = class App
       @n2 = new Node "Standard", 2, 1, [200, 250]
       @n3 = new Node "Audio", 1, 1, [100, 300]
       @w = new Wire @n1
-      console.log "Wire Init"
       if @w?connect @n2
         console.log "Connected!"
       else
         console.log "Failed to connect."
       @w2 = new Wire @n3
-      if @w2?connect @n2
-        console.log "GREAT SUCCESS!"
-      console.log @n1
-      console.log @n2
-      console.log @w
+      @w2?connect @n2
+      if @w?disconnect!
+        console.log "Wire removed"
+      else
+        console.log "Failed to disconnect"
       @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w?active-view?group!, @w2?active-view?group! ]
       
       @window?force-update!

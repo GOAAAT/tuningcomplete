@@ -3,7 +3,10 @@ NodeView = require \node_view
 {head, filter} = prelude
 
 module.exports = class Node
-
+  /**
+  * Construct an input setup that we want. Each input gets
+  * a unique reference and is stored in node as @inputs
+  */
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
@@ -18,21 +21,20 @@ module.exports = class Node
     
     @active-view = new NodeView pos, @type, @output-type, @inputs
 
-  /**view
-  **/
 
   view: (n) -> @active-view?group!
   
-  /** find-input : int
+
+  /** find-input : Input
   * nodetype : NodeType
   *
-  *  - Update the list of free ports
-  *  - Inform the wire object which port it should draw to
-  *  - Inform the view that this port is now busy
+  *  Returns the first available Input to be free and of type
+  * Nodetype
   */
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
   
+
   /** get-output-pos : paper.Point
   *
   *  Requests position of output port from node_view
@@ -48,7 +50,7 @@ module.exports = class Node
   */
   register-output: (node) !->
     @send-list.push node
-    console.log "Successful register"
+
 
   /** rem-output : void
   * node : Node
@@ -57,10 +59,3 @@ module.exports = class Node
   */
   rem-output: (node) !->
     @send-list = filter (!= node), @send-list
-      
-  /** get-output-type() : String
-   *
-   * Returns output type
-   */
-   
-  get-output-type: !-> @output-type
