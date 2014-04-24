@@ -116,7 +116,7 @@ module.exports = class App
       console.log @n1
       console.log @n2
       console.log @w
-      @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w?active-view?group!, @w2?active-view?group! ]
+      @window?insert-children [ @w?active-view?group!, @w2?active-view?group!, @n1?active-view?group!, @n2?active-view?group!, @n3?active-view?group! ]
       
       @window?force-update!
 
