@@ -81,7 +81,7 @@ module.exports = class WireView
    * Removes the wire from being drawn
    */
    
-  remove: !-> @wire-path.remove
+  remove: !-> @wire-path.remove!
   
   /* private make-wire 
    * 
