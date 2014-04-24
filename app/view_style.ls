@@ -100,4 +100,4 @@ export standard-out =
 export wire-idle =
   stroke-color: Colour.white,
   stroke-width: 3,
-  stroke-cape: "round"
+  stroke-cap: "round"

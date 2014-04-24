@@ -36,7 +36,6 @@ module.exports = class WireView
      
     switch @type
     | "Standard" => @line-style = VS.wire-idle
-    console.log @line-style
     
     @wire-path = new paper.Path
     @wire-path.add @startpos
@@ -48,13 +47,13 @@ module.exports = class WireView
   group: ->
     @wire-path
       
-  /* set-line-style (style : VS) : void
+  /* set-line-type (type : String) : void
    *
-   * Sets the line style of the wire
+   * Sets the line type (and consequently style) of the wire
    *
    */
    
-  set-line-style: (@type) !->
+  set-line-type: (@type) !->
     switch type
     | "Standard" => @line-style = VS.wire-idle
     @wire-path.style = @line-style
@@ -66,6 +65,7 @@ module.exports = class WireView
    */
    
   set-start: (@startpos) !->
+    @_make-wire!
     
   /* set-end (location : Paper.Point) : void
    *
@@ -74,7 +74,6 @@ module.exports = class WireView
    */
 
   set-end: (@endpos) !-> 
-    console.log "Found function 'set-end'"
     @_make-wire!
   
   /* remove () : void
@@ -92,7 +91,7 @@ module.exports = class WireView
   
   _make-wire: !->
     
-    # Fancy wires to come!
+    # Fancy wires to come in the far off future!
     
     @wire-path = new paper.Path @startpos, @endpos
     @wire-path.style = @line-style

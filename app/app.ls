@@ -100,10 +100,10 @@ module.exports = class App
       @window.insert-ui [ @node-list.view! ]
 
       
-      /* Node test stuff */
-      @n1 = new Node "Standard", 1, 1, [100, 200]
+      /* Testing stuff - REMOVE WHEN NODE ADDING IS IMPLEMENTED */
+      @n1 = new Node "Numerical", 1, 1, [100, 200]
       @n2 = new Node "Standard", 2, 1, [200, 250]
-      @n3 = new Node "Numerical", 1, 1, [100, 300]
+      @n3 = new Node "Audio", 1, 1, [100, 300]
       @w = new Wire @n1
       console.log "Wire Init"
       if @w?connect @n2
@@ -116,7 +116,7 @@ module.exports = class App
       console.log @n1
       console.log @n2
       console.log @w
-      @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w? ]
+      @window?insert-children [ @n1?active-view?group!, @n2?active-view?group!, @w?active-view?group!, @w2?active-view?group! ]
       
       @window?force-update!
 

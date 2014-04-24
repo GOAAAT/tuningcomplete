@@ -10,8 +10,8 @@ Input = require \input
  * group() : Group
  * -- returns the group to be drawn, public
  *
- * get-input-pos(ref, total) : Paper.Point
- * -- returns the position of input port ref out of total
+ * get-input-pos(ref) : Paper.Point
+ * -- returns the position of input port ref
  *
  * get-output-pos : Paper.Point
  * -- returns the position of the output port
@@ -19,7 +19,7 @@ Input = require \input
  * busy-port(ref)
  * -- marks input port ref as busy
  * 
- * clear-port(ref)
+ * free-port(ref)
  * -- marks input port ref as clear
  *
  * set-node-type(type)
@@ -46,7 +46,6 @@ module.exports = class NodeView
    * Default (0, 0) with 1 input and standard style
    * Inputs is a list of input_views
    */
-  
 
   (pos = [100, 100], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
 
@@ -64,9 +63,6 @@ module.exports = class NodeView
      * inputs : [input_view] -- list of inputs to be added
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
-     
-    # Set up the group to be returned
-    #@node-group = new paper.Group
     
     @node-pos = new paper.Point pos[0], pos[1]
     
@@ -89,13 +85,13 @@ module.exports = class NodeView
     @_make-node!
   
   /*  group() : Group
-   *  returns a group to go to the canvas
+   *  returns the paper group
    */
    
   group: ->
      @node-group
       
-  /* getInputPos(ref : Int) : Paper.Point
+  /* get-input-pos(ref : Int) : Paper.Point
    *
    * Returns position of port ref
    *
@@ -116,7 +112,7 @@ module.exports = class NodeView
     result
     
   
-  /* getOutputPos : Paper.Point
+  /* get-output-pos : Paper.Point
    *
    * Returns the position of the output port
    *
@@ -125,7 +121,7 @@ module.exports = class NodeView
   get-output-pos: ->
     @outport-pos
     
-  /* busyPort(ref : Int) : void
+  /* busy-port(ref : Int) : void
    *
    * Set port ref as busy
    *
@@ -134,9 +130,9 @@ module.exports = class NodeView
   busy-port: (ref) !->
     @inputs[ref]?busy-port!
 
-  /* clearPort(ref : Int) : void 
+  /* free-port(ref : Int) : void 
    *
-   * Set port ref as clear
+   * Set port ref as free
    *
    */
    
@@ -145,7 +141,7 @@ module.exports = class NodeView
         
   /* set-node-type(type : String) : void
    *
-   * Sets the type of the node
+   * Sets the type (and consequently style) of the node
    *
    */
    
@@ -158,7 +154,7 @@ module.exports = class NodeView
     
   /* set-outport-type(type : String) : void
    *
-   * Sets the style of output port
+   * Sets the type (and consequently style) of output port
    *
    */
    
@@ -174,7 +170,7 @@ module.exports = class NodeView
    *
    */
 
-  set-node-pos: (@node-path.position) !->
+  set-node-pos: (pos) !-> @node-path.set-position pos
 
   /* set-node-fill-color(col : Colour) :void
    * 
@@ -187,7 +183,7 @@ module.exports = class NodeView
      
   /*  private set-input-angle
    *  
-   *  Sets the angle to offset inputs by on the node
+   *  Sets the angle to offset inputs by on the node.  Basically, maths.
    *
    */
     
@@ -196,7 +192,7 @@ module.exports = class NodeView
   
   /*  private make-port(pos : Paper.Point, sty : VS) : Paper.Path
    *
-   *  Makes a port path
+   *  Makes a port-shaped path.  A little outdated now inputs are handled separately, but nice.
    *
    */
    
@@ -208,7 +204,7 @@ module.exports = class NodeView
   /*  private make-node() : Group
    *  
    *  Given the location and number of inputs to the node,
-   *  return a group to be drawn of the node.
+   *  return a group to be drawn of the node.  Sets the specifics of the inputs.
    *
    */
   
@@ -231,7 +227,6 @@ module.exports = class NodeView
     i = 0
 
     for i from 0 to (@inputs.length-1)
-      console.log @get-input-pos i
       @inputs[i]?input-view?set-pos (@get-input-pos i)
       @inputs[i]?input-view?set-size (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?input-view?item!

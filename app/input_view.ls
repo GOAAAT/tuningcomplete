@@ -34,7 +34,7 @@ module.exports = class InputView
   
   item: -> @inport-path
   
-  /* busyPort(ref : Int) : void
+  /* busy-port(ref : Int) : void
    *
    * Set port ref as busy and change style appropriately
    *
@@ -45,7 +45,7 @@ module.exports = class InputView
       @busy = true
       @inport-path.style = @busy-style
 
-  /* freePort(ref : Int) : void 
+  /* free-port(ref : Int) : void 
    *
    * Set port ref as free and change style appropriately
    *
@@ -73,14 +73,14 @@ module.exports = class InputView
       @free-style = VS.standard-free
       @busy-style = VS.standard-busy
       
-  /* setPos(pos : Paper.Point) : void
+  /* set-pos(pos : Paper.Point) : void
    *
    * set port position
    */
    
   set-pos: (pos) !-> @inport-path.set-position pos
   
-  /* setSize(r : Int) : void
+  /* set-size(r : Int) : void
    * set port radius
    */
    
