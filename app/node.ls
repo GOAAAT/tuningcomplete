@@ -19,10 +19,10 @@ module.exports = class Node
     @sending-wires = []
     @type = "Standard"
     
-    @active-view = new NodeView pos, @type, @output-type, @inputs
+    @active-view = new NodeView pos, @type, @inputs
 
 
-  view: (n) -> @active-view?group!
+  view: -> @active-view?group!
   
 
   /** find-input : Input

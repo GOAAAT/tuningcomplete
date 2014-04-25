@@ -40,14 +40,14 @@ const PORT_RATIO = 4
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [type : string], [output-type : VS], [inputs : [input_view]]) : void
+  /* NodeView([location : Paper.Point], [type : string], [output-type : String], [inputs : [InputView]]) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
    * Inputs is a list of input_views
    */
 
-  (pos = [100, 100], @node-type = "Standard", @output-type = "Standard", @inputs = []) ->
+  (pos = [100, 100], @node-type = "Standard", @inputs = []) ->
 
     /* Set up constants:
      * 
@@ -64,13 +64,21 @@ module.exports = class NodeView
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
     
-    @node-pos = new paper.Point pos[0], pos[1]
+    @node-pos = new paper.Point pos
     
     switch @node-type
-    | "Maths" => @node-style = VS.maths
-    | "Oscillator" => @node-style = VS.oscillator
-    | "Instrument" => @node-style = VS.instrument
-    | otherwise => @node-style = VS.standard
+    | "Maths" => 
+        @node-style = VS.maths
+        @output-type = VS.numerical-free
+    | "Oscillator" => 
+        @node-style = VS.oscillator
+        @output-type = VS.audio-free
+    | "Instrument" => 
+        @node-style = VS.instrument
+        @output-type = VS.audio-free
+    | otherwise => 
+        @node-style = VS.standard
+        @output-type = VS.other-type
         
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x = @outport-pos.x + NODE_SIZE
@@ -88,8 +96,7 @@ module.exports = class NodeView
    *  returns the paper group
    */
    
-  group: ->
-     @node-group
+  group: -> @node-group
       
   /* get-input-pos(ref : Int) : Paper.Point
    *
@@ -117,67 +124,34 @@ module.exports = class NodeView
    * Returns the position of the output port
    *
    */
-  
-  get-output-pos: ->
-    @outport-pos
+  get-output-pos: -> @outport-pos
     
   /* busy-port(ref : Int) : void
    *
    * Set port ref as busy
    *
    */    
-
-  busy-port: (ref) !->
-    @inputs[ref]?busy-port!
+  busy-port: (ref) !-> @inputs[ref]?busy-port!
 
   /* free-port(ref : Int) : void 
    *
    * Set port ref as free
    *
    */
-   
-  free-port: (ref) !->
-    @inputs[ref]?free-port
+  free-port: (ref) !-> @inputs[ref]?free-port!
         
-  /* set-node-type(type : String) : void
-   *
-   * Sets the type (and consequently style) of the node
-   *
-   */
-   
-  set-node-type: (@node-type = "Standard") !->
-    switch @node-type
-      | "Maths" => @node-style = VS.maths
-      | "Oscillator" => @node-style = VS.oscillator
-      | "Instrument" => @node-style = VS.instrument
-      | otherwise => @node-style = VS.standard
-    
-  /* set-outport-type(type : String) : void
-   *
-   * Sets the type (and consequently style) of output port
-   *
-   */
-   
-  set-output-type: (@output-type = "Standard") !->
-    switch @output-type
-    | "Numerical" => @outport-style = VS.numerical-out
-    | "Audio" => @outport-style = VS.audio-out
-    | otherwise => @outport-style = VS.standard-out
-
+ 
   /* set-node-pos(location : Paper.Point) : void
    *
    * Sets the position of the node
-   *
    */
-
   set-node-pos: (pos) !-> @node-path.set-position pos
 
   /* set-node-fill-color(col : Colour) :void
    * 
    * Sets the fill colour of the node
    */
-   
-  remove: !-> @node-group.remove-children
+  remove: !-> @node-group.remove!
       
   /** PRIVATE METHODS **/
      
@@ -186,7 +160,6 @@ module.exports = class NodeView
    *  Sets the angle to offset inputs by on the node.  Basically, maths.
    *
    */
-    
   _set-input-angle: !->
     @angle = 180 / (@inputs.length + 1)
   
@@ -195,7 +168,6 @@ module.exports = class NodeView
    *  Makes a port-shaped path.  A little outdated now inputs are handled separately, but nice.
    *
    */
-   
   _make-port: (pos, sty) ->
     path = new paper.Path.Circle pos, (NODE_SIZE / PORT_RATIO)  
     path.style = sty
@@ -207,7 +179,6 @@ module.exports = class NodeView
    *  return a group to be drawn of the node.  Sets the specifics of the inputs.
    *
    */
-  
   _make-node: !->
     
     @_set-input-angle!
@@ -224,8 +195,6 @@ module.exports = class NodeView
     @node-group.add-child @outport-path
     
     # Draw each individual input
-    i = 0
-
     for i from 0 to (@inputs.length-1)
       @inputs[i]?input-view?set-pos (@get-input-pos i)
       @inputs[i]?input-view?set-size (NODE_SIZE / PORT_RATIO)

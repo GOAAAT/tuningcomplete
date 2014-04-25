@@ -13,6 +13,7 @@ module.exports = class Wire
     @wire-type = @origin?output-type
     @active-view = new WireView @origin?get-output-pos!, "Standard"
 
+  view: -> @active-view?group!
 
   /** connect : Boolean
   * node : Node
@@ -27,7 +28,7 @@ module.exports = class Wire
        @dest = node
        @input?register-input @
        @origin?register-output node
-       @active-view?set-end input?input-view?item!position
+       @active-view?set-end input?view!position
        true
      else 
        false

@@ -101,3 +101,10 @@ export wire-idle =
   stroke-color: Colour.white,
   stroke-width: 3,
   stroke-cap: "round"
+
+/** Catch all **/
+
+export other-type =
+  stroke-color: Colour.black,
+  stroke-width: 3,
+  fill-color: Colour.black
