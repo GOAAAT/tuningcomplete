@@ -17,9 +17,8 @@ module.exports = class Node
     @send-list = []
 
     @sending-wires = []
-    @type = "Standard"
     
-    @active-view = new NodeView pos, @type, @inputs
+    @active-view = new NodeView pos, @output-type, @inputs
 
 
   view: -> @active-view?group!
@@ -28,13 +27,12 @@ module.exports = class Node
   /** find-input : Input
   * nodetype : NodeType
   *
-  *  Returns the first available Input to be free and of type
+  * Returns the first available Input to be free and of type
   * Nodetype
   */
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
   
-
   /** get-output-pos : paper.Point
   *
   *  Requests position of output port from node_view

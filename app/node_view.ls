@@ -7,8 +7,8 @@ Input = require \input
  * NodeView([location], [type], [output-type], [inputs])
  * -- constructor method
  *
- * group() : Group
- * -- returns the group to be drawn, public
+ * item() : Item
+ * -- returns the item to be drawn, public
  *
  * get-input-pos(ref) : Paper.Point
  * -- returns the position of input port ref
@@ -22,12 +22,6 @@ Input = require \input
  * free-port(ref)
  * -- marks input port ref as clear
  *
- * set-node-type(type)
- * -- sets the type of the node
- * 
- * set-outport-type(type)
- * -- sets the type of the output port
- *
  * set-node-pos(location)
  * -- sets the node position
  *
@@ -40,14 +34,14 @@ const PORT_RATIO = 4
 
 module.exports = class NodeView
   
-  /* NodeView([location : Paper.Point], [type : string], [output-type : String], [inputs : [InputView]]) : void
+  /* NodeView(location, node-type, inputs) : void
    *
    * Instantiates instance variables
    * Default (0, 0) with 1 input and standard style
    * Inputs is a list of input_views
    */
 
-  (pos = [100, 100], @node-type = "Standard", @inputs = []) ->
+  (pos, @node-type = "Standard", @inputs = []) ->
 
     /* Set up constants:
      * 
@@ -66,37 +60,20 @@ module.exports = class NodeView
     
     @node-pos = new paper.Point pos
     
-    switch @node-type
-    | "Maths" => 
-        @node-style = VS.maths
-        @output-type = VS.numerical-free
-    | "Oscillator" => 
-        @node-style = VS.oscillator
-        @output-type = VS.audio-free
-    | "Instrument" => 
-        @node-style = VS.instrument
-        @output-type = VS.audio-free
-    | otherwise => 
-        @node-style = VS.standard
-        @output-type = VS.other-type
+    @set-node-type @node-type
         
     @outport-pos = new paper.Point @node-pos
-    @outport-pos.x = @outport-pos.x + NODE_SIZE
-    
-    switch @output-type
-    | "Numerical" => @outport-style = VS.numerical-out
-    | "Audio" => @outport-style = VS.audio-out
-    | otherwise => @outport-style = VS.standard-out
+    @outport-pos.x += NODE_SIZE
     
     @_set-input-angle!
 
     @_make-node!
   
-  /*  group() : Group
+  /*  item() : Item
    *  returns the paper group
    */
    
-  group: -> @node-group
+  item: -> @node-group
       
   /* get-input-pos(ref : Int) : Paper.Point
    *
@@ -105,19 +82,7 @@ module.exports = class NodeView
    */
     
   get-input-pos: (ref) ->
-    _angle = ((ref+1) * @angle) + 90
-    _angle *= Math.PI / 180
-    
-    dx = Math.round (NODE_SIZE * (Math.cos _angle))
-    dy = Math.round (NODE_SIZE * (Math.sin _angle))
-    
-    ipx = @node-pos.x + dx
-    ipy = @node-pos.y + dy
-    
-    result = new paper.Point ipx, ipy
-    
-    result
-    
+    new paper.Point [Math.cos _angle, Math.sin _angle] .scale NODE_SIZE .round!add @node-pos
   
   /* get-output-pos : Paper.Point
    *
@@ -139,17 +104,34 @@ module.exports = class NodeView
    *
    */
   free-port: (ref) !-> @inputs[ref]?free-port!
-        
  
   /* set-node-pos(location : Paper.Point) : void
    *
    * Sets the position of the node
    */
   set-node-pos: (pos) !-> @node-path.set-position pos
+  
+  /* set-node-type(type : String) : void
+   * sets the node type and style
+   */
+  set-node-type: (@node-type) !->
+	switch @node-type
+	  | "Maths" => 
+		  @node-style = VS.maths
+		  @output-style = VS.numerical-free
+	  | "Oscillator" => 
+		  @node-style = VS.oscillator
+		  @output-style = VS.audio-free
+	  | "Instrument" => 
+		  @node-style = VS.instrument
+		  @output-style = VS.audio-free
+	  | otherwise => 
+		  @node-style = VS.standard
+		  @output-style = VS.other-type
 
-  /* set-node-fill-color(col : Colour) :void
+  /* remove() : void
    * 
-   * Sets the fill colour of the node
+   * removes the node
    */
   remove: !-> @node-group.remove!
       
