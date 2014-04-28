@@ -115,19 +115,19 @@ module.exports = class NodeView
    * sets the node type and style
    */
   set-node-type: (@node-type) !->
-	switch @node-type
-	  | "Maths" => 
-		  @node-style = VS.maths
-		  @output-style = VS.numerical-free
-	  | "Oscillator" => 
-		  @node-style = VS.oscillator
-		  @output-style = VS.audio-free
-	  | "Instrument" => 
-		  @node-style = VS.instrument
-		  @output-style = VS.audio-free
-	  | otherwise => 
-		  @node-style = VS.standard
-		  @output-style = VS.other-type
+    switch @node-type
+      | "Maths" => 
+          @node-style = VS.maths
+          @output-style = VS.numerical-free
+      | "Oscillator" => 
+          @node-style = VS.oscillator
+          @output-style = VS.audio-free
+      | "Instrument" => 
+          @node-style = VS.instrument
+          @output-style = VS.audio-free
+      | otherwise => 
+          @node-style = VS.standard
+          @output-style = VS.other-type
 
   /* remove() : void
    * 
