@@ -1,5 +1,6 @@
 CursorResponder = require \cursor_responder
-{Node,Input,Output} = require \node
+Node = require \node
+Input = require \input
 
 module.exports = class Window extends CursorResponder
   /** Window
@@ -11,7 +12,8 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
-    @view-layer = @ctx.project.active-layer
+    @wire-layer = @ctx.project.active-layer
+    @view-layer = new @ctx.Layer!
     @ui-layer   = new @ctx.Layer!
 
     @view-layer.activate!
@@ -47,6 +49,16 @@ module.exports = class Window extends CursorResponder
    */
   insert-children: (sub, pos = 0) ->
     @view-layer?insert-children pos, sub
+    
+  /** insert-wire : [paper.Item]
+   *  sub : [paper.Item],
+   *  pos : Int
+   *
+   * On the wire layer, add children `sub` at position `pos`, 
+   * returns the inserted items, or null on failure.
+   */
+  insert-wire: (sub, pos = 0) ->
+    @wire-layer?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -77,9 +89,9 @@ module.exports = class Window extends CursorResponder
   pointer-down: (pt) !->
     item = @_snap-item pt ?.item
 
-    if item instanceof Output
+    if item instanceof Node
       @active-wire = new Wire(item)
-      [ @active-wire?view! ] |> @insert-children
+      [ @active-wire?active-view! ] |> @insert-children
 
   /** pointer-moved : void
    *  pt : paper.Point
@@ -93,15 +105,14 @@ module.exports = class Window extends CursorResponder
    *  pt : paper.Point
    *
    * If the pointer is released near an Input of a Node, then connect
-   * the wire to it.
+   * on the wire to this Node
    */
   pointer-up: (pt) !->
     item = @_snap-item pt ?.item
 
-    if item instanceof Input and @active-wire?
-      item.connect @active-wire
-    else
-      @active-wire?view?remove!
+    @active-wire?view?remove! unless item instanceof Input and 
+    @active-wire? and 
+    @active-wire.connect item
 
   /** pan-by : void
    *  delta : paper.Point
@@ -109,7 +120,7 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) !->
-    @ctx?view?scroll-by delta
+    @ctx?view?scroll-by delta  
 
   /** Private methods */
   const HIT_TOLERANCE  = 20
