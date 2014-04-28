@@ -18,11 +18,9 @@ module.exports = class Window extends CursorResponder
     @ui-layer   = new @ctx.Layer!
     @cursor-layer = new @ctx.Layer!
 
-    @moveable-layers = [@wire-layer, @view-layer]
+    @moveable-layers = [@wire-layer, @view-layer
 
     @view-layer.activate!
-
-
 
   /** activate : void
    *
@@ -46,7 +44,14 @@ module.exports = class Window extends CursorResponder
   insert-ui: (sub, pos = 0) ->
     @ui-layer?insert-children pos, sub
 
-# for @cursor-layer
+
+  /** insert-cursor : [paper.Item]
+   *  sub : [paper.Item],
+   *  pos : Int
+   *
+   * Adds children `sub` to the cursor layer (above all layers), returning the
+   * inserted items, or null on failure.
+   */
   insert-cursor: (sub, pos = 0) ->
     @cursor-layer?insert-children pos, sub
 
@@ -172,15 +177,17 @@ module.exports = class Window extends CursorResponder
 
 
   pointers-changed: (pts) !->
-    @cursor-layer.remove-children()
-    a = [];
-    for i from 0 til pts.length
-      a[i]= new paper.Shape.Circle(pts[i],10)
-      a[i].fillColor = 'red'
-    a[pts.length] = new paper.Shape.Circle(new paper.Point(100,100),10)
-    a[pts.length].fillColor = 'red'
-    @cursor-layer.insert-children a.length,a
-    @force-update
+    @cursor-layer.remove-children!
+
+    pts
+      |> map (pt) ->
+        new paper.Shape.Circle do
+          center: pt,
+          radius: 10,
+          fillColor: \red
+      |> @insert-cursor
+
+    @force-update!
 
 
 
