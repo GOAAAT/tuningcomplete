@@ -18,7 +18,7 @@ module.exports = class Window extends CursorResponder
     @ui-layer   = new @ctx.Layer!
     @cursor-layer = new @ctx.Layer!
 
-    @moveable-layers = [@wire-layer, @view-layer
+    @moveable-layers = [@wire-layer, @view-layer]
 
     @view-layer.activate!
 
