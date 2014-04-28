@@ -1,6 +1,7 @@
 Input = require \input
 NodeView = require \node_view
-{head, filter} = prelude
+VS = require \view_style
+{head, filter, empty} = prelude
 
 module.exports = class Node
   /**
@@ -18,11 +19,10 @@ module.exports = class Node
 
     @sending-wires = []
     
-    @active-view = new NodeView pos, @output-type, @inputs
+    @active-view = new NodeView pos, VS.standard, @output-type, @inputs
 
 
-  view: -> @active-view?group!
-  
+  view: -> @active-view?item!
 
   /** find-input : Input
   * nodetype : NodeType
@@ -48,6 +48,7 @@ module.exports = class Node
   */
   register-output: (node) !->
     @send-list.push node
+    @active-view.busy-out!
 
 
   /** rem-output : void
@@ -57,3 +58,4 @@ module.exports = class Node
   */
   rem-output: (node) !->
     @send-list = filter (!= node), @send-list
+    @active-view.free-out! if empty @send-list

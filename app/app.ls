@@ -102,26 +102,40 @@ module.exports = class App
       
       /* Testing stuff - REMOVE WHEN NODE ADDING IS IMPLEMENTED */
       @n1 = new Node "Numerical", 1, 1, [100, 200]
-      @n2 = new Node "Standard", 2, 1, [200, 250]
-      @n3 = new Node "Audio", 1, 1, [100, 300]
+      @n3 = new Node "Numerical", 2, 1, [200, 250]
+      @n2 = new Node "Audio", 1, 1, [100, 300]
       @w = new Wire @n1
-      @w2 = new Wire @n3
+      @w2 = new Wire @n2
 
 
-      if @w?connect @n2
+      if @w?connect @n3
         console.log "Connected!"
       else
         console.log "Failed to connect."
-      if @w2?connect @n2
+      if @w2?connect @n3
         console.log "Connected!"
       else
         console.log "Failed to connect."
 
       if @w2?disconnect!
         console.log "Disconnected"
+        
+      @foo = new Wire @n2
+      @bar = new Wire @n2
       
-      [@w, @w2, @n1, @n2, @n3] |> map (.view!) |> @window?insert-children
+      @foo?connect @n3
+      @bar?connect @n3
+        
+      console.log @n1
+      console.log @n2
+      console.log @n3
+      console.log @w
+      console.log @w2
+      console.log @foo
+      console.log @bar
       
+      [@n1, @n2, @n3] |> map (.view!) |> @window?insert-children
+      [@w, @w2, @foo, @bar] |> map (.view!) |> @window?insert-wire
       @window?force-update!
 
 

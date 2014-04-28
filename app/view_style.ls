@@ -19,82 +19,84 @@ Colour = require \color
  *  **Wire Styles**
  *  Standard Idle
  */
+ 
+LINE_COLOUR = Colour.black
 
 /** Nodes **/
 
 export maths =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.blue
   
 export instrument =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.bee-yellow
 
 export oscillator = 
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.purpleMonster
   
 export standard =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.cyan
 
 /** Numerical Inports **/
 
 export numerical-busy =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.love-red
 
 export numerical-free =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.yellow
   
 /** Audio Inports **/
 
 export audio-busy =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.love-red
   
 export audio-free =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.green
 
 /** Standard Inports **/
 
 export standard-busy  = 
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
-  fill-color: Colour.green
+  fill-color: Colour.love-red
     
 export standard-free = 
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.red
   
 /** Outports **/
 
 export numerical-out =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.white
 
 export audio-out =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.white
 
 export standard-out = 
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.white
-  
+
 /** Wires **/
 
 export wire-idle =
@@ -105,6 +107,6 @@ export wire-idle =
 /** Catch all **/
 
 export other-type =
-  stroke-color: Colour.black,
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.black

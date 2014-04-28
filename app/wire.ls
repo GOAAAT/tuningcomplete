@@ -13,7 +13,7 @@ module.exports = class Wire
     @wire-type = @origin?output-type
     @active-view = new WireView @origin?get-output-pos!, "Standard"
 
-  view: -> @active-view?group!
+  view: -> @active-view?item!
 
   /** connect : Boolean
   * node : Node

@@ -41,7 +41,7 @@ module.exports = class NodeView
    * Inputs is a list of input_views
    */
 
-  (pos, @node-type = "Standard", @inputs = []) ->
+  (pos, @node-style, @output-type = "Standard", @inputs = []) ->
 
     /* Set up constants:
      * 
@@ -60,7 +60,7 @@ module.exports = class NodeView
     
     @node-pos = new paper.Point pos
     
-    @set-node-type @node-type
+    @set-output-type!
         
     @outport-pos = new paper.Point @node-pos
     @outport-pos.x += NODE_SIZE
@@ -82,7 +82,9 @@ module.exports = class NodeView
    */
     
   get-input-pos: (ref) ->
-    new paper.Point [Math.cos _angle, Math.sin _angle] .scale NODE_SIZE .round!add @node-pos
+    _angle = ((ref+1) * @angle) + 90
+    _angle = _angle * (Math.PI / 180)
+    new paper.Point [Math.cos _angle; Math.sin _angle] .multiply NODE_SIZE .round!add @node-pos
   
   /* get-output-pos : Paper.Point
    *
@@ -114,26 +116,36 @@ module.exports = class NodeView
   /* set-node-type(type : String) : void
    * sets the node type and style
    */
-  set-node-type: (@node-type) !->
-    switch @node-type
-      | "Maths" => 
-          @node-style = VS.maths
-          @output-style = VS.numerical-free
-      | "Oscillator" => 
-          @node-style = VS.oscillator
-          @output-style = VS.audio-free
-      | "Instrument" => 
-          @node-style = VS.instrument
-          @output-style = VS.audio-free
+  set-output-type: !->
+    console.log "Set output type"
+    switch @output-type
+      | "Numerical" => 
+          @outport-style = VS.numerical-free
+      | "Audio" => 
+          @outport-style = VS.audio-free
       | otherwise => 
-          @node-style = VS.standard
-          @output-style = VS.other-type
+          @outport-style = VS.other-type
+          
+  /* set-node-style: (style) : void
+   * sets the node style
+   */
+  set-node-style: (@node-path.style) !->
 
   /* remove() : void
    * 
    * removes the node
    */
   remove: !-> @node-group.remove!
+  
+  /* free and busy out () : void
+   * Make the output port red.
+   */
+   
+  busy-out: !-> 
+    console.log "Set busy"
+    @outport-path.style = VS.standard-busy
+  
+  free-out: !-> @outport-path.style = @outport-style
       
   /** PRIVATE METHODS **/
      
@@ -172,6 +184,7 @@ module.exports = class NodeView
     # Add node
     @node-group = new paper.Group [ @node-path ]
     
+    console.log "Make node"
     @outport-path = @_make-port @outport-pos, @outport-style
     # Add outport
     @node-group.add-child @outport-path

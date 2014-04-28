@@ -12,7 +12,8 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
-    @view-layer = @ctx.project.active-layer
+    @wire-layer = @ctx.project.active-layer
+    @view-layer = new @ctx.Layer!
     @ui-layer   = new @ctx.Layer!
 
     @view-layer.activate!
@@ -48,6 +49,16 @@ module.exports = class Window extends CursorResponder
    */
   insert-children: (sub, pos = 0) ->
     @view-layer?insert-children pos, sub
+    
+  /** insert-wire : [paper.Item]
+   *  sub : [paper.Item],
+   *  pos : Int
+   *
+   * On the wire layer, add children `sub` at position `pos`, 
+   * returns the inserted items, or null on failure.
+   */
+  insert-wire: (sub, pos = 0) ->
+    @wire-layer?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -109,7 +120,7 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) !->
-    @ctx?view?scroll-by delta
+    @ctx?view?scroll-by delta  
 
   /** Private methods */
   const HIT_TOLERANCE  = 20

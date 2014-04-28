@@ -48,7 +48,7 @@ module.exports = class WireView
    *
    * Sets the line type (and consequently style) of the wire
    */
-  set-line-type: (@type) !->
+  set-wire-type: (@type) !->
     switch @type
     | "Standard" => @wire-path.style = VS.wire-idle
     | otherwise => @wire-path.style = VS.other-type
