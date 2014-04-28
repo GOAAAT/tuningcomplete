@@ -1,6 +1,7 @@
 CursorResponder = require \cursor_responder
 Node = require \node
 Input = require \input
+{map} = prelude
 
 module.exports = class Window extends CursorResponder
   /** Window
@@ -15,6 +16,8 @@ module.exports = class Window extends CursorResponder
     @wire-layer = @ctx.project.active-layer
     @view-layer = new @ctx.Layer!
     @ui-layer   = new @ctx.Layer!
+    
+    @moveable-layers = [@wire-layer, @view-layer]
 
     @view-layer.activate!
 
@@ -77,9 +80,12 @@ module.exports = class Window extends CursorResponder
    * Scale about the given position `pt` by the provided scale factor `sf`.
    */
   scale-by: (sf, pt) !->
-    delta = @ctx.view.center.subtract pt
-    @ctx.view.zoom *= sf
-    delta.multiply 1 - sf |> @ctx.view.scroll-by
+    delta = @moveable-layers.0.position.subtract pt .multiply 1 - sf
+    @moveable-layers 
+      |> map (l) -> 
+        l.scale sf, sf
+        l.translate delta.negate!
+    @force-update!
 
   /** pointer-down : void
    *  pt : paper.Point
@@ -120,7 +126,8 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) !->
-    @ctx?view?scroll-by delta  
+    @moveable-layers |> map (.translate delta.negate!)
+    @force-update!
 
   /** Private methods */
   const HIT_TOLERANCE  = 20

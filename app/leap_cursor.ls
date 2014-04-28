@@ -1,4 +1,4 @@
-{map, filter, head} = prelude
+{map, filter, head, abs} = prelude
 
 Cursor = require \cursor
 CursorResponder = require \cursor_responder
@@ -17,9 +17,12 @@ const ALIGN = 50
 
 #Determines the z region that is used for commands e.g panning and selecting
 #Measured in mm from the origin at the leap motion
-ACTIVE-REGION = 0
+const ACTIVE-REGION = 0
 #Offset the active region for panning to avoid command mixup
-PAN-OFFSET = 10
+const PAN-OFFSET = 20
+
+#Scale to determine how many px per mm in the real world
+const SCALE = 4
 
 module.exports = class LeapCursor extends Cursor
   ->
@@ -38,9 +41,6 @@ module.exports = class LeapCursor extends Cursor
     #Kept to use normalize method for vectors in @_point
     @_i-box = Leap.InteractionBox.Invalid
 
-    #Scale to determine how many px per mm in the real world
-    @_scale = 4
-
     # Flags to determine current behaviour, limit the user to doing one thing at a time
     # Waiting state, ready to detect activity.
     @_waiting = true
@@ -50,8 +50,6 @@ module.exports = class LeapCursor extends Cursor
     @_panning = false
     # zooming in and out
     @_zooming = false
-
-    
 
     #Store the ids of the objects we want to watch
     @_object-id = []
@@ -78,12 +76,12 @@ module.exports = class LeapCursor extends Cursor
 
   /*
   *  Sets @_sw and @_sh according to the size of the new interaction box
-  *  Scales the mm input to window px with @_scale
+  *  Scales the mm input to window px with SCALE
   */
   _adjust: (frame) !->
     @_i-box = frame.interaction-box
-    @_sh = frame.interaction-box.height*@_scale
-    @_sw = frame.interaction-box.width*@_scale
+    @_sh = frame.interaction-box.height*SCALE
+    @_sw = frame.interaction-box.width*SCALE
 
   /*
   *  Function for converting vec3 millimeter coordinates into paperjs window coordinates.
@@ -227,12 +225,12 @@ module.exports = class LeapCursor extends Cursor
 
   _pan: (frame) !->
     hand = frame.hand(@_object-id[0])
-    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION - PAN-OFFSET
+    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION
       @_waiting = true
       @_panning = false
     else
-      delta-x = (@_pv[0] - hand.stabilized-palm-position[0]) * @_scale
-      delta-y = (hand.stabilized-palm-position[1] - @_pv[1]) * @_scale
+      delta-x = (@_pv[0] - hand.stabilized-palm-position[0]) * SCALE
+      delta-y = (hand.stabilized-palm-position[1] - @_pv[1]) * SCALE
       @delegate.pan-by new paper.Point delta-x, delta-y
       @_pv = hand.stabilized-palm-position
 
@@ -245,7 +243,7 @@ module.exports = class LeapCursor extends Cursor
     else
       #set @_pv to the average of the palm positions for a centre point to scale around
       Leap.vec3.add @_pv, hand1.stabilized-palm-position, hand2.stabilized-palm-position
-      Leap.vec3.scale @_pv, 0.5
+      Leap.vec3.scale @_pv, @_pv, 0.5
       #get the positive distance between them in x axis
       d = hand1.stabilized-palm-position[0] - hand2.stabilized-palm-position[0] |> abs
 
@@ -266,7 +264,6 @@ module.exports = class LeapCursor extends Cursor
       #invalid frame instance from the controller
       return
     @_adjust frame
-    @_send-pointers frame
     if @_waiting
       @_detect frame
     else if @_dragging
@@ -275,6 +272,7 @@ module.exports = class LeapCursor extends Cursor
       @_pan frame
     else if @_zooming
       @_zoom frame
+    @_send-pointers frame
 
   /*
   *  Activate the leap_cursor instance.
