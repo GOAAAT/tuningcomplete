@@ -33,10 +33,7 @@ module.exports = class WireView
      * startpos : Paper.Point
      * type : String
      */
-    
     @wire-path = new paper.Path
-    @wire-path.add @startpos
-    
     @set-wire-type @type
     
   /* item () : Item
@@ -50,8 +47,8 @@ module.exports = class WireView
    */
   set-wire-type: (@type) !->
     switch @type
-    | "Standard" => @wire-path.style = VS.wire-idle
-    | otherwise => @wire-path.style = VS.other-type
+    | "Standard" => @line-style = VS.wire-idle
+    | otherwise => @line-style = VS.other-type
     @wire-path.style = @line-style
     
   /* set-start (location : Paper.Point) : void
@@ -65,13 +62,12 @@ module.exports = class WireView
    * Sets the wire end point.  Will change with fancy wires.
    */
   set-end: (@endpos) !->
-    @wire-path.remove-segment 1
-    @wire-path.insert-segment 1, @endpos
+    @_make-wire!
   
   /* remove () : void
    * Removes the wire from being drawn
    */
-  remove: !->  @wire-path.remove-segment 1
+  remove: !->  @wire-path.remove!
     
   /* private make-wire 
    * 
@@ -79,8 +75,12 @@ module.exports = class WireView
    *
    */  
   _make-wire: !->
-    
-    # Fancy wires to come in the far off future!
-    
-    @wire-path = new paper.Path @startpos, @endpos
+    @wire-path.remove!
+    diff = @endpos.subtract @startpos
+    mid = diff.multiply [0.5 0.5] .add @startpos
+    q1 = diff.multiply [0.25 0.1] .add @startpos
+    q3 = diff.multiply [0.75 0.9] .add @startpos
+    arc = new paper.Path.Arc mid, q3, @endpos
+    @wire-path = new paper.Path.Arc @startpos, q1, mid
+    @wire-path.join arc
     @wire-path.style = @line-style
