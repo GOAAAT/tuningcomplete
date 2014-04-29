@@ -16,7 +16,8 @@ module.exports = class Window extends CursorResponder
     @wire-layer = @ctx.project.active-layer
     @view-layer = new @ctx.Layer!
     @ui-layer   = new @ctx.Layer!
-    
+    @cursor-layer = new @ctx.Layer!
+
     @moveable-layers = [@wire-layer, @view-layer]
 
     @view-layer.activate!
@@ -43,6 +44,17 @@ module.exports = class Window extends CursorResponder
   insert-ui: (sub, pos = 0) ->
     @ui-layer?insert-children pos, sub
 
+
+  /** insert-cursor : [paper.Item]
+   *  sub : [paper.Item],
+   *  pos : Int
+   *
+   * Adds children `sub` to the cursor layer (above all layers), returning the
+   * inserted items, or null on failure.
+   */
+  insert-cursor: (sub, pos = 0) ->
+    @cursor-layer?insert-children pos, sub
+
   /** insert-children : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -52,12 +64,12 @@ module.exports = class Window extends CursorResponder
    */
   insert-children: (sub, pos = 0) ->
     @view-layer?insert-children pos, sub
-    
+
   /** insert-wire : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
    *
-   * On the wire layer, add children `sub` at position `pos`, 
+   * On the wire layer, add children `sub` at position `pos`,
    * returns the inserted items, or null on failure.
    */
   insert-wire: (sub, pos = 0) ->
@@ -81,8 +93,8 @@ module.exports = class Window extends CursorResponder
    */
   scale-by: (sf, pt) !->
     delta = @moveable-layers.0.position.subtract pt .multiply 1 - sf
-    @moveable-layers 
-      |> map (l) -> 
+    @moveable-layers
+      |> map (l) ->
         l.scale sf, sf
         l.translate delta.negate!
     @force-update!
@@ -116,8 +128,8 @@ module.exports = class Window extends CursorResponder
   pointer-up: (pt) !->
     item = @_snap-item pt ?.item
 
-    @active-wire?view?remove! unless item instanceof Input and 
-    @active-wire? and 
+    @active-wire?view?remove! unless item instanceof Input and
+    @active-wire? and
     @active-wire.connect item
 
   /** pan-by : void
@@ -161,3 +173,21 @@ module.exports = class Window extends CursorResponder
       fill:      true
       stroke:    true
       tolerance: tol
+
+
+
+  pointers-changed: (pts) !->
+    @cursor-layer.remove-children!
+
+    pts
+      |> map (pt) ->
+        new paper.Shape.Circle do
+          center: pt,
+          radius: 10,
+          fillColor: \red
+      |> @insert-cursor
+
+    @force-update!
+
+
+
