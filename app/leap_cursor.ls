@@ -2,6 +2,7 @@
 
 Cursor = require \cursor
 CursorResponder = require \cursor_responder
+PointInfo = require \point_info
     
 #Set how slowly a pointer needs to move to select somewhere, same for hands when starting to zoom.
 # Note its the square that is compared to this, so 1000 equates to ~30mm per second
@@ -95,6 +96,10 @@ module.exports = class LeapCursor extends Cursor
     y = (0.5 - nv[1]) * @_sh + @_height
     new paper.Point x, y
 
+  _point-info: (v,type) ->
+    pt = @_point v
+    new PointInfo pt, type, v[2]
+
   /*
   *  Passes pointer information from the given frame to the delegate.
   */
@@ -102,25 +107,28 @@ module.exports = class LeapCursor extends Cursor
     #if we're in an action currently, only pass useful pointers
     if @_panning
       ptr = []
-      #ptr[0] = @_point frame.hand(@_object-id[0]).stabilized-palm-position
+      ptr[0] = @_point-info frame.hand(@_object-id[0]).stabilized-palm-position, \pan
       @delegate.pointers-changed ptr
       return
     if @_dragging
       ptr = []
       #Do we need to send pointer info in this case?
-      #ptr[0] = @_point frame.pointable(@_object-id[0]).stabilized-tip-position()
+      #ptr[0] = @_point-info frame.pointable(@_object-id[0]).stabilized-tip-position, \pointable
       @delegate.pointers-changed ptr
       return
     if @_zooming
       ptrs = []
-      ptrs[0] = @_point frame.hand(@_object-id[0]).stabilized-palm-position
-      ptrs[1] = @_point frame.hand(@_object-id[1]).stabilized-palm-position
+      ptrs[0] = @_point-info frame.hand(@_object-id[0]).stabilized-palm-position, \zoom
+      ptrs[1] = @_point-info frame.hand(@_object-id[1]).stabilized-palm-position, \zoom
       @delegate.pointers-changed ptrs
       return
-    pts = frame.pointables
+    fingers = frame.pointables
         |> filter (.valid)
-        |> map (pt) ~> @_point pt.stabilized-tip-position
-    @delegate.pointers-changed pts
+        |> map (pt) ~> @_point-info pt.stabilized-tip-position, \finger
+    hands = frame.hands
+        |> filter (.valid)
+        |> map (hand) ~> @_point-info hand.stabilized-palm-position, \hand
+    @delegate.pointers-changed (fingers ++ hands)
 
 
   /*
@@ -168,7 +176,7 @@ module.exports = class LeapCursor extends Cursor
 
     hand = frame.hands
         |> filter (.stabilized-palm-position[2] < ACTIVE-REGION - PAN-OFFSET)
-        |> filter (.fingers.length != 0)
+        |> filter (.fingers.length == 0)
         |> head
     if hand?
       @_waiting = false
