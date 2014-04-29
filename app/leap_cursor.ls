@@ -24,6 +24,9 @@ const PAN-OFFSET = 20
 #Scale to determine how many px per mm in the real world
 const SCALE = 4
 
+#Minimum zooming amount
+const ZOOM-TOL = 0.05
+
 module.exports = class LeapCursor extends Cursor
   ->
     #Store window width and height
@@ -60,9 +63,6 @@ module.exports = class LeapCursor extends Cursor
 
     #Variable for tracking the previous distance between two hands for the zooming function
     @_pd = 0
-
-    #Minimum zooming amount
-    @_zoom-tol = 0.05
 
     /*
     *  Remember the width and height of the window on resize events
@@ -168,6 +168,7 @@ module.exports = class LeapCursor extends Cursor
 
     hand = frame.hands
         |> filter (.stabilized-palm-position[2] < ACTIVE-REGION - PAN-OFFSET)
+        |> filter (.fingers.length != 0)
         |> head
     if hand?
       @_waiting = false
@@ -225,7 +226,7 @@ module.exports = class LeapCursor extends Cursor
 
   _pan: (frame) !->
     hand = frame.hand(@_object-id[0])
-    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION
+    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION || hand.fingers.length != 0
       @_waiting = true
       @_panning = false
     else
@@ -250,7 +251,7 @@ module.exports = class LeapCursor extends Cursor
       #flip this to alter zooming direction
       sf = d/@_pd
       #don't scale by too small amounts
-      if -@_zoom-tol < sf - 1 <@_zoom-tol then return
+      if -ZOOM-TOL < sf - 1 <ZOOM-TOL then return
       @delegate.scale-by sf, @_point @_pv
       @_pd = d
 
