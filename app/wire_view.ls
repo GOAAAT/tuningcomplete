@@ -54,15 +54,16 @@ module.exports = class WireView
   /* set-start (location : Paper.Point) : void
    * Sets the wire start point.  Will change with fancy wires.
    */
-  set-start: (@startpos) !-> 
-    @wire-path.remove-segment 0
-    @wire-path.insert-segment 0, @startpos
+  set-start: (@startpos) !->
+    if @endpos?
+      _make-wire!
     
   /* set-end (location : Paper.Point) : void
    * Sets the wire end point.  Will change with fancy wires.
    */
   set-end: (@endpos) !->
-    @_make-wire!
+    if @startpos?
+      @_make-wire!
   
   /* remove () : void
    * Removes the wire from being drawn
