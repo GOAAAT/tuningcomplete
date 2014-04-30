@@ -177,7 +177,6 @@ module.exports = class Window extends CursorResponder
       tolerance: tol
 
 
-
   pointers-changed: (pt-infos) !->
     @cursor-layer.remove-children!
     pt-infos
