@@ -2,6 +2,7 @@ CursorResponder = require \cursor_responder
 Node = require \node
 Input = require \input
 PointInfo = require \point_info
+VS = require \view_style
 {map} = prelude
 
 module.exports = class Window extends CursorResponder
@@ -179,27 +180,8 @@ module.exports = class Window extends CursorResponder
 
   pointers-changed: (pt-infos) !->
     @cursor-layer.remove-children!
-
     pt-infos
-      |> map (pt-info) ->
-        switch pt-info.type
-        | \hand =>
-          new paper.Shape.Circle do
-            center: pt-info.pt,
-            radius: 20,
-            fillColor: \green
-        | \finger =>  new paper.Shape.Circle do
-            center: pt-info.pt,
-            radius: 10,
-            fillColor: \red
-        | \zoom =>  new paper.Shape.Circle do
-            center: pt-info.pt,
-            radius: 20,
-            fillColor: \blue
-        | \pan => new paper.Shape.Circle do
-            center: pt-info.pt,
-            radius: 20,
-            fillColor: \blue
+      |> map VS.view-style-for-pointers
       |> @insert-cursor
 
     @force-update!

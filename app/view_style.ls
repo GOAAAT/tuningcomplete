@@ -18,6 +18,16 @@ Colour = require \color
  *
  *  **Wire Styles**
  *  Standard Idle
+ *
+ *  **Pointer Styles**
+ *  Finger pointers
+ *  Hand Pointers
+ *  Zoom Pointers
+ *  Pan Pointers
+ *
+ *  Methods:
+ *  view-style-for-pointers(pt-info: PointInfo): paper.Shape
+ *    returns the appropriate styling given a type of point. 
  */
  
 LINE_COLOUR = Colour.black
@@ -104,9 +114,51 @@ export wire-idle =
   stroke-width: 3,
   stroke-cap: "round"
 
+/** Pointers **/
+
+export finger-pointer =
+  fill-color: \red
+
+export hand-pointer =
+  fill-color: \green
+
+export zoom-pointer =
+  fill-color: \blue
+
+export pan-pointer =
+  fill-color: \blue
+
 /** Catch all **/
 
 export other-type =
   stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.black
+
+export view-style-for-pointers = (pt-info) ->
+  switch pt-info.type
+  | \finger =>
+    pt = new paper.Shape.Circle do
+      center: pt-info.pt,
+      radius: 10
+    pt.style = finger-pointer
+    pt
+  | \hand =>
+    pt = new paper.Shape.Circle do
+      center: pt-info.pt,
+      radius: 20
+    pt.style = hand-pointer
+    pt
+  | \zoom =>
+    pt = new paper.Shape.Circle do
+      center: pt-info.pt,
+      radius: 20
+    pt.style = zoom-pointer
+    pt
+  | \pan =>
+    pt = new paper.Shape.Circle do
+      center: pt-info.pt,
+      radius: 20
+    pt.style = pan-pointer
+    pt
+    

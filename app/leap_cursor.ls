@@ -176,7 +176,7 @@ module.exports = class LeapCursor extends Cursor
 
     hand = frame.hands
         |> filter (.stabilized-palm-position[2] < ACTIVE-REGION - PAN-OFFSET)
-        |> filter (.fingers.length == 0)
+        |> filter (.fingers.map ((finger) -> finger.time-visible > 0.5) .length == 0)
         |> head
     if hand?
       @_waiting = false
@@ -234,7 +234,7 @@ module.exports = class LeapCursor extends Cursor
 
   _pan: (frame) !->
     hand = frame.hand(@_object-id[0])
-    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION || hand.fingers.length != 0
+    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION || hand.fingers.map ((finger) -> finger.time-visible > 0.5) .length != 0
       @_waiting = true
       @_panning = false
     else
