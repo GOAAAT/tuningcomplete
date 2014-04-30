@@ -145,6 +145,19 @@ module.exports = class Window extends CursorResponder
     @moveable-layers |> map (.translate delta.negate!)
     @force-update!
 
+  /** pointers-changed : void
+   *  pt-infos : [PointInfo]
+   *
+   * Update the position of the cursors on screen.
+   */
+  pointers-changed: (pt-infos) !->
+    @cursor-layer.remove-children!
+    pt-infos
+      |> map VS.view-style-for-pointers
+      |> @insert-cursor
+
+    @force-update!
+
   /** Private methods */
   const HIT_TOLERANCE  = 20
   const SNAP_TOLERANCE = 40
@@ -177,16 +190,6 @@ module.exports = class Window extends CursorResponder
       fill:      true
       stroke:    true
       tolerance: tol
-
-
-  pointers-changed: (pt-infos) !->
-    @cursor-layer.remove-children!
-    pt-infos
-      |> map VS.view-style-for-pointers
-      |> @insert-cursor
-
-    @force-update!
-
 
   /** (private) _correct-scaling : void
    *  items : [paper.Item]
