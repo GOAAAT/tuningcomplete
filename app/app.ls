@@ -35,9 +35,21 @@ module.exports = class App
       # New Node List
       @node-list = new FilterList @window
 
+      numerical = class Numeric extends Node
+        @desc = "produces a numerical output"
+        (pos) -> super \Numerical 1 1 pos
+
+      audio     = class Audio extends Node
+        @desc = "produces audio output"
+        (pos) -> super \Audio 1 1 pos
+
       # Test Data only
       data  = new PrefixTree!
       nodes =
+        * name: \numerical
+          node: numerical
+        * name: \audio
+          node: audio
         * name: \oscillator
           node: { desc: "Generates a continuous tone" }
         * name: \mixer
@@ -99,14 +111,12 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
 
-      
       /* Testing stuff - REMOVE WHEN NODE ADDING IS IMPLEMENTED */
       @n1 = new Node "Numerical", 1, 1, [100, 200]
-      @n3 = new Node "Numerical", 2, 1, [200, 250]
-      @n2 = new Node "Audio", 1, 1, [100, 300]
       @w = new Wire @n1
+      @n2 = new Node "Audio", 1, 1, [100, 300]
       @w2 = new Wire @n2
-
+      @n3 = new Node "Numerical", 2, 1, [200, 250]
 
       if @w?connect @n3
         console.log "Connected!"
@@ -119,13 +129,13 @@ module.exports = class App
 
       if @w2?disconnect!
         console.log "Disconnected"
-        
+
       @foo = new Wire @n2
       @bar = new Wire @n2
-      
+
       @foo?connect @n3
       @bar?connect @n3
-        
+
       console.log @n1
       console.log @n2
       console.log @n3
@@ -133,11 +143,10 @@ module.exports = class App
       console.log @w2
       console.log @foo
       console.log @bar
-      
+
       [@n1, @n2, @n3] |> map (.view!) |> @window?insert-children
       [@w, @w2, @foo, @bar] |> map (.view!) |> @window?insert-wire
       @window?force-update!
-
 
     /** Button properties */
     const BTN_DEFAULT = 0
@@ -191,3 +200,5 @@ module.exports = class App
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
       console.log "New Node #name, #{Node.desc}"
+      new-node = new Node paper.view.center
+      @window.insert-children [new-node.view!]
