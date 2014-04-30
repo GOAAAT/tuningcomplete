@@ -3,7 +3,7 @@ Node = require \node
 Input = require \input
 PointInfo = require \point_info
 VS = require \view_style
-{map} = prelude
+{map, each} = prelude
 
 module.exports = class Window extends CursorResponder
   /** Window
@@ -15,14 +15,18 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
-    @wire-layer = @ctx.project.active-layer
-    @view-layer = new @ctx.Layer!
-    @ui-layer   = new @ctx.Layer!
+    @sf = 1
+
+    @view-layer   = @ctx.project.active-layer
+    @ui-layer     = new @ctx.Layer!
     @cursor-layer = new @ctx.Layer!
 
-    @moveable-layers = [@wire-layer, @view-layer]
+    @moveable-layers = [@view-layer]
 
     @view-layer.activate!
+
+    @wire-group = new @ctx.Group!
+    @insert-children [@wire-group], 0
 
   /** activate : void
    *
@@ -46,7 +50,6 @@ module.exports = class Window extends CursorResponder
   insert-ui: (sub, pos = 0) ->
     @ui-layer?insert-children pos, sub
 
-
   /** insert-cursor : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -64,7 +67,8 @@ module.exports = class Window extends CursorResponder
    * Add children `sub` at position `pos`, returns the inserted items, or null
    * on failure.
    */
-  insert-children: (sub, pos = 0) ->
+  insert-children: (sub, pos = 1) ->
+    @_correct-scaling sub
     @view-layer?insert-children pos, sub
 
   /** insert-wire : [paper.Item]
@@ -75,7 +79,8 @@ module.exports = class Window extends CursorResponder
    * returns the inserted items, or null on failure.
    */
   insert-wire: (sub, pos = 0) ->
-    @wire-layer?insert-children pos, sub
+    @_correct-scaling sub
+    @wire-group?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -94,11 +99,8 @@ module.exports = class Window extends CursorResponder
    * Scale about the given position `pt` by the provided scale factor `sf`.
    */
   scale-by: (sf, pt) !->
-    delta = @moveable-layers.0.position.subtract pt .multiply 1 - sf
-    @moveable-layers
-      |> map (l) ->
-        l.scale sf, sf
-        l.translate delta.negate!
+    @sf *= sf
+    @moveable-layers |> map (l) -> l.scale sf, pt
     @force-update!
 
   /** pointer-down : void
@@ -186,4 +188,11 @@ module.exports = class Window extends CursorResponder
     @force-update!
 
 
+  /** (private) _correct-scaling : void
+   *  items : [paper.Item]
+   *
+   * Match the scaling of the items to the scaling of the view.
+   */
+  _correct-scaling: (items) !->
+      items |> each (item) ~> item.scale @sf / item.scaling.x
 
