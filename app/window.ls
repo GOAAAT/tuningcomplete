@@ -1,5 +1,6 @@
 CursorResponder = require \cursor_responder
 Node = require \node
+Wire = require \wire
 NodeView = require \node_view
 WireView = require \wire_view
 Input = require \input
@@ -131,11 +132,13 @@ module.exports = class Window extends CursorResponder
    * If the pointer goes down near an output, start a new wire.
    */
   pointer-down: (pt) !->
-    item = @_snap-item pt ?.item
+    view =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
 
-    if item instanceof Node
-      @active-wire = new Wire(item)
-      [ @active-wire?active-view! ] |> @insert-children
+    if view instanceof NodeView
+      @current-wire = new Wire view.owner
+      @insert-wire [ @current-wire?view! ]
 
   /** pointer-moved : void
    *  pt : paper.Point
@@ -143,7 +146,7 @@ module.exports = class Window extends CursorResponder
    * Update the end of the currently active wire.
    */
   pointer-moved: (pt) !->
-    @active-wire?set-end pt
+    @current-wire?active-view.set-end pt
 
   /** pointer-up : void
    *  pt : paper.Point
@@ -152,11 +155,16 @@ module.exports = class Window extends CursorResponder
    * on the wire to this Node
    */
   pointer-up: (pt) !->
-    item = @_snap-item pt ?.item
+    view =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
 
-    @active-wire?view?remove! unless item instanceof Input and
-    @active-wire? and
-    @active-wire.connect item
+    connected =
+      view instanceof NodeView and
+      @current-wire?connect view.owner
+
+    @current-wire?view!remove! unless connected
+    @current-wire = undefined
 
   /** pan-by : void
    *  delta : paper.Point
@@ -189,21 +197,6 @@ module.exports = class Window extends CursorResponder
   const HIT_TOLERANCE  = 50
   const SNAP_TOLERANCE = 100
 
-  /** (private) _snap-item : paper.HitResult
-   *  pt : paper.Point
-   *  (optional) tol : Float
-   *
-   * Searches for the nearest *selected* item within `tol` distance of `pt`.
-   * Returns a HitResult detailing the information if something was hit, or
-   * `null` otherwise.
-   */
-  _snap-item: (pt, tol = SNAP_TOLERANCE) ->
-    @ctx?project?hit-test pt, do
-      fill:      true
-      stroke:    true
-      selected:  true
-      tolerance: tol
-
   /** (private) _find-item : paper.HitResult
    *  pt : paper.Point
    *  (optional) tol : Float
@@ -213,7 +206,7 @@ module.exports = class Window extends CursorResponder
    * otherwise.
    */
   _find-item: (pt, tol = HIT_TOLERANCE) ->
-    @ctx?project?hit-test pt, do
+    @view-layer?hit-test pt, do
       fill:      true
       stroke:    true
       tolerance: tol

@@ -58,16 +58,9 @@ module.exports = class NodeView
      * angle : Int -- the angle the input ports are distributed by on the LHS
      */
 
-    @node-pos = new paper.Point pos
-
     @set-output-type!
-
-    @outport-pos = new paper.Point @node-pos
-    @outport-pos.x += NODE_SIZE
-
     @_set-input-angle!
-
-    @_make-node!
+    @_make-node pos
 
   /*  item() : Item
    *  returns the paper group
@@ -84,14 +77,16 @@ module.exports = class NodeView
   get-input-pos: (ref) ->
     _angle = ((ref+1) * @angle) + 90
     _angle = _angle * (Math.PI / 180)
-    new paper.Point [Math.cos _angle; Math.sin _angle] .multiply NODE_SIZE .round!add @node-pos
+    new paper.Point [Math.cos _angle; Math.sin _angle]
+      .multiply NODE_SIZE
+      .round!add @node-path.position
 
   /* get-output-pos : Paper.Point
    *
    * Returns the position of the output port
    *
    */
-  get-output-pos: -> @outport-pos
+  get-output-pos: -> @node-path.position.add [ NODE_SIZE, 0 ]
 
   /* busy-port(ref : Int) : void
    *
@@ -184,12 +179,12 @@ module.exports = class NodeView
    *  return a group to be drawn of the node.  Sets the specifics of the inputs.
    *
    */
-  _make-node: !->
+  _make-node: (pos) !->
 
     @_set-input-angle!
 
     # Set up paths
-    @node-path = new paper.Path.Circle @node-pos, NODE_SIZE
+    @node-path = new paper.Path.Circle pos, NODE_SIZE
     @node-path.style = @node-style
 
     # Add node
@@ -197,7 +192,7 @@ module.exports = class NodeView
     @node-group.data.obj = this
 
     # Add outport
-    @outport-path = @_make-port @outport-pos, @outport-style
+    @outport-path = @_make-port @get-output-pos!, @outport-style
     @node-group.add-child @outport-path
 
     # Draw each individual input

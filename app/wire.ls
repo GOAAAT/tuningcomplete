@@ -23,7 +23,7 @@ module.exports = class Wire
   */
   connect: (node) ->
      input = node?find-input (@wire-type)
-     if input?
+     if node != @origin and input?
        @input = input
        @dest = node
        @input?register-input this
@@ -41,6 +41,6 @@ module.exports = class Wire
   */
   disconnect: ->
      @input?remove-input!
-     @origin?rem-output @dest
+     @origin?rem-output this
      @active-view?remove!
      true

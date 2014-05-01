@@ -172,7 +172,7 @@ module.exports = class LeapCursor extends Cursor
       @_waiting = false
       @_object-id[0] = point.id
       @_pv = point.stabilized-tip-position
-      @delegate.pointer-down @_point @_pv
+      @_pv |> @_point |> @delegate.pointer-down
       return
 
     hand = frame.hands
@@ -228,7 +228,7 @@ module.exports = class LeapCursor extends Cursor
     if !pointer.valid || pointer.stabilized-tip-position[2] > ACTIVE-REGION
       @_waiting = true
       @_dragging = false
-      @delegate.pointer-up |> @_point @_pv
+      @_pv |> @_point |> @delegate.pointer-up
     else
       @_pv = pointer.stabilized-tip-position
       @_pv |> @_point |> @delegate.pointer-moved

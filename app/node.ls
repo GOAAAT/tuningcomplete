@@ -16,7 +16,6 @@ module.exports = class Node
       new Input "Numerical", (i+audio) |> @inputs.push
 
     @send-list = []
-    @sending-wires = []
 
     @active-view = new NodeView this, pos, VS.standard, @output-type, @inputs
 
