@@ -3,7 +3,7 @@
 Cursor = require \cursor
 CursorResponder = require \cursor_responder
 PointInfo = require \point_info
-    
+
 #Set how slowly a pointer needs to move to select somewhere, same for hands when starting to zoom.
 # Note its the square that is compared to this, so 1000 equates to ~30mm per second
 const SENSITIVITY = 1000
@@ -162,9 +162,10 @@ module.exports = class LeapCursor extends Cursor
     point = frame.pointables
         |> filter (.valid)
         |> filter (.stabilized-tip-position[2] < ACTIVE-REGION)
-        |> filter ((.tip-velocity |> @_speed) < SENSITIVITY)
+        |> filter ~> ((@_speed it.tip-velocity) < SENSITIVITY)
         |> filter (.direction[2] < -DTOL)
         |> head
+
     #pointable object in the active region and 'stationary'
     if point?
       @_dragging = true
@@ -197,7 +198,7 @@ module.exports = class LeapCursor extends Cursor
     !(@_speed(hand1.palm-velocity) > SENSITIVITY  ||  @_speed(hand2.palm-velocity) > SENSITIVITY) &&
     #Check palms are facing horizontally
     (@_horiz(hand1) && @_horiz(hand2))
-  
+
   /*
   *  Similar to init-zoom, but doesn't check hands are low speed
   */
@@ -263,7 +264,7 @@ module.exports = class LeapCursor extends Cursor
       @delegate.scale-by sf, @_point @_pv
       @_pd = d
 
-  /** 
+  /**
   *  Callback function for dealing with a frame from the leap motion device.
   *  Passed to the LeapMotion controller object to receive frame events.
   *  Bound to the instance of leap_cursor, so we can get the right behaviour on callback
@@ -290,7 +291,7 @@ module.exports = class LeapCursor extends Cursor
     @_controller = new Leap.Controller enable-gestures:true
     @_controller.on 'frame', @~_on-frame
     @_controller.connect!
-  
+
   /*
   *  Disconnect the leap_cursor instance.
   */
