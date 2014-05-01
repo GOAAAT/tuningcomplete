@@ -101,19 +101,22 @@ module.exports = class Window extends CursorResponder
     @active-node-view?deselect!
     @active-wire-view?deselect!
 
-    if selected instanceof NodeView
-      @active-node-view = selected
-      @active-node-view?select!
-    else if selected instanceof WireView
+    @active-node-view =
+      selected instanceof NodeView
+      ? selected
+      : undefined
 
-      # Selecting an already selected wire will disconnect it
-      if @active-wire-view == selected
-        @active-wire-view.owner.disconnect!
-        @active-wire-view = undefined
-      else
-        @active-wire-view = selected
+    if @active-wire-view == selected
+      @active-wire-view?owner.disconnect!
+      @active-wire-view = undefined
+    else
+      @active-wire-view =
+        selected instanceof WireView
+        ? selected
+        : undefined
 
-      @active-wire-view?select!
+    @active-node-view?select!
+    @active-wire-view?select!
 
   /** scale-by : void
    *  sf : Float,
