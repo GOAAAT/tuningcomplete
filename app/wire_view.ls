@@ -24,16 +24,15 @@ Colour = require \color
 
 module.exports = class WireView
 
-  /* WireView(start : Paper.Point, type : String) : void
+  /* WireView(@startpos : Paper.Point, type : String) : void
    *
    * Sets up initial values of the wire
    */
-  (@startpos, @type = "Standard") ->
-    /* Set up constants:
-     * startpos : Paper.Point
-     * type : String
-     */
-    @wire-path = new paper.Path
+  (@owner, @startpos, @type = "Standard") ->
+    @wire-path = new paper.Path!
+    @wire-path.data.obj = this
+
+    @selected = false
     @set-wire-type @type
 
   /* item () : Item
@@ -50,7 +49,9 @@ module.exports = class WireView
     | "Standard" => @line-style = VS.wire-idle
     | "Selected" => @line-style = VS.wire-active
     | otherwise => @line-style = VS.other-type
-    @wire-path.style = @line-style
+
+    if not @selected
+        @wire-path.style = @line-style
 
   /* set-start (location : Paper.Point) : void
    * Sets the wire start point.  Will change with fancy wires.
@@ -65,6 +66,23 @@ module.exports = class WireView
   set-end: (@endpos) !->
     if @startpos?
       @_make-wire!
+
+  /** select : void
+   *
+   * Mark the wire as selected. (If a selected wire is selected again,
+   * it is disconnected and removed).
+   */
+  select: !->
+    @selected = true
+    @wire-path.style = VS.wire-selected
+
+  /** deselect : void
+   *
+   * Mark the wire as deselected (the default state).
+   */
+  deselect: !->
+    @selected = false
+    @wire-path.style = @line-style
 
   /* remove () : void
    * Removes the wire from being drawn

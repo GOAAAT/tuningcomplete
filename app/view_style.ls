@@ -57,6 +57,11 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.cyan
 
+export node-selected =
+  stroke-color: Colour.green,
+  stroke-width: 5,
+  fill-color: Colour.cyan
+
 /** Numerical ports **/
 
 export numerical-busy =
@@ -102,6 +107,11 @@ export wire-idle =
 
 export wire-active =
   stroke-color: Colour.green,
+  stroke-width: 3,
+  stroke-cap: \round
+
+export wire-selected =
+  stroke-color: Colour.red,
   stroke-width: 3,
   stroke-cap: \round
 

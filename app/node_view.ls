@@ -123,7 +123,9 @@ module.exports = class NodeView
   /* set-node-style: (style) : void
    * sets the node style
    */
-  set-node-style: (@node-path.style) !->
+  set-node-style: (@node-style) !->
+    if not @selected
+      @node-path.style = @node-style
 
   /* remove() : void
    *
@@ -138,6 +140,23 @@ module.exports = class NodeView
   busy-out: !-> @outport-path.style = @busy-outport-style
 
   free-out: !-> @outport-path.style = @outport-style
+
+  /** select : void
+   *
+   * Mark the node as selected. The selected node receives subsequent pan
+   * events.
+   */
+  select: !->
+    @selected = true
+    @node-path.style = VS.node-selected
+
+  /** deselect : void
+   *
+   * mark the node as deselected.
+   */
+  deselect: !->
+    @selected = false
+    @node-path.style = @node-style
 
   /** PRIVATE METHODS **/
 
@@ -175,10 +194,10 @@ module.exports = class NodeView
 
     # Add node
     @node-group = new paper.Group [ @node-path ]
-    
-    console.log "Make node"
-    @outport-path = @_make-port @outport-pos, @outport-style
+    @node-group.data.obj = this
+
     # Add outport
+    @outport-path = @_make-port @outport-pos, @outport-style
     @node-group.add-child @outport-path
 
     # Draw each individual input
@@ -186,3 +205,6 @@ module.exports = class NodeView
       @inputs[i]?input-view?set-pos (@get-input-pos i)
       @inputs[i]?input-view?set-size (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?input-view?item!
+
+    # Mark node as not selected
+    @deselect!

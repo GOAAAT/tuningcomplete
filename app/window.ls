@@ -1,6 +1,7 @@
 CursorResponder = require \cursor_responder
 Node = require \node
 NodeView = require \node_view
+WireView = require \wire_view
 Input = require \input
 PointInfo = require \point_info
 VS = require \view_style
@@ -91,7 +92,28 @@ module.exports = class Window extends CursorResponder
    * Notify the item nearest to the point that it has been selected.
    */
   select-at: (pt) !->
-    @_find-item pt ?.item?fire 'doubleclick'
+    selected =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
+
+    console.log selected
+
+    @active-node-view?deselect!
+    @active-wire-view?deselect!
+
+    if selected instanceof NodeView
+      @active-node-view = selected
+      @active-node-view?select!
+    else if selected instanceof WireView
+
+      # Selecting an already selected wire will disconnect it
+      if @active-wire-view == selected
+        @active-wire-view.owner.disconnect!
+        @active-wire-view = undefined
+      else
+        @active-wire-view = selected
+
+      @active-wire-view?select!
 
   /** scale-by : void
    *  sf : Float,
@@ -160,8 +182,8 @@ module.exports = class Window extends CursorResponder
     @force-update!
 
   /** Private methods */
-  const HIT_TOLERANCE  = 20
-  const SNAP_TOLERANCE = 40
+  const HIT_TOLERANCE  = 50
+  const SNAP_TOLERANCE = 100
 
   /** (private) _snap-item : paper.HitResult
    *  pt : paper.Point
@@ -198,5 +220,16 @@ module.exports = class Window extends CursorResponder
    * Match the scaling of the items to the scaling of the view.
    */
   _correct-scaling: (items) !->
-      items |> each (item) ~> item.scale @sf / item.scaling.x
+    items |> each (item) ~> item.scale @sf / item.scaling.x
 
+  /** (private) _find-significant-parent : View
+   *  item : paper.Item
+   *
+   * Find the closest ancestor of the given item that belongs to a view
+   * (A NodeView or a WireView).
+   */
+  _find-significant-parent: (item) ->
+    while item and not item.data.obj?
+      item = item.parent
+
+    item?data?obj

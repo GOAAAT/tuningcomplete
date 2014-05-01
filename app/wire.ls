@@ -11,7 +11,7 @@ Input = require \input
 module.exports = class Wire
   (@origin) ->
     @wire-type = @origin?output-type
-    @active-view = new WireView @origin?get-output-pos!, "Standard"
+    @active-view = new WireView this, @origin?get-output-pos!, "Standard"
 
   view: -> @active-view?item!
 
