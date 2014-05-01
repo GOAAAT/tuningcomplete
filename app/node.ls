@@ -1,7 +1,7 @@
 Input = require \input
 NodeView = require \node_view
 VS = require \view_style
-{head, filter, empty} = prelude
+{head, filter, each, empty} = prelude
 
 module.exports = class Node
   /**
@@ -17,10 +17,7 @@ module.exports = class Node
 
     @send-list = []
 
-    @sending-wires = []
-    
-    @active-view = new NodeView pos, VS.standard, @output-type, @inputs
-
+    @active-view = new NodeView this, pos, VS.standard, @output-type, @inputs
 
   view: -> @active-view?item!
 
@@ -32,7 +29,7 @@ module.exports = class Node
   */
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
-  
+
   /** get-output-pos : paper.Point
   *
   *  Requests position of output port from node_view
@@ -40,16 +37,29 @@ module.exports = class Node
   get-output-pos: ->
     @active-view?get-output-pos!
 
+  /** translate : void
+   *
+   * Move the Node and any associated wires.
+   */
+  translate: (pt) !->
+    @view!translate pt
+
+    @inputs |> each (input) ->
+      input.wire?active-view.wire-end!?add pt
+        |> input.wire?active-view.set-end
+
+    @send-list |> each (wire) ->
+      wire?active-view.wire-start!?add pt
+        |> wire?active-view.set-start
 
   /** register-output : void
-  * node : Node
+  * wire : Wire
   *
-  *  Add to the send-list the node 'node'
+  *  Add to the send-list the wire 'wire'
   */
-  register-output: (node) !->
-    @send-list.push node
+  register-output: (wire) !->
+    @send-list.push wire
     @active-view.busy-out!
-
 
   /** rem-output : void
   * node : Node

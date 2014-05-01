@@ -1,6 +1,6 @@
 Colour = require \color
 
-/*  This class will contain all the various styles that can be used 
+/*  This class will contain all the various styles that can be used
  *  for nodes.
  *  Please do expand it!
  *
@@ -27,9 +27,12 @@ Colour = require \color
  *
  *  Methods:
  *  view-style-for-pointers(pt-info: PointInfo): paper.Shape
- *    returns the appropriate styling given a type of point. 
+ *    returns the appropriate styling given a type of point.
+ *
+ *  view-styles-for-type(type : String) : (Style, Style)
+ *    returns the standard and busy styles for a given data type
  */
- 
+
 LINE_COLOUR = Colour.black
 
 /** Nodes **/
@@ -38,81 +41,79 @@ export maths =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.blue
-  
+
 export instrument =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.bee-yellow
 
-export oscillator = 
+export oscillator =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.purpleMonster
-  
+
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.cyan
 
-/** Numerical Inports **/
+export node-selected =
+  stroke-color: Colour.green,
+  stroke-width: 5,
+  fill-color: Colour.cyan
+
+/** Numerical ports **/
 
 export numerical-busy =
-  stroke-color: LINE_COLOUR,
+  stroke-color: Colour.green,
   stroke-width: 3,
-  fill-color: Colour.love-red
+  fill-color: Colour.yellow
 
 export numerical-free =
   stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.yellow
-  
-/** Audio Inports **/
+
+/** Audio ports **/
 
 export audio-busy =
-  stroke-color: LINE_COLOUR,
+  stroke-color: Colour.green,
   stroke-width: 3,
-  fill-color: Colour.love-red
-  
+  fill-color: Colour.blue
+
 export audio-free =
   stroke-color: LINE_COLOUR,
   stroke-width: 3,
-  fill-color: Colour.green
+  fill-color: Colour.blue
 
 /** Standard Inports **/
 
-export standard-busy  = 
+export standard-busy  =
   stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.love-red
-    
-export standard-free = 
+
+export standard-free =
   stroke-color: LINE_COLOUR,
   stroke-width: 3,
   fill-color: Colour.red
-  
-/** Outports **/
-
-export numerical-out =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 3,
-  fill-color: Colour.white
-
-export audio-out =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 3,
-  fill-color: Colour.white
-
-export standard-out = 
-  stroke-color: LINE_COLOUR,
-  stroke-width: 3,
-  fill-color: Colour.white
 
 /** Wires **/
 
 export wire-idle =
   stroke-color: Colour.white,
   stroke-width: 3,
-  stroke-cap: "round"
+  stroke-cap: \round
+
+export wire-active =
+  stroke-color: Colour.green,
+  stroke-width: 3,
+  stroke-cap: \round
+
+export wire-selected =
+  stroke-color: Colour.red,
+  stroke-width: 3,
+  stroke-cap: \round
 
 /** Pointers **/
 
@@ -161,4 +162,10 @@ export view-style-for-pointers = (pt-info) ->
       radius: 20
     pt.style = pan-pointer
     pt
-    
+
+export view-styles-for-type = (type) ->
+  switch type
+  | \Audio     => [audio-free, audio-busy]
+  | \Numerical => [numerical-free, numerical-busy]
+  | \Standard  => [standard-busy, standard-free]
+  | otherwise  => [other-type, other-type]

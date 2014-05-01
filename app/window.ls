@@ -1,9 +1,12 @@
 CursorResponder = require \cursor_responder
 Node = require \node
+Wire = require \wire
+NodeView = require \node_view
+WireView = require \wire_view
 Input = require \input
 PointInfo = require \point_info
 VS = require \view_style
-{map} = prelude
+{map, each} = prelude
 
 module.exports = class Window extends CursorResponder
   /** Window
@@ -15,14 +18,18 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
 
-    @wire-layer = @ctx.project.active-layer
-    @view-layer = new @ctx.Layer!
-    @ui-layer   = new @ctx.Layer!
+    @sf = 1
+
+    @view-layer   = @ctx.project.active-layer
+    @ui-layer     = new @ctx.Layer!
     @cursor-layer = new @ctx.Layer!
 
-    @moveable-layers = [@wire-layer, @view-layer]
+    @moveable-layers = [@view-layer]
 
     @view-layer.activate!
+
+    @wire-group = new @ctx.Group!
+    @insert-children [@wire-group], 0
 
   /** activate : void
    *
@@ -46,7 +53,6 @@ module.exports = class Window extends CursorResponder
   insert-ui: (sub, pos = 0) ->
     @ui-layer?insert-children pos, sub
 
-
   /** insert-cursor : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -64,7 +70,8 @@ module.exports = class Window extends CursorResponder
    * Add children `sub` at position `pos`, returns the inserted items, or null
    * on failure.
    */
-  insert-children: (sub, pos = 0) ->
+  insert-children: (sub, pos = 1) ->
+    @_correct-scaling sub
     @view-layer?insert-children pos, sub
 
   /** insert-wire : [paper.Item]
@@ -75,7 +82,8 @@ module.exports = class Window extends CursorResponder
    * returns the inserted items, or null on failure.
    */
   insert-wire: (sub, pos = 0) ->
-    @wire-layer?insert-children pos, sub
+    @_correct-scaling sub
+    @wire-group?insert-children pos, sub
 
   /** CursorResponder methods */
 
@@ -85,7 +93,27 @@ module.exports = class Window extends CursorResponder
    * Notify the item nearest to the point that it has been selected.
    */
   select-at: (pt) !->
-    @_find-item pt ?.item?fire 'doubleclick'
+    selected =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
+
+    console.log selected
+
+    @active-node-view?deselect!
+    @active-wire-view?deselect!
+
+    @active-node-view =
+      if selected instanceof NodeView then selected else undefined
+
+    if @active-wire-view == selected
+      @active-wire-view?owner.disconnect!
+      @active-wire-view = undefined
+    else
+      @active-wire-view =
+        if selected instanceof WireView then selected else undefined
+
+    @active-node-view?select!
+    @active-wire-view?select!
 
   /** scale-by : void
    *  sf : Float,
@@ -94,11 +122,8 @@ module.exports = class Window extends CursorResponder
    * Scale about the given position `pt` by the provided scale factor `sf`.
    */
   scale-by: (sf, pt) !->
-    delta = @moveable-layers.0.position.subtract pt .multiply 1 - sf
-    @moveable-layers
-      |> map (l) ->
-        l.scale sf, sf
-        l.translate delta.negate!
+    @sf *= sf
+    @moveable-layers |> map (l) -> l.scale sf, pt
     @force-update!
 
   /** pointer-down : void
@@ -107,11 +132,13 @@ module.exports = class Window extends CursorResponder
    * If the pointer goes down near an output, start a new wire.
    */
   pointer-down: (pt) !->
-    item = @_snap-item pt ?.item
+    view =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
 
-    if item instanceof Node
-      @active-wire = new Wire(item)
-      [ @active-wire?active-view! ] |> @insert-children
+    if view instanceof NodeView
+      @current-wire = new Wire view.owner
+      @insert-wire [ @current-wire?view! ]
 
   /** pointer-moved : void
    *  pt : paper.Point
@@ -119,7 +146,7 @@ module.exports = class Window extends CursorResponder
    * Update the end of the currently active wire.
    */
   pointer-moved: (pt) !->
-    @active-wire?set-end pt
+    @current-wire?active-view.set-end pt
 
   /** pointer-up : void
    *  pt : paper.Point
@@ -128,11 +155,16 @@ module.exports = class Window extends CursorResponder
    * on the wire to this Node
    */
   pointer-up: (pt) !->
-    item = @_snap-item pt ?.item
+    view =
+      @_find-item pt ?.item
+        |> @_find-significant-parent
 
-    @active-wire?view?remove! unless item instanceof Input and
-    @active-wire? and
-    @active-wire.connect item
+    connected =
+      view instanceof NodeView and
+      @current-wire?connect view.owner
+
+    @current-wire?view!remove! unless connected
+    @current-wire = undefined
 
   /** pan-by : void
    *  delta : paper.Point
@@ -140,27 +172,30 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) !->
-    @moveable-layers |> map (.translate delta.negate!)
+    dn = delta.negate!
+    if @active-node-view?
+      @active-node-view.owner.translate dn
+    else
+      @moveable-layers |> map (.translate dn)
+
+    @force-update!
+
+  /** pointers-changed : void
+   *  pt-infos : [PointInfo]
+   *
+   * Update the position of the cursors on screen.
+   */
+  pointers-changed: (pt-infos) !->
+    @cursor-layer.remove-children!
+    pt-infos
+      |> map VS.view-style-for-pointers
+      |> @insert-cursor
+
     @force-update!
 
   /** Private methods */
-  const HIT_TOLERANCE  = 20
-  const SNAP_TOLERANCE = 40
-
-  /** (private) _snap-item : paper.HitResult
-   *  pt : paper.Point
-   *  (optional) tol : Float
-   *
-   * Searches for the nearest *selected* item within `tol` distance of `pt`.
-   * Returns a HitResult detailing the information if something was hit, or
-   * `null` otherwise.
-   */
-  _snap-item: (pt, tol = SNAP_TOLERANCE) ->
-    @ctx?project?hit-test pt, do
-      fill:      true
-      stroke:    true
-      selected:  true
-      tolerance: tol
+  const HIT_TOLERANCE  = 50
+  const SNAP_TOLERANCE = 100
 
   /** (private) _find-item : paper.HitResult
    *  pt : paper.Point
@@ -171,19 +206,27 @@ module.exports = class Window extends CursorResponder
    * otherwise.
    */
   _find-item: (pt, tol = HIT_TOLERANCE) ->
-    @ctx?project?hit-test pt, do
+    @view-layer?hit-test pt, do
       fill:      true
       stroke:    true
       tolerance: tol
 
+  /** (private) _correct-scaling : void
+   *  items : [paper.Item]
+   *
+   * Match the scaling of the items to the scaling of the view.
+   */
+  _correct-scaling: (items) !->
+    items |> each (item) ~> item.scale @sf / item.scaling.x
 
-  pointers-changed: (pt-infos) !->
-    @cursor-layer.remove-children!
-    pt-infos
-      |> map VS.view-style-for-pointers
-      |> @insert-cursor
+  /** (private) _find-significant-parent : View
+   *  item : paper.Item
+   *
+   * Find the closest ancestor of the given item that belongs to a view
+   * (A NodeView or a WireView).
+   */
+  _find-significant-parent: (item) ->
+    while item and not item.data.obj?
+      item = item.parent
 
-    @force-update!
-
-
-
+    item?data?obj
