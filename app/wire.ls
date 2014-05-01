@@ -8,7 +8,7 @@ Input = require \input
 * to.
 */
 
-module.exports = class Wire 
+module.exports = class Wire
   (@origin) ->
     @wire-type = @origin?output-type
     @active-view = new WireView @origin?get-output-pos!, "Standard"
@@ -29,11 +29,11 @@ module.exports = class Wire
        @input?register-input @
        @origin?register-output node
        @active-view?set-end input?view!position
+       @active-view?set-wire-type \Selected
        true
-     else 
+     else
        false
-    
-    
+
   /** disconnect : Boolean
   *
   * Adjusts both properties of nodes, and removes the wire

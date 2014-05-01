@@ -1,5 +1,6 @@
 CursorResponder = require \cursor_responder
 Node = require \node
+NodeView = require \node_view
 Input = require \input
 PointInfo = require \point_info
 VS = require \view_style

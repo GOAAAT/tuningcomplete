@@ -48,6 +48,7 @@ module.exports = class WireView
   set-wire-type: (@type) !->
     switch @type
     | "Standard" => @line-style = VS.wire-idle
+    | "Selected" => @line-style = VS.wire-active
     | otherwise => @line-style = VS.other-type
     @wire-path.style = @line-style
 
