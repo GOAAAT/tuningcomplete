@@ -28,12 +28,13 @@ module.exports = class WireView
    *
    * Sets up initial values of the wire
    */
-  (@owner, @startpos, @type = "Standard") ->
+  (@owner, startpos, @type = "Standard") ->
     @wire-path = new paper.Path!
     @wire-path.data.obj = this
 
     @selected = false
     @set-wire-type @type
+    @set-start startpos
 
   /* item () : Item
    * return a item to be drawn
@@ -51,21 +52,21 @@ module.exports = class WireView
     | otherwise => @line-style = VS.other-type
 
     if not @selected
-        @wire-path.style = @line-style
+      @wire-path.style = @line-style
 
   /* set-start (location : Paper.Point) : void
    * Sets the wire start point.  Will change with fancy wires.
    */
-  set-start: (@startpos) !->
-    if @endpos?
-      _make-wire!
+  set-start: (startpos) !->
+    @startpos = new paper.Point startpos
+    @_make-wire!
 
   /* set-end (location : Paper.Point) : void
    * Sets the wire end point.  Will change with fancy wires.
    */
-  set-end: (@endpos) !->
-    if @startpos?
-      @_make-wire!
+  set-end: (endpos) !->
+    @endpos = new paper.Point endpos
+    @_make-wire!
 
   /** select : void
    *
@@ -89,19 +90,37 @@ module.exports = class WireView
    */
   remove: !->  @wire-path.remove-segments!
 
-  /* private make-wire
+  /** wire-start : paper.Point
+   *
+   * The start of the wire.
+   */
+  wire-start: -> @startpos or @wire-path.first-curve?point1
+
+  /** wire-end : paper.Point
+   *
+   * The end of the wire.
+   */
+  wire-end: -> @endpos or @wire-path.last-curve?point2
+
+  /* private _make-wire : void
    *
    *  Return a group of the line to be drawn
    *
    */
   _make-wire: !->
-    @wire-path.remove!
+    start = @wire-start!
+    end   = @wire-end!
 
-    diff = @endpos.subtract @startpos
-    mid = diff.multiply [0.5 0.5] .add @startpos
-    q1 = diff.multiply [0.25 0.1] .add @startpos
-    q3 = diff.multiply [0.75 0.9] .add @startpos
+    return unless start and end
+    @remove!
 
-    @wire-path.move-to @startpos
+    diff = end.subtract start
+    mid  = diff.multiply [0.5 0.5] .add start
+    q1   = diff.multiply [0.25 0.1] .add start
+    q3   = diff.multiply [0.75 0.9] .add start
+
+    @wire-path.move-to start
     @wire-path.arc-to q1, mid
-    @wire-path.arc-to q3, @endpos
+    @wire-path.arc-to q3, end
+
+    @startpos = @endpos = undefined

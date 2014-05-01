@@ -41,7 +41,7 @@ module.exports = class NodeView
    * Inputs is a list of input_views
    */
 
-  (pos, @node-style, @output-type = "Standard", @inputs = []) ->
+  (@owner, pos, @node-style, @output-type = "Standard", @inputs = []) ->
 
     /* Set up constants:
      *

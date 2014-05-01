@@ -102,18 +102,14 @@ module.exports = class Window extends CursorResponder
     @active-wire-view?deselect!
 
     @active-node-view =
-      selected instanceof NodeView
-      ? selected
-      : undefined
+      if selected instanceof NodeView then selected else undefined
 
     if @active-wire-view == selected
       @active-wire-view?owner.disconnect!
       @active-wire-view = undefined
     else
       @active-wire-view =
-        selected instanceof WireView
-        ? selected
-        : undefined
+        if selected instanceof WireView then selected else undefined
 
     @active-node-view?select!
     @active-wire-view?select!
@@ -168,7 +164,12 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) !->
-    @moveable-layers |> map (.translate delta.negate!)
+    dn = delta.negate!
+    if @active-node-view?
+      @active-node-view.owner.translate dn
+    else
+      @moveable-layers |> map (.translate dn)
+
     @force-update!
 
   /** pointers-changed : void

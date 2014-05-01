@@ -9,10 +9,10 @@ module.exports = class Input
 
   /* register-input : void
   * wire : Wire
-  * 
+  *
   * Informs this port that it is busy
   */
-  register-input: (wire) !-> 
+  register-input: (wire) !->
     @busy = true
     @input-view?busy-port!
     @wire = wire

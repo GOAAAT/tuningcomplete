@@ -26,8 +26,8 @@ module.exports = class Wire
      if input?
        @input = input
        @dest = node
-       @input?register-input @
-       @origin?register-output node
+       @input?register-input this
+       @origin?register-output this
        @active-view?set-end input?view!position
        @active-view?set-wire-type \Selected
        true
