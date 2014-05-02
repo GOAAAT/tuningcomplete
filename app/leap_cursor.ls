@@ -136,18 +136,11 @@ module.exports = class LeapCursor extends Cursor
   */
   _detect: (frame) !->
     #Check for select-at gesture
-    screen-tap = frame.gestures
-        |> filter (.type == "screenTap")
+    tap = frame.gestures
+        |> filter  ((gesture) -> gesture.type == "screenTap" || gesture.type == "keyTap")
         |> head
     if screen-tap?
-      screen-tap.position |> @_point |> @delegate.select-at
-      return
-
-    key-tap = frame.gestures
-        |> filter (.type == "keyTap")
-        |> head
-    if key-tap?
-      key-tap.position |> @_point |> @delegate.select-at
+      tap.position |> @_point |> @delegate.select-at
       return
 
     #Check for zooming
