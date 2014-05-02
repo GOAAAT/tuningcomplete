@@ -31,12 +31,15 @@ module.exports = class Window extends CursorResponder
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
     
-    /** Audio **/
-    @actx = new webkitAudioContext
+    /** Audio: webkitAudioContext for Chrome <= 34 **/
+    @actx = if window.AudioContext then new AudioContext
+            else if window.webkitAudioContext then new webkitAudioContext
+            else undefined
     
     @osc = @actx.create-oscillator!
     @osc.connect @actx.destination
     
+
 
   /** activate : void
    *
