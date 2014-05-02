@@ -58,7 +58,7 @@ export standard =
   fill-color: Colour.cyan
 
 export node-selected =
-  stroke-color: Colour.green,
+  stroke-color: Colour.blue,
   stroke-width: 5,
   fill-color: Colour.cyan
 
