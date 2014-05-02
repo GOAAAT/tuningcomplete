@@ -139,7 +139,7 @@ module.exports = class LeapCursor extends Cursor
     tap = frame.gestures
         |> filter  ((gesture) -> gesture.type == "screenTap" || gesture.type == "keyTap")
         |> head
-    if screen-tap?
+    if tap?
       tap.position |> @_point |> @delegate.select-at
       return
 
