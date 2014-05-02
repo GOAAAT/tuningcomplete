@@ -33,6 +33,10 @@ module.exports = class Window extends CursorResponder
     
     /** Audio **/
     @actx = new webkitAudioContext
+    
+    @osc = @actx.create-oscillator!
+    @osc.connect @actx.destination
+    
 
   /** activate : void
    *
