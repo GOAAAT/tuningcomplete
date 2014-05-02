@@ -17,7 +17,7 @@ module.exports = class Window extends CursorResponder
   (canvas) ->
     @ctx = new paper.PaperScope()
     @ctx.setup(canvas)
-
+    
     @sf = 1
 
     @view-layer   = @ctx.project.active-layer
@@ -30,6 +30,9 @@ module.exports = class Window extends CursorResponder
 
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
+    
+    /** Audio **/
+    @actx = new webkitAudioContext
 
   /** activate : void
    *
