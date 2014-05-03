@@ -7,19 +7,17 @@ module.exports = class AudioNode extends Node
 
   @desc = "produces an audio output"
 
-  /* AudioNode (pos : paper.Point, noinputs : int) : void
-   * Creates an audio node at pos with number of audio inputs noinputs
+  /* AudioNode (pos : paper.Point) : void
+   * Creates an audio node at pos
    */
    
-  (pos, noinputs) ->
+  (pos) ->
   
-    super "Numerical", noinputs, 0, pos
-    
-    @value = 0
+    super "Numerical", 1, 1, pos
     
     @active-view.set-node-style VS.instrument
     
-    @source
+    @source = new AudioNode
     
   /* register-output (wire) : void
    * connects the node to other nodes
