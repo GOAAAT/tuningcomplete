@@ -60,10 +60,8 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.cyan
 
-export node-selected =
-  stroke-color: Colour.blue,
-  stroke-width: 5,
-  fill-color: Colour.cyan
+export selected =
+  stroke-color: Colour.blue
 
 /** Numerical ports **/
 
