@@ -3,8 +3,8 @@ Color      = require \color
 LeapCursor = require \leap_cursor
 Window     = require \window
 Button     = require \button
-PrefixTree = require \prefix_tree
 FilterList = require \filter_list
+NodeList   = require \node_list
 Node = require \node
 Wire = require \wire
 
@@ -35,38 +35,12 @@ module.exports = class App
       # New Node List
       @node-list = new FilterList @window
 
-      numerical = class Numeric extends Node
-        @desc = "produces a numerical output"
-        (pos) -> super \Numerical 1 1 pos
-
-      audio     = class Audio extends Node
-        @desc = "produces audio output"
-        (pos) -> super \Audio 1 1 pos
-
-      # Test Data only
-      data  = new PrefixTree!
-      nodes =
-        * name: \numerical
-          node: numerical
-        * name: \audio
-          node: audio
-        * name: \oscillator
-          node: { desc: "Generates a continuous tone" }
-        * name: \mixer
-          node: { desc: "Mix two sources together" }
-        * name: \gain
-          node: { desc: "Control the amplitude of a signal" }
-        * name: \sequencer
-          node: { desc: "Control properties of signals over time" }
-
-      nodes |> each ({name, node}) !-> data.insert name, node
-
       @node-list.set-visible false
       @node-list.set-listener @~new-node
       @node-list.view!position = [NL_X, NL_Y]
       @node-list.expand NL_WIDTH
 
-      @node-list.set-data data
+      @node-list.set-data NodeList
 
       # Node Palette Button
       @add-node-btn = new Button do
