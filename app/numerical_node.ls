@@ -1,6 +1,7 @@
 Node = require \node
 Input = require \input
 VS = require \view_style
+{map} = prelude
 
 module.exports = class NumericalNode extends Node
 
