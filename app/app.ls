@@ -5,6 +5,8 @@ Window     = require \window
 Button     = require \button
 FilterList = require \filter_list
 Node       = require \node
+Numerical  = require \numerical_node
+Audio      = require \audio_node
 Wire       = require \wire
 GOAAAT     = require \goaaat
 NodeList   = require \node_list
@@ -40,7 +42,8 @@ module.exports = class App
       @osc = @actx.create-oscillator!
       @osc.frequency.value = 440
       @osc.type = "sine"
-      @osc.start 0
+      # @osc.start 0
+
       @osc.connect @actx.destination
 
       GOAAAT.load-sound (arraybuffer) ~>
@@ -52,7 +55,6 @@ module.exports = class App
 
       # New Node List
       @node-list = new FilterList @window
-
       @node-list.set-visible false
       @node-list.set-listener @~new-node
       @node-list.view!position = [NL_X, NL_Y]
