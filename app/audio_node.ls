@@ -25,12 +25,17 @@ module.exports = class AudioNode extends Node
    */
    
   register-output: (wire) !->
-    @send-list.push wire.dest
     @source.connect wire.dest
+    super wire
     
   /* rem-output (node) : void
    * removes the connection
    */
    
   rem-output: (node) !->
+    i = 0
+    while (@send-list[i] != node) && (i < @send-list.length)
+      i++
+    @source.disconnect i
+    super node
     
