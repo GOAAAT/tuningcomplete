@@ -7,13 +7,13 @@ module.exports = class NumericalNode extends Node
 
   @desc = "produces a numerical output"
 
-  /* NumericalNode (pos : paper.Point, noinputs : int) : void
+  /* NumericalNode (pos : paper.Point) : void
    * Creates a numerical node at pos
    */
    
-  (pos, noinputs) ->
+  (pos) ->
   
-    super "Numerical", 0, noinputs, pos
+    super "Numerical", 1, 1, pos
     
     @value = 0
     
