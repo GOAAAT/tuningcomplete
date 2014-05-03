@@ -86,7 +86,11 @@ module.exports = class NodeView
    * Returns the position of the output port
    *
    */
-  get-output-pos: -> @node-path.position.add [ NODE_SIZE, 0 ]
+  get-output-pos: ->
+    @node-path.position.add [
+      @node-path.bounds.width / 2,
+      0
+    ]
 
   /* busy-port(ref : Int) : void
    *
