@@ -19,6 +19,9 @@ module.exports = class App
       @window = new Window canvas
       @cursor = new LeapCursor
 
+      # Web Audio Context
+      @actx   = new webkit-audio-context!
+
       @cursor.set-delegate @window
 
     /** init : void
@@ -31,6 +34,20 @@ module.exports = class App
     init: !->
       @window.activate!
       @cursor.activate!
+
+      # Web Audio test
+      @osc = @actx.create-oscillator!
+      @osc.frequency.value = 440
+      @osc.type = "sine"
+      @osc.start 0
+
+      @osc.connect @actx.destination
+      @byteArray = Base64Binary.decodeArrayBuffer GOAAAT.scream
+      @actx.decode-audio-data @byteArray, (buf) ~>
+        @source = @actx.create-buffer-source!
+        @source.buffer = buf
+        @source.connect @actx.destination
+        @source.start 10
 
       # New Node List
       @node-list = new FilterList @window
