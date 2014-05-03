@@ -28,4 +28,4 @@ module.exports = class NumericalNode extends Node
    * Receives the value
    */
    
-  receive: (@value) !-> console.log @value
+  receive: (@value) !-> @send!
