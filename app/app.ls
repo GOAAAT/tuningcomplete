@@ -41,14 +41,14 @@ module.exports = class App
       @osc.frequency.value = 440
       @osc.type = "sine"
       @osc.start 0
-
       @osc.connect @actx.destination
-      @byteArray = Base64Binary.decodeArrayBuffer GOAAAT.scream
-      @actx.decode-audio-data @byteArray, (buf) ~>
-        @source = @actx.create-buffer-source!
-        @source.buffer = buf
-        @source.connect @actx.destination
-        @source.start 10
+
+      GOAAAT.load-sound (arraybuffer) ~>
+        @actx.decode-audio-data arraybuffer, (buf) ~>
+          @source = @actx.create-buffer-source!
+          @source.buffer = buf
+          @source.connect @actx.destination
+          @source.start 5
 
       # New Node List
       @node-list = new FilterList @window
