@@ -1,6 +1,8 @@
-Node = require \node
+Node       = require \node
 PrefixTree = require \prefix_tree
-{each} = prelude
+Numerical  = require \numerical_node
+Audio      = require \audio_node
+{each}     = prelude
 
 class Numerical extends Node
   @desc = "produces a numerical output"
