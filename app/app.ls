@@ -4,6 +4,7 @@ LeapCursor = require \leap_cursor
 Window     = require \window
 Button     = require \button
 FilterList = require \filter_list
+NodeList   = require \node_list
 Node       = require \node
 Numerical  = require \numerical_node
 Audio      = require \audio_node

@@ -11,9 +11,9 @@ module.exports = class NumericalNode extends Node
    * Creates a numerical node at pos
    */
    
-  (pos) ->
+  (pos, audioin, numin) ->
   
-    super "Numerical", 1, 1, pos
+    super "Numerical", audioin, numin, pos
     
     @value = 0
     
