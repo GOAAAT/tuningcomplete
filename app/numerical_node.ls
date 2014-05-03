@@ -16,6 +16,7 @@ module.exports = class NumericalNode extends Node
     
     @value = 0
     
+    @active-view.set-node-style VS.maths
     
   /* send () : void
    * Sends its value to all its children
