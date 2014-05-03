@@ -1,6 +1,7 @@
 Node = require \node
 Input = require \input
 VS = require \view_style
+{map} = prelude
 
 module.exports = class AudioNode extends Node
 
@@ -33,9 +34,6 @@ module.exports = class AudioNode extends Node
    */
    
   rem-output: (node) !->
-    i = 0
-    while (@send-list[i] != node) && (i < @send-list.length)
-      i++
-    @source.disconnect i
     super node
-    
+    @source.disconnect!
+    @send-list |> map (@source.connect)
