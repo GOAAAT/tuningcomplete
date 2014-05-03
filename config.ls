@@ -10,9 +10,7 @@ exports.config =
       order:
         # Files in `vendor` directories are compiled before other files
         # even if they aren't specified in order.before.
-        before: [
-          'vendor/scripts/base64-binary.js'
-        ]
+        before: []
 
     stylesheets:
       joinTo:
