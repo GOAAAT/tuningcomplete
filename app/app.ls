@@ -5,8 +5,9 @@ Window     = require \window
 Button     = require \button
 PrefixTree = require \prefix_tree
 FilterList = require \filter_list
-Node = require \node
-Wire = require \wire
+Node       = require \node
+Wire       = require \wire
+GOAAAT     = require \goaaat
 
 module.exports = class App
     /** App
@@ -18,6 +19,9 @@ module.exports = class App
     (canvas) ->
       @window = new Window canvas
       @cursor = new LeapCursor
+
+      # Web Audio Context
+      @actx   = new webkit-audio-context!
 
       @cursor.set-delegate @window
 
@@ -31,6 +35,20 @@ module.exports = class App
     init: !->
       @window.activate!
       @cursor.activate!
+
+      # Web Audio test
+      @osc = @actx.create-oscillator!
+      @osc.frequency.value = 440
+      @osc.type = "sine"
+      @osc.start 0
+
+      @osc.connect @actx.destination
+      @byteArray = Base64Binary.decodeArrayBuffer GOAAAT.scream
+      @actx.decode-audio-data @byteArray, (buf) ~>
+        @source = @actx.create-buffer-source!
+        @source.buffer = buf
+        @source.connect @actx.destination
+        @source.start 10
 
       # New Node List
       @node-list = new FilterList @window
