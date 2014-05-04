@@ -99,21 +99,12 @@ module.exports = class Window extends CursorResponder
         |> @_find-significant-parent
     
     if button?
-      console.log button
-
-    if button instanceof Button
       button.trigger true
-      return
-    else if button?
-      button.trigger!
       return
 
     selected =
       @_find-item pt ?.item
         |> @_find-significant-parent
-
-    if selected?
-      console.log selected
 
     @active-node-view?deselect!
     @active-wire-view?deselect!
