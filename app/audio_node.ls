@@ -4,34 +4,36 @@ VS = require \view_style
 {map} = prelude
 
 module.exports = class Audio extends Node
-
-  @desc = "produces an audio output"
-
-  /* AudioNode (pos : paper.Point) : void
-   * Creates an audio node at pos
+  /** Audio
+   *  audioin : Int
+   *  numin   : Int
+   *  pos     : paper.Point
+   *
+   * Creates an audio node at `pos` with `audioin` audio inputs and
+   * `numin` numeric inputs.
    */
-
-  (pos, audioin, numin) ->
-
-    super "Audio", audioin, numin, pos
+  (audioin, numin, pos) ->
+    super \Audio audioin, numin, pos
 
     @active-view.set-node-style VS.instrument
 
-    @audio-node = new AudioNode
-
-  /* register-output (wire) : void
-   * connects the node to other nodes
+  /** register-output : void
+   *  wire : Wire
+   *
+   * Notifies this node that they should start sending information down
+   * this wire.
    */
-
   register-output: (wire) !->
     @audio-node.connect wire.dest
     super wire
 
-  /* rem-output (node) : void
-   * removes the connection
+  /** rem-output : void
+   *  wire : Wire
+   *
+   * Notifies this node that they should no longer send information down this
+   * wire.
    */
-
-  rem-output: (node) !->
-    super node
+  rem-output: (wire) !->
+    super wire
     @audio-node.disconnect!
     @send-list |> map @audio-node~connect
