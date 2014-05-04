@@ -268,9 +268,8 @@ class SimpleRow
 
   /*
   *  Activate the row's select function
-  *  p1,p2 unused parameters to match the Button trigger interface
   */
-  trigger: (p1, p2 = true) !->
+  trigger: !->
     if @_on-select?
       @_on-select @data
 
