@@ -97,15 +97,23 @@ module.exports = class Window extends CursorResponder
     button = 
       @_find-ui-item pt, HIT_TOLERANCE ?.item
         |> @_find-significant-parent
-    console.log button
+    
+    if button?
+      console.log button
+
     if button instanceof Button
       button.trigger true
+      return
+    else if button?
+      button.trigger!
+      return
 
     selected =
       @_find-item pt ?.item
         |> @_find-significant-parent
 
-    console.log selected
+    if selected?
+      console.log selected
 
     @active-node-view?deselect!
     @active-wire-view?deselect!
@@ -221,7 +229,8 @@ module.exports = class Window extends CursorResponder
 
   _find-ui-item: (pt, tol = HIT_TOLERANCE) ->
     @ui-layer?hit-test pt, do
-      bounds:      true
+      fill:      true
+      stroke:    true
       tolerance: tol
 
   /** (private) _correct-scaling : void
