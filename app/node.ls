@@ -1,4 +1,5 @@
-Input = require \input
+AudioInput = require \audio_input
+NumericalInput = require \numerical_input
 NodeView = require \node_view
 VS = require \view_style
 {head, filter, each, empty} = prelude
@@ -11,9 +12,9 @@ module.exports = class Node
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
-      new Input "Audio", i |> @inputs.push
+      new AudioInput i |> @inputs.push
     for i from 1 to numerical
-      new Input "Numerical", (i+audio) |> @inputs.push
+      new NumericalInput i+audio |> @inputs.push
 
     @send-list = []
 
