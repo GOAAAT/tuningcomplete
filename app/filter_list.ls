@@ -244,6 +244,7 @@ class SimpleRow
 
     @group = new paper.Group do
       children: [ @text, @hit-box ]
+    @group.data.obj = this
 
     @hit-box.on 'mouseenter' @~_on-mouse-enter
     @hit-box.on 'mouseleave' @~_on-mouse-leave
@@ -264,6 +265,13 @@ class SimpleRow
    * object).
    */
   set-listener: (@_on-select) !->
+
+  /*
+  *  Activate the row's select function
+  */
+  trigger: !->
+    if @_on-select?
+      @_on-select @data
 
   /** build : void
    *  name : String

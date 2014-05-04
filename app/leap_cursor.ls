@@ -6,7 +6,7 @@ PointInfo = require \point_info
 
 #Set how slowly a pointer needs to move to select somewhere, same for hands when starting to zoom.
 # Note its the square that is compared to this, so 1000 equates to ~30mm per second
-const SENSITIVITY = 1000
+const SENSITIVITY = 200
 
 #Set how accurately gesture directions need to be
 #Used in pointer-down finger direction and zooming for hands facing each other
@@ -18,9 +18,10 @@ const ALIGN = 50
 
 #Determines the z region that is used for commands e.g panning and selecting
 #Measured in mm from the origin at the leap motion
-const ACTIVE-REGION = 0
+const ACTIVE-REGION = -20
 #Offset the active region for panning to avoid command mixup
-const PAN-OFFSET = 20
+#Must be non-zero (for normalisation purposes when passing z information to CursorResponder)
+const PAN-OFFSET = 60
 
 #Scale to determine how many px per mm in the real world
 const SCALE = 4
@@ -98,7 +99,13 @@ module.exports = class LeapCursor extends Cursor
 
   _point-info: (v,type) ->
     pt = @_point v
-    new PointInfo pt, type, v[2]
+    new PointInfo pt, type, @_z-norm v[2]
+  
+  /*
+  *  Normalises the z component to: activeregion < 0 and < panregion < 1
+  */
+  _z-norm: (z) ->  (z - ACTIVE-REGION)/PAN-OFFSET
+
 
   /*
   *  Passes pointer information from the given frame to the delegate.
@@ -112,8 +119,7 @@ module.exports = class LeapCursor extends Cursor
       return
     if @_dragging
       ptr = []
-      #Do we need to send pointer info in this case?
-      #ptr[0] = @_point-info frame.pointable(@_object-id[0]).stabilized-tip-position, \pointable
+      ptr[0] = @_point-info frame.pointable(@_object-id[0]).stabilized-tip-position, \finger
       @delegate.pointers-changed ptr
       return
     if @_zooming
@@ -164,6 +170,7 @@ module.exports = class LeapCursor extends Cursor
         |> filter (.stabilized-tip-position[2] < ACTIVE-REGION)
         |> filter ~> ((@_speed it.tip-velocity) < SENSITIVITY)
         |> filter (.direction[2] < -DTOL)
+        |> filter (.hand!.fingers.length == 1)
         |> head
 
     #pointable object in the active region and 'stationary'
@@ -176,7 +183,7 @@ module.exports = class LeapCursor extends Cursor
       return
 
     hand = frame.hands
-        |> filter (.stabilized-palm-position[2] < ACTIVE-REGION - PAN-OFFSET)
+        |> filter (.stabilized-palm-position[2] < ACTIVE-REGION + PAN-OFFSET)
         |> filter (.fingers.map ((finger) -> finger.time-visible > 0.5) .length == 0)
         |> head
     if hand?
@@ -235,7 +242,7 @@ module.exports = class LeapCursor extends Cursor
 
   _pan: (frame) !->
     hand = frame.hand(@_object-id[0])
-    if !hand.valid || hand.stabilized-palm-position[2] > ACTIVE-REGION || hand.fingers.map ((finger) -> finger.time-visible > 0.5) .length != 0
+    if !hand.valid || hand.stabilized-palm-position[2] > (ACTIVE-REGION+PAN-OFFSET) || hand.fingers.map ((finger) -> finger.time-visible > 0.5) .length != 0
       @_waiting = true
       @_panning = false
     else

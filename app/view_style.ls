@@ -21,6 +21,9 @@ Colour = require \color
  *
  *  **Pointer Styles**
  *  Finger pointers
+ *   -active
+ *   -close
+ *   -other
  *  Hand Pointers
  *  Zoom Pointers
  *  Pan Pointers
@@ -117,8 +120,14 @@ export wire-selected =
 
 /** Pointers **/
 
-export finger-pointer =
+export active-pointer =
   fill-color: \red
+
+export close-pointer =
+  fill-color: \orange
+
+export finger-pointer =
+  fill-color: \yellow
 
 export hand-pointer =
   fill-color: \green
@@ -142,7 +151,11 @@ export view-style-for-pointers = (pt-info) ->
     pt = new paper.Shape.Circle do
       center: pt-info.pt,
       radius: 10
-    pt.style = finger-pointer
+    if pt-info.z < 0
+      pt.style = active-pointer
+    else if pt-info.z < 1
+      pt.style = close-pointer
+    else pt.style = finger-pointer
     pt
   | \hand =>
     pt = new paper.Shape.Circle do

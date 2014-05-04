@@ -13,6 +13,6 @@ module.exports = class PointInfo
   *       = \zoom => hand while zooming
   *       = \pan => hand while panning
   *  pt is just a paper.Point representing x, y coords (in px)
-  *  z is 'currently' just the displacement along the z axis in mm from the leap motion, this may change depending on needs.
+  *  z is a normalised value, with positive direction aay form the screen, 0 at activeregion boundary, 1 at panning region boundary
   */
   (@pt, @type, @z) ->

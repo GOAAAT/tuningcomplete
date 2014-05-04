@@ -35,6 +35,7 @@ module.exports = class Button
       radius: @label.bounds.width / 2 + 10
 
     @group = new paper.Group [ @bg, @label ]
+    @group.data.obj = this
 
     # Recenter the label
     @label.position = [0 0]
