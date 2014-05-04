@@ -6,6 +6,7 @@ WireView = require \wire_view
 Input = require \input
 PointInfo = require \point_info
 VS = require \view_style
+Button = require \button
 {map, each} = prelude
 
 module.exports = class Window extends CursorResponder
@@ -93,6 +94,13 @@ module.exports = class Window extends CursorResponder
    * Notify the item nearest to the point that it has been selected.
    */
   select-at: (pt) !->
+    button = 
+      @_find-ui-item pt, HIT_TOLERANCE ?.item
+        |> @_find-significant-parent
+    console.log button
+    if button instanceof Button
+      button.trigger true
+
     selected =
       @_find-item pt ?.item
         |> @_find-significant-parent
@@ -209,6 +217,11 @@ module.exports = class Window extends CursorResponder
     @view-layer?hit-test pt, do
       fill:      true
       stroke:    true
+      tolerance: tol
+
+  _find-ui-item: (pt, tol = HIT_TOLERANCE) ->
+    @ui-layer?hit-test pt, do
+      bounds:      true
       tolerance: tol
 
   /** (private) _correct-scaling : void
