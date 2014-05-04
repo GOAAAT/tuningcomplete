@@ -18,10 +18,10 @@ const ALIGN = 50
 
 #Determines the z region that is used for commands e.g panning and selecting
 #Measured in mm from the origin at the leap motion
-const ACTIVE-REGION = -60
+const ACTIVE-REGION = -20
 #Offset the active region for panning to avoid command mixup
 #Must be non-zero (for normalisation purposes when passing z information to CursorResponder)
-const PAN-OFFSET = 100
+const PAN-OFFSET = 60
 
 #Scale to determine how many px per mm in the real world
 const SCALE = 4
@@ -170,6 +170,7 @@ module.exports = class LeapCursor extends Cursor
         |> filter (.stabilized-tip-position[2] < ACTIVE-REGION)
         |> filter ~> ((@_speed it.tip-velocity) < SENSITIVITY)
         |> filter (.direction[2] < -DTOL)
+        |> filter (.hand!.fingers.length == 1)
         |> head
 
     #pointable object in the active region and 'stationary'
