@@ -1,16 +1,20 @@
-NodeView = require \node_view
 VS = require \view_style
 {min, max} = prelude
 
-module.exports = class SliderView extends NodeView
+module.exports = class SliderView
 
   /* SliderView (owner, pos) : void
    * create view at pos
    */
    
   (@owner, @pos) ->
-    super @owner, @pos, "Slider", "Numerical", []
     @value = 0.5
+    
+  /* item() : Group
+   * return the node group
+   */
+   
+  item: -> @node-group
     
   /* move-slider (pos) : Float
    * Move the slider to the position and return the percentage
@@ -44,7 +48,7 @@ module.exports = class SliderView extends NodeView
     @slider-track.style = VS.slider-track
     
     # Make Slider
-    @slider-path = new paper.Path.Rectangle (@slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]), new Size (NODE_SIZE, NODE_SIZE / 4)
+    @slider-path = new paper.Path.Rectangle (@slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]); new Size NODE_SIZE, NODE_SIZE / 4
     @slider-path.style = VS.slider-path
     
     @node-group = new paper.Group
