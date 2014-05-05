@@ -17,5 +17,5 @@ module.exports = class Slider extends NumericalNode
    */
    
   move-slider: (pos) -> 
-    @active-view.move-slider pos
+    @value = @active-view.move-slider pos
     send!
