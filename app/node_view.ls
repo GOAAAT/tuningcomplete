@@ -196,8 +196,9 @@ module.exports = class NodeView
     @node-group.data.obj = this
 
     # Add outport
-    @outport-path = @_make-port @get-output-pos!, @outport-style
-    @node-group.add-child @outport-path
+    if @owner.has-output!
+      @outport-path = @_make-port @get-output-pos!, @outport-style
+      @node-group.add-child @outport-path
 
     # Draw each individual input
     for i from 0 to (@inputs.length-1)

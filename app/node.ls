@@ -31,6 +31,12 @@ module.exports = class Node
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
 
+  /** has-output : Boolean
+   *
+   * Returns whether the node has an output.
+   */
+  has-output: -> true
+
   /** get-output-pos : paper.Point
   *
   *  Requests position of output port from node_view
