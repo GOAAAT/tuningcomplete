@@ -24,7 +24,7 @@ module.exports = class Audio extends Node
    * this wire.
    */
   register-output: (wire) !->
-    @_connect wire
+    @_connect wire.input
     super wire
 
   /** (override) rem-output : void
@@ -36,18 +36,17 @@ module.exports = class Audio extends Node
   rem-output: (wire) !->
     super wire
     @_disconnect!
-    @send-list |> map @audio-node~connect
+    @send-list |> map (.input) |> map @~_connect
 
   /** (protected abstract) _connect : void
-   *  wire : Wire
+   *  input : Input
    *
-   * Attempt to connect the audio node to the given wire. Return a boolean
-   * flag to indicate success.
+   * Attempt to connect the audio node to the given Input.
    */
-  _connect: (wire) !->
+  _connect: (input) !->
 
   /** (protected abstract) _disconnect : void
    *
    * Disconnect the audio node from everything.
    */
-  _disconnect : !->
+  _disconnect: !->
