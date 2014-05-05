@@ -1,22 +1,30 @@
-Node = require \node
+Node       = require \node
 PrefixTree = require \prefix_tree
-{each} = prelude
+Numerical  = require \numerical_node
+Audio      = require \audio_node
+Oscillator = require \oscillator_node
+GainNode   = require \gain_node
+{each}     = prelude
 
-class Numerical extends Node
+class SimpleNumerical extends Numerical
   @desc = "produces a numerical output"
-  (pos) -> super \Numerical 1 1 pos
+  (pos) -> super 1 1 pos
 
-class Audio extends Node
+class SimpleAudio extends Audio
   @desc = "produces audio output"
-  (pos) -> super \Audio 1 1 pos
+  (pos) -> super 1 1 pos
 
 # Test Data only
 data  = new PrefixTree!
 nodes =
+  * name: \oscillator
+    node: Oscillator
+  * name: \gain
+    node: GainNode
   * name: \numerical
-    node: Numerical
+    node: SimpleNumerical
   * name: \audio
-    node: Audio
+    node: SimpleAudio
 
 nodes |> each ({name, node}) !-> data.insert name, node
 

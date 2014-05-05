@@ -5,8 +5,13 @@ Window     = require \window
 Button     = require \button
 FilterList = require \filter_list
 NodeList   = require \node_list
-Node = require \node
-Wire = require \wire
+Node       = require \node
+Numerical  = require \numerical_node
+Audio      = require \audio_node
+Wire       = require \wire
+GOAAAT     = require \goaaat
+
+DestinationNode = require \destination_node
 
 module.exports = class App
     /** App
@@ -18,6 +23,9 @@ module.exports = class App
     (canvas) ->
       @window = new Window canvas
       @cursor = new LeapCursor
+
+      # Web Audio Context
+      @actx   = new webkit-audio-context!
 
       @cursor.set-delegate @window
 
@@ -32,9 +40,27 @@ module.exports = class App
       @window.activate!
       @cursor.activate!
 
+      # Destination Node
+      destination = new DestinationNode paper.view.center, @actx
+      @window.insert-children [destination.view!]
+
+      # Web Audio test
+      @osc = @actx.create-oscillator!
+      @osc.frequency.value = 440
+      @osc.type = "sine"
+      # @osc.start 0
+
+      @osc.connect @actx.destination
+
+      GOAAAT.load-sound (arraybuffer) ~>
+        @actx.decode-audio-data arraybuffer, (buf) ~>
+          @source = @actx.create-buffer-source!
+          @source.buffer = buf
+          @source.connect @actx.destination
+          @source.start 5
+
       # New Node List
       @node-list = new FilterList @window
-
       @node-list.set-visible false
       @node-list.set-listener @~new-node
       @node-list.view!position = [NL_X, NL_Y]
@@ -138,5 +164,6 @@ module.exports = class App
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
       console.log "New Node #name, #{Node.desc}"
-      new-node = new Node paper.view.center
+
+      new-node = new Node paper.view.center, @actx
       @window.insert-children [new-node.view!]

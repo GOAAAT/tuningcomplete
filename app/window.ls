@@ -94,10 +94,10 @@ module.exports = class Window extends CursorResponder
    * Notify the item nearest to the point that it has been selected.
    */
   select-at: (pt) !->
-    button = 
+    button =
       @_find-ui-item pt, HIT_TOLERANCE ?.item
         |> @_find-significant-parent
-    
+
     if button?
       button.trigger true
       return
@@ -143,7 +143,7 @@ module.exports = class Window extends CursorResponder
       @_find-item pt ?.item
         |> @_find-significant-parent
 
-    if view instanceof NodeView
+    if view instanceof NodeView and view.owner.has-output!
       @current-wire = new Wire view.owner
       @insert-wire [ @current-wire?view! ]
 

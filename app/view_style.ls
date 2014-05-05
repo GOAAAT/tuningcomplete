@@ -55,15 +55,18 @@ export oscillator =
   stroke-width: 5,
   fill-color: Colour.purpleMonster
 
+export destination =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.black
+
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.cyan
 
-export node-selected =
-  stroke-color: Colour.green,
-  stroke-width: 5,
-  fill-color: Colour.cyan
+export selected =
+  stroke-color: Colour.blue
 
 /** Numerical ports **/
 
