@@ -1,4 +1,5 @@
 Audio = require \audio_node
+VS = require \view_style
 
 module.exports = class OscillatorNode extends Audio
   @desc = "produces note of a given pitch"
@@ -10,6 +11,7 @@ module.exports = class OscillatorNode extends Audio
    */
   (pos, actx) ->
     super 0 1, pos
+    @active-view.set-node-style VS.oscillator
     @osc-node = actx.create-oscillator!
     @osc-node.frequency = 440
     @osc-node.start 0
