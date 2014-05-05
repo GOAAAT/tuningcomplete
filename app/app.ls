@@ -11,6 +11,8 @@ Audio      = require \audio_node
 Wire       = require \wire
 GOAAAT     = require \goaaat
 
+DestinationNode = require \destination_node
+
 module.exports = class App
     /** App
      *  canvas : HTMLCanvasElement
@@ -37,6 +39,10 @@ module.exports = class App
     init: !->
       @window.activate!
       @cursor.activate!
+
+      # Destination Node
+      destination = new DestinationNode paper.view.center, @actx
+      @window.insert-children [destination.view!]
 
       # Web Audio test
       @osc = @actx.create-oscillator!
@@ -158,5 +164,6 @@ module.exports = class App
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
       console.log "New Node #name, #{Node.desc}"
-      new-node = new Node paper.view.center
+
+      new-node = new Node paper.view.center, @actx
       @window.insert-children [new-node.view!]

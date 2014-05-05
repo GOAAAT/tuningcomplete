@@ -55,6 +55,11 @@ export oscillator =
   stroke-width: 5,
   fill-color: Colour.purpleMonster
 
+export destination =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.black
+
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
