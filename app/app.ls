@@ -82,8 +82,6 @@ module.exports = class App
       modes =
         * name:  \DESIGN
           color: Color.red
-        * name:  \SETUP
-          color: Color.yellow
         * name:  \PERFORM
           color: Color.green
 
@@ -119,6 +117,10 @@ module.exports = class App
     const BTN_PAD     = 20px
     const BTN_Y       = 70px
 
+    /** Modes */
+    const MODE_DESIGN  = 0
+    const MODE_PERFORM = 1
+
     /** Node List Properties */
     const NL_WIDTH    = BTN_WIDTH * 4 + BTN_PAD * 3
     const NL_X        = BTN_OFF - BTN_WIDTH/2 + NL_WIDTH/2
@@ -147,6 +149,7 @@ module.exports = class App
      */
     change-mode: (mode, state) !->
       @current-mode = if state then mode else BTN_DEFAULT
+      @window.show-perform @current-mode == MODE_PERFORM
 
       @add-node-btn.trigger false
       @mode-btns |> each (btn) !~>

@@ -21,16 +21,24 @@ module.exports = class Window extends CursorResponder
 
     @sf = 1
 
-    @view-layer   = @ctx.project.active-layer
-    @ui-layer     = new @ctx.Layer!
-    @cursor-layer = new @ctx.Layer!
+    @view-layer    = @ctx.project.active-layer
+    @perform-layer = new @ctx.Layer!
+    @ui-layer      = new @ctx.Layer!
+    @cursor-layer  = new @ctx.Layer!
 
     @moveable-layers = [@view-layer]
 
     @view-layer.activate!
+    @perform-layer.visible = false
 
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
+
+    perform-bg = new paper.Shape.Rectangle @ctx.view.bounds
+    perform-bg.fill-color = new paper.Color 0.3 0.8
+    @insert-perform [perform-bg], 0
+
+    @ctx.view.on \resize ~> perform-bg.bounds = @ctx.view.bounds
 
   /** activate : void
    *
@@ -64,6 +72,16 @@ module.exports = class Window extends CursorResponder
   insert-cursor: (sub, pos = 0) ->
     @cursor-layer?insert-children pos, sub
 
+  /** insert-perform : [paper.Item]
+   *  sub : [paper.Item]
+   *  pos : Int
+   *
+   * Add children `sub` to the perform layer at position `pos`, returns the
+   * inserted items, or null on failure.
+   */
+  insert-perform: (sub, pos = 1) ->
+    @perform-layer?insert-children pos, sub
+
   /** insert-children : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -86,6 +104,13 @@ module.exports = class Window extends CursorResponder
     @_correct-scaling sub
     @wire-group?insert-children pos, sub
 
+  /** show-perform : void
+   *  state : Boolean
+   *
+   * Set the performance layer as visible or not.
+   */
+  show-perform: (@perform-layer.visible) !-> @force-update!
+
   /** CursorResponder methods */
 
   /** select-at : void
@@ -100,6 +125,9 @@ module.exports = class Window extends CursorResponder
 
     if button?
       button.trigger true
+      return
+
+    if @perform-layer.visible
       return
 
     selected =
@@ -139,6 +167,9 @@ module.exports = class Window extends CursorResponder
    * If the pointer goes down near an output, start a new wire.
    */
   pointer-down: (pt) !->
+    if @perform-layer.visible
+      return
+
     view =
       @_find-item pt ?.item
         |> @_find-significant-parent
@@ -153,6 +184,9 @@ module.exports = class Window extends CursorResponder
    * Update the end of the currently active wire.
    */
   pointer-moved: (pt) !->
+    if @perform-layer.visible
+      return
+
     @current-wire?active-view.set-end pt
 
   /** pointer-up : void
@@ -162,6 +196,9 @@ module.exports = class Window extends CursorResponder
    * on the wire to this Node
    */
   pointer-up: (pt) !->
+    if @perform-layer.visible
+      return
+
     view =
       @_find-item pt ?.item
         |> @_find-significant-parent
