@@ -66,7 +66,7 @@ export standard =
   fill-color: Colour.cyan
 
 export selected =
-  stroke-color: Colour.blue
+  stroke-color: Colour.elsa-blue
 
 /** Numerical ports **/
 
