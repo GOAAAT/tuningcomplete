@@ -1,4 +1,5 @@
-Input = require \input
+AudioInput = require \audio_input
+NumericalInput = require \numerical_input
 NodeView = require \node_view
 VS = require \view_style
 {head, filter, each, empty} = prelude
@@ -11,9 +12,9 @@ module.exports = class Node
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
-      new Input "Audio", i |> @inputs.push
+      new AudioInput this, i |> @inputs.push
     for i from 1 to numerical
-      new Input "Numerical", (i+audio) |> @inputs.push
+      new NumericalInput this, i+audio |> @inputs.push
 
     @send-list = []
 
@@ -29,6 +30,20 @@ module.exports = class Node
   */
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
+
+  /** (abstract) receive-for-ref : void
+   *  ref : Int
+   *  value : Int
+   *
+   * One of the inputs received a value.
+   */
+  receive-for-ref: (ref, value) !->
+
+  /** has-output : Boolean
+   *
+   * Returns whether the node has an output.
+   */
+  has-output: -> true
 
   /** get-output-pos : paper.Point
   *
@@ -53,10 +68,10 @@ module.exports = class Node
         |> wire?active-view.set-start
 
   /** register-output : void
-  * wire : Wire
-  *
-  *  Add to the send-list the wire 'wire'
-  */
+   *  wire : Wire
+   *
+   *  Add to the send-list the wire 'wire'.
+   */
   register-output: (wire) !->
     @send-list.push wire
     @active-view.busy-out!

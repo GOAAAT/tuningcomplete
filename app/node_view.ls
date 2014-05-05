@@ -112,8 +112,8 @@ module.exports = class NodeView
    */
   set-node-pos: (pos) !-> @node-path.set-position pos
 
-  /* set-node-type(type : String) : void
-   * sets the node type and style
+  /* set-output-type(type : String) : void
+   * sets the output type and style
    */
   set-output-type: !->
     [ @outport-style, @busy-outport-style ] =
@@ -147,7 +147,7 @@ module.exports = class NodeView
    */
   select: !->
     @selected = true
-    @node-path.style = VS.node-selected
+    @node-path.stroke-color = VS.selected.stroke-color
 
   /** deselect : void
    *
@@ -155,7 +155,7 @@ module.exports = class NodeView
    */
   deselect: !->
     @selected = false
-    @node-path.style = @node-style
+    @node-path.stroke-color = @node-style.stroke-color
 
   /** PRIVATE METHODS **/
 
@@ -196,8 +196,9 @@ module.exports = class NodeView
     @node-group.data.obj = this
 
     # Add outport
-    @outport-path = @_make-port @get-output-pos!, @outport-style
-    @node-group.add-child @outport-path
+    if @owner.has-output!
+      @outport-path = @_make-port @get-output-pos!, @outport-style
+      @node-group.add-child @outport-path
 
     # Draw each individual input
     for i from 0 to (@inputs.length-1)

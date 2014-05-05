@@ -1,17 +1,17 @@
 InputView = require \input_view
 
 module.exports = class Input
-  (@type="Standard", @ref) ->
+  (@type="Standard", @node, @ref) ->
     @busy = false
     @input-view = new InputView @type
 
   view: -> @input-view?item!
 
-  /* register-input : void
-  * wire : Wire
-  *
-  * Informs this port that it is busy
-  */
+  /** register-input : void
+   *  wire : Wire
+   *
+   * Informs this port that it is busy.
+   */
   register-input: (wire) !->
     @busy = true
     @input-view?busy-port!
