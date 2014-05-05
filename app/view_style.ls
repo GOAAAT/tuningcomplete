@@ -65,8 +65,13 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.cyan
 
+export slider =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.love-red
+  
 export selected =
-  stroke-color: Colour.blue
+  stroke-color: Colour.elsa-blue
 
 /** Numerical ports **/
 
@@ -120,7 +125,12 @@ export wire-selected =
   stroke-color: Colour.red,
   stroke-width: 3,
   stroke-cap: \round
-
+  
+export wire-tuning-complete =
+  stroke-color: Colour.love-red,
+  stroke-width: 3,
+  stroke-cap: \round
+  
 /** Pointers **/
 
 export active-pointer =

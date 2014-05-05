@@ -8,6 +8,7 @@ NodeList   = require \node_list
 Node       = require \node
 Numerical  = require \numerical_node
 Audio      = require \audio_node
+Slider     = require \slider
 Wire       = require \wire
 GOAAAT     = require \goaaat
 
@@ -57,7 +58,7 @@ module.exports = class App
           @source = @actx.create-buffer-source!
           @source.buffer = buf
           @source.connect @actx.destination
-          @source.start 5
+          @source.start 1
 
       # New Node List
       @node-list = new FilterList @window
