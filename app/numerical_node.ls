@@ -14,6 +14,8 @@ module.exports = class Numerical extends Node
    */
   (audioin, numin, pos) ->
     super \Numerical audioin, numin, pos
+
+    @value = 0
     @active-view.set-node-style VS.maths
 
   /** send : void
