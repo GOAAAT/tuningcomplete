@@ -29,4 +29,5 @@ export white      = \#FFF
 export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
 export love-red       = \#E41B17
+export elsa-blue      = \#00FFFF
 

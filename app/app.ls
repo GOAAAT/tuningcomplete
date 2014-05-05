@@ -57,7 +57,7 @@ module.exports = class App
           @source = @actx.create-buffer-source!
           @source.buffer = buf
           @source.connect @actx.destination
-          @source.start 5
+          @source.start 1
 
       # New Node List
       @node-list = new FilterList @window
