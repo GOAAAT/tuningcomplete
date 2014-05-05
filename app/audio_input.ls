@@ -6,4 +6,4 @@ module.exports = class AudioInput extends Input
    *
    * Creates an audio input that is in the `ref`th position of its Node.
    */
-  (ref) -> super \Audio ref
+  (node, ref) -> super \Audio node, ref

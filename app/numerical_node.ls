@@ -22,10 +22,4 @@ module.exports = class Numerical extends Node
    *
    * Sends its value to all its children.
    */
-  send: !-> @send-list |> map (.receive @value)
-
-  /** receive : void
-   *
-   * Receives the value.
-   */
-  receive: (@value) !-> @send!
+  send: !-> @send-list |> map (.input.receive @value)

@@ -12,9 +12,9 @@ module.exports = class Node
   (@output-type, audio, numerical, pos) ->
     @inputs = []
     for i from 1 to audio
-      new AudioInput i |> @inputs.push
+      new AudioInput this, i |> @inputs.push
     for i from 1 to numerical
-      new NumericalInput i+audio |> @inputs.push
+      new NumericalInput this, i+audio |> @inputs.push
 
     @send-list = []
 
@@ -30,6 +30,14 @@ module.exports = class Node
   */
   find-input: (nodetype) ->
     @inputs |> filter (-> it.type == nodetype and not it.busy) |> head
+
+  /** (abstract) receive-for-ref : void
+   *  ref : Int
+   *  value : Int
+   *
+   * One of the inputs received a value.
+   */
+  receive-for-ref: (ref, value) !->
 
   /** has-output : Boolean
    *

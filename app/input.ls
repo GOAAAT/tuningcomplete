@@ -1,7 +1,7 @@
 InputView = require \input_view
 
 module.exports = class Input
-  (@type="Standard", @ref) ->
+  (@type="Standard", @node, @ref) ->
     @busy = false
     @input-view = new InputView @type
 
