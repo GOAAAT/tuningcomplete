@@ -8,6 +8,7 @@ NodeList   = require \node_list
 Node       = require \node
 Numerical  = require \numerical_node
 Audio      = require \audio_node
+Slider     = require \slider
 Wire       = require \wire
 GOAAAT     = require \goaaat
 
