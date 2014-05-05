@@ -54,10 +54,10 @@ module.exports = class Node
         |> wire?active-view.set-start
 
   /** register-output : void
-  * wire : Wire
-  *
-  *  Add to the send-list the wire 'wire'
-  */
+   *  wire : Wire
+   *
+   *  Add to the send-list the wire 'wire'.
+   */
   register-output: (wire) !->
     @send-list.push wire
     @active-view.busy-out!

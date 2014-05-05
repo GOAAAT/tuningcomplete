@@ -7,11 +7,11 @@ module.exports = class Input
 
   view: -> @input-view?item!
 
-  /* register-input : void
-  * wire : Wire
-  *
-  * Informs this port that it is busy
-  */
+  /** register-input : void
+   *  wire : Wire
+   *
+   * Informs this port that it is busy.
+   */
   register-input: (wire) !->
     @busy = true
     @input-view?busy-port!
