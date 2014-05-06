@@ -16,7 +16,7 @@ module.exports = class MixerNode extends Audio
     @gain-left = actx.create-gain!
     @gain-right = actx.create-gain!
     /* Initially set inputs to be equal */
-    @gain-right.gain.value = 0
+    @gain-right.gain.value = 0.5
 
     @inputs.0.audio-node = @gain-left
     @inputs.1.audio-node = @gain-right
