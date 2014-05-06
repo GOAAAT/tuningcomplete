@@ -169,4 +169,4 @@ module.exports = class App
       console.log "New Node #name, #{Node.desc}"
 
       new-node = new Node paper.view.center, @actx
-      @window.insert-children [new-node.view!]
+      new-node.add-to-window @window

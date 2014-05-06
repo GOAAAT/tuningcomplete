@@ -20,7 +20,18 @@ module.exports = class Node
 
     @active-view = new NodeView this, pos, VS.standard, @output-type, @inputs
 
+  /** view : paper.Item
+   *
+   * Returns the PaperJS object that represents this controller.
+   */
   view: -> @active-view?item!
+
+  /** add-to-window : void
+   *  win : Window
+   *
+   * Adds this classes view to the window
+   */
+  add-to-window: (win) !-> win.insert-children [@view!]
 
   /** find-input : Input
   * nodetype : NodeType
