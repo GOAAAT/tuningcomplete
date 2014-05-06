@@ -1,5 +1,6 @@
 Audio = require \audio_node
 VS = require \view_style
+{sin, pi, pow} = prelude
 
 module.exports = class MixerNode extends Audio
   @desc = "Changes the ratio between two audio sources"
@@ -15,19 +16,18 @@ module.exports = class MixerNode extends Audio
     @gain-left = actx.create-gain!
     @gain-right = actx.create-gain!
     /* Initially set inputs to be equal */
-    @gain-left.gain.value = Math.cos(0.25*Math.PI)
-    @gain-right.gain.value = Math.cos(0.25*Math.PI)
+    @gain-right.gain.value = 0
 
-    @inputs.0.audio-node = @gain-one
-    @inputs.1.audio-node = @gain-two
+    @inputs.0.audio-node = @gain-left
+    @inputs.1.audio-node = @gain-right
 
   /** (override) receive-for-ref : void
    *  ref : Int
    *  value : Float
    */
   receive-for-ref: (ref, value) !->
-    @gain-left.gain.value = Math.cos(value * 0.5*Math.PI)
-    @gain-right.gain.value = Math.cos((1.0 - value) * 0.5*Math.PI)
+    @gain-left.gain.value = sin(value * pi/2)^2
+    @gain-right.gain.value = sin((1-value)*pi/2)^2
 
   /** (override protected) _connect : void
    *  input : Input
