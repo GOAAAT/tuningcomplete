@@ -168,6 +168,9 @@ module.exports = class Window extends CursorResponder
    */
   pointer-down: (pt) !->
     if @perform-layer.visible
+      @_find-item pt, @perform-layer ?.item
+        |> @_find-significant-parent
+        |> (?pointer-down pt)
       return
 
     view =
@@ -185,6 +188,9 @@ module.exports = class Window extends CursorResponder
    */
   pointer-moved: (pt) !->
     if @perform-layer.visible
+      @_find-item pt, @perform-layer ?.item
+        |> @_find-significant-parent
+        |> (?pointer-moved pt)
       return
 
     @current-wire?active-view.set-end pt
@@ -197,6 +203,9 @@ module.exports = class Window extends CursorResponder
    */
   pointer-up: (pt) !->
     if @perform-layer.visible
+      @_find-item pt, @perform-layer ?.item
+        |> @_find-significant-parent
+        |> (?pointer-up pt)
       return
 
     view =
