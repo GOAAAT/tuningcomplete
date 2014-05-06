@@ -11,7 +11,7 @@ module.exports = class MixerNode extends Audio
    */
   (pos, actx) ->
     super 2 1 pos
-    @active-view.set-node-style VS.standard
+    @active-view.set-node-style VS.mixer
 
     @gain-left = actx.create-gain!
     @gain-right = actx.create-gain!
