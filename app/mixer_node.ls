@@ -3,7 +3,7 @@ VS = require \view_style
 {sin, pi, pow} = prelude
 
 module.exports = class MixerNode extends Audio
-  @desc = "Changes the ratio between two audio sources"
+  @desc = "Alters the ratio of two audio sources"
   /** MixerNode
    *  pos : paper.Point
    *  actx : AudioContext
