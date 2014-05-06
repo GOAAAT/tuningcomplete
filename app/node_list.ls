@@ -4,6 +4,7 @@ Numerical  = require \numerical_node
 Audio      = require \audio_node
 Oscillator = require \oscillator_node
 GainNode   = require \gain_node
+MixerNode  = require \mixer_node
 {each}     = prelude
 
 class SimpleNumerical extends Numerical
@@ -21,6 +22,8 @@ nodes =
     node: Oscillator
   * name: \gain
     node: GainNode
+  * name: \mixer
+    node: MixerNode
   * name: \numerical
     node: SimpleNumerical
   * name: \audio
