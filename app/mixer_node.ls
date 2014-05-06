@@ -14,8 +14,9 @@ module.exports = class MixerNode extends Audio
 
     @gain-left = actx.create-gain!
     @gain-right = actx.create-gain!
-    /* Initially mute the right input */
-    @gain-right.gain.value = 0
+    /* Initially set inputs to be equal */
+    @gain-left.gain.value = Math.cos(0.25*Math.PI)
+    @gain-right.gain.value = Math.cos(0.25*Math.PI)
 
     @inputs.0.audio-node = @gain-one
     @inputs.1.audio-node = @gain-two
@@ -31,7 +32,7 @@ module.exports = class MixerNode extends Audio
   /** (override protected) _connect : void
    *  input : Input
    *
-   * Connect this gain node as the source for the given input.
+   * Connect this mixer node as the source for the given input.
    */
   _connect: (input) !->
     @gain-left.connect input.audio-node
