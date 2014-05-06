@@ -120,7 +120,7 @@ module.exports = class Window extends CursorResponder
    */
   select-at: (pt) !->
     button =
-      @_find-ui-item pt, HIT_TOLERANCE ?.item
+      @_find-item pt, @ui-layer ?.item
         |> @_find-significant-parent
 
     if button?
@@ -239,27 +239,20 @@ module.exports = class Window extends CursorResponder
 
   /** Private methods */
   const HIT_TOLERANCE  = 50
-  const SNAP_TOLERANCE = 100
 
   /** (private) _find-item : paper.HitResult
    *  pt : paper.Point
    *  (optional) tol : Float
    *
-   * Searches for the nearest item within `tol` distance of `pt`. Returns a
-   * HitResult detailing the information if something was hit, or `null`
-   * otherwise.
+   * Searches for the nearest item in `layer` to `pt` within a tolerance.
+   * Returns a HitResult detailing the information if something was hit, or
+   * `null` otherwise.
    */
-  _find-item: (pt, tol = HIT_TOLERANCE) ->
-    @view-layer?hit-test pt, do
+  _find-item: (pt, layer = @view-layer) ->
+    layer?hit-test pt, do
       fill:      true
       stroke:    true
-      tolerance: tol
-
-  _find-ui-item: (pt, tol = HIT_TOLERANCE) ->
-    @ui-layer?hit-test pt, do
-      fill:      true
-      stroke:    true
-      tolerance: tol
+      tolerance: HIT_TOLERANCE
 
   /** (private) _correct-scaling : void
    *  items : [paper.Item]
