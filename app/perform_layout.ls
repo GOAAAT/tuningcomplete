@@ -9,6 +9,8 @@ module.exports = class PerformLayout extends CursorResponder
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.6]
   const BUTTON_DIM = [0.125 0.2]
+  
+  const OFFSET = 101
 
   /** PerformLayout
    *  ctx : paper.PaperScope
@@ -28,7 +30,7 @@ module.exports = class PerformLayout extends CursorResponder
     ctx.view.on \resize -> bg.bounds = ctx.view.bounds
 
     slider-dim = ctx.view.bounds.size.multiply SLIDER_DIM
-    slider-y   = slider-dim.height / 2
+    slider-y   = (slider-dim.height / 2) + OFFSET
 
     @sliders =
       for i from 0 til SLIDERS
