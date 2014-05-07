@@ -11,17 +11,19 @@ module.exports = class Slider extends NumericalNode
 
   (pos) ->
     super 0, 0, pos
-    @style = VS.slider
-    @active-view.set-node-style @style
+    @active-view.set-node-style VS.slider
 
   /* add-to-window (window) : void
    * add the node to the window
    */
   add-to-window: (win) ->
-    super win
     @input-view = win.request-input-view-for-type "Slider"
-    @input-view?set-owner @
-    @style.fill-color = @input-view?colour
+    if @input-view?
+      @input-view.set-owner @
+      @active-view.set-node-style do
+        @active-view.node-style with
+          fill-color: @input-view.colour
+      return super win
     return @input-view?
 
   /* set-value (val) : void
