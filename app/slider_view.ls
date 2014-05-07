@@ -18,7 +18,7 @@ module.exports = class SliderView
   /* SliderView (pos) : void
    * create view at pos
    */
-   
+
   (@pos, @node-size, ref) ->
     @value = 0.5
     @sticky = true
@@ -28,13 +28,13 @@ module.exports = class SliderView
     @slider-pos = @slider-pos.subtract @offset
     @_make-node!
     @colour = VS.slider-colours[ref]
-    
+
   /* item() : Group
    * return the node group
    */
-   
+
   item: -> @node-group
-   
+
   /* select-at (pos) : bool
   */
   select-at: (pos) ->
@@ -47,39 +47,40 @@ module.exports = class SliderView
   /* set-owner (owner) : void
   */
   set-owner: (@owner) !->
-    
+
   /* private set-sticky (b) : void
    * Sets slider sticky to b
    */
   _set-sticky: (@sticky) !->
-   
+
   /* private move-slider (pos) : void
    * Move the slider to the position and return the percentage to the owner
    */
   _move-slider: (pos) ->
     top = @slider-track.bounds.top
     bottom = @slider-track.bounds.bottom
-  
+
     @slider-pos.y = min bottom, (max pos.y, top)
-  
+
     @slider-path.position = @slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]
-    
+
     @value = (@slider-pos.y - top) / @slider-track.bounds.height
     @owner.set-value @value
-  
+
   /* pointer-down
-  pointer-down: (pos) !-> 
+   */
+  pointer-down: (pos) !->
     @_selected true
     @_move-slider pos
-  
+
   /* pointer-up
   */
   pointer-up: (pos) !-> @_selected false
-    
+
   /* pointer-moved
   */
   pointer-moved: (pos) !-> @_move-slider pos
-    
+
   /* private selected (b) : void
    * Sets the path to either selected or not
    */
@@ -88,23 +89,23 @@ module.exports = class SliderView
       @slider-path.stroke-color = VS.selected
     else
       @slider-path.stroke-color = VS.slider-path.stroke-color
-      if !sticky 
+      if !sticky
         @_move-slider @slider-track.bounds.bottom
-    
+
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
    */
   set-node-pos: (@pos) !-> @node-group.set-position @pos
-    
+
   /* private make-path () : void
    * make the path, replacing the previous one
    */
   _make-node: !->
-    
+
     # Make Slider Track
     @slider-track = new paper.Path.Line [@pos.x, @pos.y - (@node-size * 2)], [@pos.x, @pos.y + (@node-size * 2)]
     @slider-track.style = VS.slider-track
-    
+
     # Make Slider
     @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, @node-size * 2, @node-size / 2
     @slider-path.style = VS.slider-path
