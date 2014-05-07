@@ -137,6 +137,9 @@ export finger-pointer =
 export hand-pointer =
   fill-color: \green
 
+export close-hand-pointer =
+  fill-color: \darkGreen
+
 export zoom-pointer =
   fill-color: \blue
 
@@ -158,7 +161,7 @@ export view-style-for-pointers = (pt-info) ->
       radius: 10
     if pt-info.z < 0
       pt.style = active-pointer
-    else if pt-info.z < 1
+    else if pt-info.z < 4
       pt.style = close-pointer
     else pt.style = finger-pointer
     pt
@@ -166,7 +169,10 @@ export view-style-for-pointers = (pt-info) ->
     pt = new paper.Shape.Circle do
       center: pt-info.pt,
       radius: 20
-    pt.style = hand-pointer
+    if pt-info.z < 1
+      pt.style = close-hand-pointer
+    else
+      pt.style = hand-pointer
     pt
   | \zoom =>
     pt = new paper.Shape.Circle do
