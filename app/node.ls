@@ -31,7 +31,9 @@ module.exports = class Node
    *
    * Adds this classes view to the window
    */
-  add-to-window: (win) !-> win.insert-children [@view!]
+  add-to-window: (win) -> 
+    win.insert-children [@view!]
+    return true
 
   /** find-input : Input
   * nodetype : NodeType

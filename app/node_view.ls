@@ -29,7 +29,7 @@ Input = require \input
  * -- removes the node
  **/
 
-const NODE_SIZE = 30
+const NODE_SIZE = 50
 const PORT_RATIO = 4
 
 module.exports = class NodeView

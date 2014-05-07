@@ -8,6 +8,7 @@ NodeList   = require \node_list
 Node       = require \node
 Numerical  = require \numerical_node
 Audio      = require \audio_node
+Slider     = require \slider
 Wire       = require \wire
 GOAAAT     = require \goaaat
 
@@ -41,7 +42,7 @@ module.exports = class App
       @cursor.activate!
 
       # Destination Node
-      destination = new DestinationNode paper.view.center, @actx
+      destination = new DestinationNode (new paper.Point 200, 200), @actx
       @window.insert-children [destination.view!]
 
       # Web Audio test
@@ -57,7 +58,7 @@ module.exports = class App
           @source = @actx.create-buffer-source!
           @source.buffer = buf
           @source.connect @actx.destination
-          @source.start 5
+          @source.start 1
 
       # New Node List
       @node-list = new FilterList @window
@@ -174,4 +175,5 @@ module.exports = class App
       console.log "New Node #name, #{Node.desc}"
 
       new-node = new Node paper.view.center, @actx
-      new-node.add-to-window @window
+      unless new-node.add-to-window @window
+        new-node.view!remove!

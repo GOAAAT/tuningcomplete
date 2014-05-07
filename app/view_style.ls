@@ -65,8 +65,38 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.cyan
 
+export slider =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.love-red
+
+export slider-path =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.love-red
+  
+export slider-track = 
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.black
+  
+export toggle =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.pink-cupcake
+  
+export toggle-up = 
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.fire-engine-red
+
+export toggle-down =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.oz-green
+  
 export selected =
-  stroke-color: Colour.blue
+  stroke-color: Colour.elsa-blue
 
 /** Numerical ports **/
 
@@ -120,7 +150,12 @@ export wire-selected =
   stroke-color: Colour.red,
   stroke-width: 3,
   stroke-cap: \round
-
+  
+export wire-tuning-complete =
+  stroke-color: Colour.love-red,
+  stroke-width: 3,
+  stroke-cap: \round
+  
 /** Pointers **/
 
 export active-pointer =
@@ -185,3 +220,5 @@ export view-styles-for-type = (type) ->
   | \Numerical => [numerical-free, numerical-busy]
   | \Standard  => [standard-busy, standard-free]
   | otherwise  => [other-type, other-type]
+  
+export slider-colours = [Colour.blossom-pink, Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple]
