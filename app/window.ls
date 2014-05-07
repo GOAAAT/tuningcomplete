@@ -16,8 +16,8 @@ module.exports = class Window extends CursorResponder
    * View class for the entire app and entry point for cursor events.
    */
   (canvas) ->
-    @ctx = new paper.PaperScope()
-    @ctx.setup(canvas)
+    @ctx = new paper.PaperScope!
+    @ctx.setup canvas
 
     @sf = 1
 
@@ -128,6 +128,9 @@ module.exports = class Window extends CursorResponder
       return
 
     if @perform-layer.visible
+      @_find-item pt, @perform-layer ?.item
+        |> @_find-significant-parent
+        |> (?select-at pt)
       return
 
     selected =
