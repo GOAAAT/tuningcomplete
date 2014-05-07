@@ -15,9 +15,11 @@ module.exports = class Toggle extends NumericalNode
   /* add-to-window (window) : void
    * add the node to the window
    */
-  add-to-window: (win) !-> 
-    super win
-    win.request-input-view-for-type "Toggle", @
+  add-to-window: (win) -> 
+    @input-view = win.request-input-view-for-type "Toggle"
+    if @input-view?
+      return super win
+    return false  
     
   /* set-value (val) : void
    * Set the value then send it

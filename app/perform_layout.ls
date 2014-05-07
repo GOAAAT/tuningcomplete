@@ -1,14 +1,15 @@
 CursorResponder = require \cursor_responder
 SliderView = require \slider_view
+ToggleView = require \toggle_view
 
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
   const SLIDERS   = 5
-  const BUTTONS   = [12 12]
+  const TOGGLES   = [12 12]
 
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.6]
-  const BUTTON_DIM = [0.125 0.2]
+  const TOGGLE_DIM = [0.125 0.2]
   
   const OFFSET = 101
 
@@ -31,6 +32,8 @@ module.exports = class PerformLayout extends CursorResponder
 
     slider-dim = ctx.view.bounds.size.multiply SLIDER_DIM
     slider-y   = (slider-dim.height / 2) + OFFSET
+    
+    toggle-dim = ctx.view.bounds.size.multiply TOGGLE_DIM
 
     @sliders =
       for i from 0 til SLIDERS
@@ -43,6 +46,23 @@ module.exports = class PerformLayout extends CursorResponder
         slider.item!visible = false
         @layer.add-child slider.item!
         slider
+    
+    @toggles = []
+    
+    for j, row in TOGGLES
+      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j + 0.5)
+      for i from 0 til row
+        toggle =
+          new ToggleView do
+            [toggle-dim.width*(i+0.5), toggle-y]
+            toggle-dim
+            i
+      
+        toggle.item!visible = false
+        @layer.add-child toggle.item!
+        @toggles.push toggle
+      
+    console.log \TOGGLES @toggles
 
   /** show : void
    *  visible : Boolean
@@ -76,6 +96,10 @@ module.exports = class PerformLayout extends CursorResponder
         slider = @sliders.shift!
         slider?item!visible = true
         slider
+      | \Toggle   =>
+        toggle = @toggles.shift!
+        toggle?item!visible = true
+        toggle
       | otherwise => null
 
   /** CursorResponder methods */

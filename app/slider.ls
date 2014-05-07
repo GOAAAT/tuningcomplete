@@ -24,7 +24,7 @@ module.exports = class Slider extends NumericalNode
         @active-view.node-style with
           fill-color: @input-view.colour
       return super win
-    return @input-view?
+    return false
 
   /* set-value (val) : void
    * Set the value then send it
