@@ -24,9 +24,3 @@ module.exports = class Slider extends NumericalNode
    * Set the value then send it
    */
   set-value: (@value) !-> @send!
-    
-  /* perform-view () : Group
-   * Return a group to draw
-   */
-   
-  perform-view: -> @input-view.group!
