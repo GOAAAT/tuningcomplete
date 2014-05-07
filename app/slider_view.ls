@@ -24,7 +24,7 @@ module.exports = class SliderView
     @sticky = true
     @is-selected = false
     pos = new paper.Point pos
-    offset = [@node-size.width, @node-size.height / 8]
+    offset = @node-size.multiply [1/2 1/8]
     @colour = VS.slider-colours[ref]
     @_make-node pos, pos.subtract offset
 
@@ -59,7 +59,7 @@ module.exports = class SliderView
     {top, bottom, height} = @slider-track.bounds
     @slider-path.position.y = min bottom, (max pos.y, top)
 
-    @value = (@slider-path.position.y - top) / height
+    @value = (bottom - @slider-path.position.y) / height
     @owner.set-value @value
 
   /* pointer-down
@@ -84,7 +84,7 @@ module.exports = class SliderView
       @slider-path.stroke-color = VS.selected
     else
       @slider-path.stroke-color = VS.slider-path.stroke-color
-      if !sticky
+      if !@sticky
         @_move-slider @slider-track.bounds.bottom
 
   /* set-node-pos(location : Paper.Point) : void

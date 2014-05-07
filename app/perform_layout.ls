@@ -1,9 +1,14 @@
 CursorResponder = require \cursor_responder
+SliderView = require \slider_view
 
 module.exports = class PerformLayout extends CursorResponder
-  const XYSLIDERS = [1]
-  const SLIDERS   = [4 4]
+  const XYSLIDERS = 1
+  const SLIDERS   = 6
   const BUTTONS   = [12 12]
+
+  const SLIDER_DIM = [0.1   0.6]
+  const XY_DIM     = [0.5   0.6]
+  const BUTTON_DIM = [0.125 0.2]
 
   /** PerformLayout
    *  ctx : paper.PaperScope
@@ -21,6 +26,21 @@ module.exports = class PerformLayout extends CursorResponder
     @layer.add-child bg
 
     ctx.view.on \resize -> bg.bounds = ctx.view.bounds
+
+    slider-dim = ctx.view.bounds.size.multiply SLIDER_DIM
+    slider-y   = slider-dim.height / 2
+
+    @sliders =
+      for i from 0 til SLIDERS
+        slider =
+          new SliderView do
+            [slider-dim.width*(i+0.5), slider-y]
+            slider-dim
+            i
+
+        slider.item!visible = false
+        @layer.add-child slider.item!
+        slider
 
   /** show : void
    *  visible : Boolean
@@ -42,6 +62,19 @@ module.exports = class PerformLayout extends CursorResponder
    * Returns whether the layer is locked or not.
    */
   is-locked: -> @layer.data.locked
+
+  /** request-input-for-type : View
+   *  type : String
+   *
+   * Returns a free input for the given type.
+   */
+  request-input-view-for-type: (type) ->
+    switch type
+      | \Slider   =>
+        slider = @sliders.shift!
+        slider.item!visible = true
+        slider
+      | otherwise => null
 
   /** CursorResponder methods */
 

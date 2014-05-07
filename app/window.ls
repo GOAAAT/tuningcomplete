@@ -105,6 +105,14 @@ module.exports = class Window extends CursorResponder
    */
   lock-perform: (locked) !-> @perform-layout.lock locked
 
+  /** request-input-for-type : View
+   *  type : String
+   *
+   * Returns a free input of the given type, if one exists.
+   */
+  request-input-view-for-type: (type) ->
+    @perform-layout.request-input-view-for-type type
+
   /** CursorResponder methods */
 
   /** select-at : Boolean
