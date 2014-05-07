@@ -102,7 +102,8 @@ module.exports = class SliderView
     @slider-track.style = VS.slider-track
 
     # Make Slider
-    @slider-path = new paper.Path.Rectangle slider-pos.x, slider-pos.y, @node-size.width, @node-size.height / 8
+    # @slider-path = new paper.Path.Rectangle slider-pos.x, slider-pos.y, @node-size.width, @node-size.height / 8
+    @slider-path = new paper.Path.Circle pos, 30
     @slider-path.style = VS.slider-path
     @slider-path.fill-color = @colour
 
