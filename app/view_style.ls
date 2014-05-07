@@ -60,6 +60,8 @@ export destination =
   stroke-width: 5,
   fill-color: Colour.black
 
+export mixer = instrument
+
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
