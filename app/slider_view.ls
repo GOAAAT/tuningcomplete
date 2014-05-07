@@ -24,8 +24,7 @@ module.exports = class SliderView
     @sticky = true
     @is-selected = false
     pos = new paper.Point pos
-    offset = [@node-size, @node-size / 4]
-    @_make-node pos, pos.subtract offset
+    offset = [@node-size.width, @node-size.height / 8]
     @colour = VS.slider-colours[ref]
     @_make-node pos, pos.subtract offset
 
