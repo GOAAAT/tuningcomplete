@@ -30,4 +30,7 @@ export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
 export love-red       = \#E41B17
 export elsa-blue      = \#00FFFF
+export pink-cupcake   = \#E45E9D
+export fire-engine-red = \#F62817
+export oz-green       = \#5FFB17
 

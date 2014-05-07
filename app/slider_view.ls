@@ -80,7 +80,7 @@ module.exports = class SliderView
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
    */
-  set-node-pos: (pos) !-> @node-group.set-position pos
+  set-node-pos: (@pos) !-> @node-group.set-position @pos
     
   /* private make-path () : void
    * make the path, replacing the previous one

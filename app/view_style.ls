@@ -80,6 +80,21 @@ export slider-track =
   stroke-width: 10,
   fill-color: Colour.black
   
+export toggle =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.pink-cupcake
+  
+export toggle-up = 
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.fire-engine-red
+
+export toggle-down =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.oz-green
+  
 export selected =
   stroke-color: Colour.elsa-blue
 
