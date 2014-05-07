@@ -12,20 +12,18 @@ module.exports = class Slider extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.slider
-    @input-view = new SliderView @, pos
+    @input-view = new SliderView @, pos 
     
   /* add-to-window (window) : void
    * add the node to the window
    */
   add-to-window: (win) !-> 
     super win
-    console.log @input-view.item!
-    win.insert-perform @input-view.item!
+    win.request-input-view-for-type "Slider", @
     
   /* move-slider (pos) : void
    * Move the slider's position to pos.
    */
-   
   move-slider: (pos) -> 
     @value = @input-view.move-slider pos
     send!

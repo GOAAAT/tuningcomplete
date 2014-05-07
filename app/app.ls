@@ -42,7 +42,7 @@ module.exports = class App
       @cursor.activate!
 
       # Destination Node
-      destination = new DestinationNode paper.view.center, @actx
+      destination = new DestinationNode (new paper.Point 200, 200), @actx
       @window.insert-children [destination.view!]
 
       # Web Audio test

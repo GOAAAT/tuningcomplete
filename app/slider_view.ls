@@ -1,6 +1,18 @@
 VS = require \view_style
 {min, max} = prelude
 
+/* Public Methods
+ *
+ * SliderView (owner, pos)
+ * - creates a view owned by node owner at position pos
+ * item ()
+ * - returns the group to be drawn
+ * move-slider (pos)
+ * - moves the slider to position pos and sets the value accordingly, then sends it
+ * set-node-pos (pos)
+ * - moves the node to pos
+ */
+
 const NODE_SIZE = 30
 
 module.exports = class SliderView
@@ -12,6 +24,12 @@ module.exports = class SliderView
   (@owner, @pos) ->
     @value = 0.5
     @slider-pos = @pos
+    console.log @slider-pos
+    @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
+    @slider-pos = @slider-pos.subtract @offset
+    console.log @pos
+    console.log @offset
+    console.log @slider-pos
     @_make-node!
     
   /* item() : Group
@@ -44,20 +62,17 @@ module.exports = class SliderView
   /* private make-path () : void
    * make the path, replacing the previous one
    */
-   
   _make-node: !->
     
     # Make Slider Track
-    @slider-track = new paper.Path.Line [@pos.x, @pos.y - NODE_SIZE], [@pos.x, @pos.y + NODE_SIZE]
+    @slider-track = new paper.Path.Line [@pos.x, @pos.y - (NODE_SIZE * 2)], [@pos.x, @pos.y + (NODE_SIZE * 2)]
     @slider-track.style = VS.slider-track
     
     # Make Slider
-    @slider-path = new paper.Path.Rectangle @slider-pos; new paper.Size NODE_SIZE, (NODE_SIZE / 4)
+    @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, NODE_SIZE * 2, NODE_SIZE / 2
     @slider-path.style = VS.slider-path
     console.log @slider-path
 
     @node-group = new paper.Group
     @node-group.add-child @slider-track
     @node-group.add-child @slider-path
-    @node-group.name = "SLIDER"
-    console.log @node-group
