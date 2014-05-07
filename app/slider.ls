@@ -12,7 +12,6 @@ module.exports = class Slider extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.slider
-    @input-view = new SliderView @, pos 
     
   /* add-to-window (window) : void
    * add the node to the window
@@ -21,12 +20,10 @@ module.exports = class Slider extends NumericalNode
     super win
     win.request-input-view-for-type "Slider", @
     
-  /* move-slider (pos) : void
-   * Move the slider's position to pos.
+  /* set-value (val) : void
+   * Set the value then send it
    */
-  move-slider: (pos) -> 
-    @value = @input-view.move-slider pos
-    send!
+  set-value: (@value) !-> @send!
     
   /* perform-view () : Group
    * Return a group to draw

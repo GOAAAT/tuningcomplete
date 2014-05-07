@@ -23,6 +23,7 @@ module.exports = class SliderView
    
   (@owner, @pos) ->
     @value = 0.5
+    @is-selected = false
     @slider-pos = @pos
     @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
     @slider-pos = @slider-pos.subtract @offset
@@ -34,21 +35,40 @@ module.exports = class SliderView
    
   item: -> @node-group
     
-  /* move-slider (pos) : Float
-   * Move the slider to the position and return the percentage
+  /* private move-slider (pos) : void
+   * Move the slider to the position and return the percentage to the owner
    */
-   
-  move-slider: (pos) ->
+  _move-slider: (pos) ->
+    if @is-selected
+      top = @slider-track.bounds.top
+      bottom = @slider-track.bounds.bottom
     
-    top = @slider-track.bounds.top
-    bottom = @slider-track.bounds.bottom
+      @slider-pos.y = min bottom, (max pos.y, top)
     
-    @slider-pos.y = min bottom, (max pos.y, top)
-    
-    @slider-path.position = @slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]
+      @slider-path.position = @slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]
       
-    @value = (@slider-pos.y - top) / @slider-track.bounds.height
-    @value
+      @value = (@slider-pos.y - top) / @slider-track.bounds.height
+      @owner.set-value @value
+  
+  /* pointer-down
+  pointer-down: (pos) !-> 
+    @_selected true
+    @_move-slider pos
+  
+  /* pointer-up
+  pointer-up: (pos) !-> @_selected false
+    
+  /* pointer-moved
+  pointer-moved: (pos) !-> @_move-slider pos
+    
+  /* private selected (b) : void
+   * Sets the path to either selected or not
+   */
+  _selected: (@is-selected) !->
+    if @is-selected
+      @slider-path.stroke-color = VS.selected
+    else
+      @slider-path.stroke-color = VS.slider-path.stroke-color
     
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
@@ -68,6 +88,5 @@ module.exports = class SliderView
     @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, NODE_SIZE * 2, NODE_SIZE / 2
     @slider-path.style = VS.slider-path
 
-    @node-group = new paper.Group
-    @node-group.add-child @slider-track
-    @node-group.add-child @slider-path
+    @node-group = new paper.Group [@slider-track, @slider-path]
+    @node-group.data.obj = this
