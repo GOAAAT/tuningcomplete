@@ -69,6 +69,16 @@ export slider =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.love-red
+    
+export slider-path =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.love-red
+  
+export slider-track = 
+  stroke-color: LINE_COLOUR,
+  stroke-width: 10,
+  fill-color: Colour.black
   
 export selected =
   stroke-color: Colour.elsa-blue

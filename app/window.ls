@@ -81,6 +81,7 @@ module.exports = class Window extends CursorResponder
    * inserted items, or null on failure.
    */
   insert-perform: (sub, pos = 1) ->
+    console.log sub.name
     @perform-layer?insert-children pos, sub
 
   /** insert-children : [paper.Item]

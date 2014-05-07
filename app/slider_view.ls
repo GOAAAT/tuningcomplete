@@ -1,6 +1,8 @@
 VS = require \view_style
 {min, max} = prelude
 
+const NODE_SIZE = 30
+
 module.exports = class SliderView
 
   /* SliderView (owner, pos) : void
@@ -9,6 +11,8 @@ module.exports = class SliderView
    
   (@owner, @pos) ->
     @value = 0.5
+    @slider-pos = @pos
+    @_make-node!
     
   /* item() : Group
    * return the node group
@@ -44,12 +48,16 @@ module.exports = class SliderView
   _make-node: !->
     
     # Make Slider Track
-    @slider-track = new paper.Path.Line [@pos.x, @pos.y - NODE_SIZE / 2], [@pos.x, @pos.y + NODE_SIZE / 2]
+    @slider-track = new paper.Path.Line [@pos.x, @pos.y - NODE_SIZE], [@pos.x, @pos.y + NODE_SIZE]
     @slider-track.style = VS.slider-track
     
     # Make Slider
-    @slider-path = new paper.Path.Rectangle (@slider-pos - [@slider-path.bounds.width / 2, @slider-path.bounds.height / 2]); new Size NODE_SIZE, NODE_SIZE / 4
+    @slider-path = new paper.Path.Rectangle @slider-pos; new paper.Size NODE_SIZE, (NODE_SIZE / 4)
     @slider-path.style = VS.slider-path
-    
+    console.log @slider-path
+
     @node-group = new paper.Group
-    @node-group.insert-children [@slider-path, @slider-track]
+    @node-group.add-child @slider-track
+    @node-group.add-child @slider-path
+    @node-group.name = "SLIDER"
+    console.log @node-group
