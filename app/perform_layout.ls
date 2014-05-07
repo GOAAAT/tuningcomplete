@@ -3,7 +3,7 @@ SliderView = require \slider_view
 
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
-  const SLIDERS   = 6
+  const SLIDERS   = 5
   const BUTTONS   = [12 12]
 
   const SLIDER_DIM = [0.1   0.6]
@@ -72,7 +72,7 @@ module.exports = class PerformLayout extends CursorResponder
     switch type
       | \Slider   =>
         slider = @sliders.shift!
-        slider.item!visible = true
+        slider?item!visible = true
         slider
       | otherwise => null
 
