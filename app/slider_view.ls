@@ -17,11 +17,11 @@ const NODE_SIZE = 30
 
 module.exports = class SliderView
 
-  /* SliderView (owner, pos) : void
+  /* SliderView (pos) : void
    * create view at pos
    */
    
-  (@owner, @pos) ->
+  (@pos) ->
     @value = 0.5
     @sticky = true
     @is-selected = false
@@ -43,6 +43,9 @@ module.exports = class SliderView
     else
       @_set-sticky !@sticky
       return false
+
+  /* set-owner (owner) : void
+  set-owner: (@owner) !->
     
   /* private set-sticky (b) : void
    * Sets slider sticky to b
