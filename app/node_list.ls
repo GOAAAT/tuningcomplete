@@ -4,6 +4,9 @@ Numerical  = require \numerical_node
 Audio      = require \audio_node
 Slider     = require \slider
 Toggle     = require \toggle
+Oscillator = require \oscillator_node
+GainNode   = require \gain_node
+MixerNode  = require \mixer_node
 {each}     = prelude
 
 class SimpleNumerical extends Numerical
@@ -25,6 +28,12 @@ class SimpleToggle extends Toggle
 # Test Data only
 data  = new PrefixTree!
 nodes =
+  * name: \oscillator
+    node: Oscillator
+  * name: \gain
+    node: GainNode
+  * name: \mixer
+    node: MixerNode
   * name: \numerical
     node: SimpleNumerical
   * name: \audio
