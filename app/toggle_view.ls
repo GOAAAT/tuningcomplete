@@ -17,11 +17,11 @@ module.exports = class SliderView
    * create view at pos
    */
    
-  (@pos, @node-size, ref) ->
+  (pos, @node-size, ref) ->
     @value = 0
     @sticky = true
     @is-selected = false
-    @_make-node!
+    @_make-node pos
     
   /* item() : Group
    * return the node group
@@ -89,15 +89,15 @@ module.exports = class SliderView
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
    */
-  set-node-pos: (@pos) !-> @node-group.set-position @pos
+  set-node-pos: (pos) !-> @node-group.set-position pos
     
   /* private make-path () : void
    * make the path, replacing the previous one
    */
-  _make-node: !->
+  _make-node: (pos) !->
     
     # Make Toggle Path
-    @toggle-path = new paper.Path.Circle @pos, @node-size
+    @toggle-path = new paper.Path.Circle pos, @node-size
     @toggle-path.style = VS.toggle-up
 
     @node-group = new paper.Group [@toggle-path]
