@@ -5,6 +5,7 @@ Audio      = require \audio_node
 Oscillator = require \oscillator_node
 GainNode   = require \gain_node
 MixerNode  = require \mixer_node
+PitchNode  = require \pitch
 {each}     = prelude
 
 class SimpleNumerical extends Numerical
@@ -28,6 +29,8 @@ nodes =
     node: SimpleNumerical
   * name: \audio
     node: SimpleAudio
+  * name: \pitch
+    node: PitchNode
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
