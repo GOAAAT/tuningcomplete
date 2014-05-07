@@ -4,6 +4,7 @@ Numerical  = require \numerical_node
 Audio      = require \audio_node
 Slider     = require \slider
 Toggle     = require \toggle
+XYSlider   = require \xy-slider
 Oscillator = require \oscillator_node
 GainNode   = require \gain_node
 MixerNode  = require \mixer_node
@@ -24,6 +25,10 @@ class SimpleSlider extends Slider
 class SimpleToggle extends Toggle
   @desc = "produces a numerical output in {0, 1}"
   (pos) -> super pos
+  
+class SimpleXYSlider extends XYSlider
+  @desc = "produces a numerical output in [[0..1], [0..1]]"
+  (pos) -> super pos
 
 # Test Data only
 data  = new PrefixTree!
@@ -42,6 +47,8 @@ nodes =
     node: SimpleSlider
   * name: \toggle
     node: SimpleToggle
+  * name: \xyslider
+    node: SimpleXYSlider
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
