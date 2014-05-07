@@ -30,6 +30,7 @@ module.exports = class SliderView
   item: -> @node-group
   
   /* select-at (pos) : bool
+  */
   select-at: (pos) ->
     if @node-group.layer.data.locked
       return true
@@ -38,6 +39,7 @@ module.exports = class SliderView
       return false
       
   /* set-owner (owner) : void
+  */
   set-owner: (@owner) !->
     
   /* set-sticky (b) : void
@@ -59,15 +61,18 @@ module.exports = class SliderView
     @owner.set-value @value
   
   /* pointer-down
+  */
   pointer-down: (pos) !-> 
     @_selected true
     @_set-toggle true
   
   /* pointer-up
+  */
   pointer-up: (pos) !-> 
     @_selected false
     
   /* pointer-moved
+  */
   pointer-moved: (pos) !->
     
   /* private selected (b) : void
