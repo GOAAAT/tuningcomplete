@@ -1,11 +1,11 @@
 module.exports = class CursorResponder
-  select-at: (pt) ->
-  scale-by: (sf, pt) ->
+  select-at: (pt) -> true
+  scale-by: (sf, pt) -> true
 
-  pointer-down: (pt) ->
-  pointer-up: (pt) ->
-  pointer-moved: (pt) ->
+  pointer-down: (pt) -> true
+  pointer-up: (pt) -> true
+  pointer-moved: (pt) -> true
 
-  pan-by: (delta) ->
+  pan-by: (delta) -> true
 
-  pointers-changed: (pts) ->
+  pointers-changed: (pts) -> true

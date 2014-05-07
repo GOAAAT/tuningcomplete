@@ -124,12 +124,12 @@ module.exports = class Window extends CursorResponder
 
   /** CursorResponder methods */
 
-  /** select-at : void
+  /** select-at : Boolean
    *  pt : paper.Point
    *
    * Notify the item nearest to the point that it has been selected.
    */
-  select-at: (pt) !->
+  select-at: (pt) ->
     button =
       @_find-item pt, @ui-layer ?.item
         |> @_find-significant-parent
@@ -142,7 +142,7 @@ module.exports = class Window extends CursorResponder
       @_find-item pt, @perform-layer ?.item
         |> @_find-significant-parent
         |> (?select-at pt)
-      return
+      return false
 
     selected =
       @_find-item pt ?.item
@@ -163,31 +163,33 @@ module.exports = class Window extends CursorResponder
 
     @active-node-view?select!
     @active-wire-view?select!
+    return false
 
-  /** scale-by : void
+  /** scale-by : Boolean
    *  sf : Float,
    *  pt : paper.Point
    *
    * Scale about the given position `pt` by the provided scale factor `sf`.
    */
-  scale-by: (sf, pt) !->
+  scale-by: (sf, pt) ->
     @sf *= sf
     @moveable-layers |> map (l) -> l.scale sf, pt
     @force-update!
+    return false
 
-  /** pointer-down : void
+  /** pointer-down : Boolean
    *  pt : paper.Point
    *
    * If the pointer goes down near an output, start a new wire.
    */
-  pointer-down: (pt) !->
+  pointer-down: (pt) ->
     if @perform-layer.visible
       @perform-responder =
         @_find-item pt, @perform-layer ?.item
           |> @_find-significant-parent
 
       @perform-responder?pointer-down pt
-      return
+      return false
 
     view =
       @_find-item pt ?.item
@@ -197,12 +199,14 @@ module.exports = class Window extends CursorResponder
       @current-wire = new Wire view.owner
       @insert-wire [ @current-wire?view! ]
 
-  /** pointer-moved : void
+    return false
+
+  /** pointer-moved : Boolean
    *  pt : paper.Point
    *
    * Update the end of the currently active wire.
    */
-  pointer-moved: (pt) !->
+  pointer-moved: (pt) ->
     if @perform-layer.visible
       new-responder =
         @_find-item pt, @perform-layer ?.item
@@ -215,21 +219,22 @@ module.exports = class Window extends CursorResponder
       else
         @perform-responder?pointer-moved pt
 
-      return
+      return false
 
     @current-wire?active-view.set-end pt
+    return false
 
-  /** pointer-up : void
+  /** pointer-up : Boolean
    *  pt : paper.Point
    *
    * If the pointer is released near an Input of a Node, then connect
    * on the wire to this Node
    */
-  pointer-up: (pt) !->
+  pointer-up: (pt) ->
     if @perform-layer.visible
       @perform-responder?pointer-up pt
       @perform-responder = null
-      return
+      return false
 
     view =
       @_find-item pt ?.item
@@ -241,13 +246,14 @@ module.exports = class Window extends CursorResponder
 
     @current-wire?view!remove! unless connected
     @current-wire = undefined
+    return false
 
-  /** pan-by : void
+  /** pan-by : Boolean
    *  delta : paper.Point
    *
    * Scroll the entire view by the given vector
    */
-  pan-by: (delta) !->
+  pan-by: (delta) ->
     dn = delta.negate!
     if @active-node-view?
       @active-node-view.owner.translate dn
@@ -255,19 +261,21 @@ module.exports = class Window extends CursorResponder
       @moveable-layers |> map (.translate dn)
 
     @force-update!
+    return false
 
-  /** pointers-changed : void
+  /** pointers-changed : Boolean
    *  pt-infos : [PointInfo]
    *
    * Update the position of the cursors on screen.
    */
-  pointers-changed: (pt-infos) !->
+  pointers-changed: (pt-infos) ->
     @cursor-layer.remove-children!
     pt-infos
       |> map VS.view-style-for-pointers
       |> @insert-cursor
 
     @force-update!
+    return false
 
   /** Private methods */
   const HIT_TOLERANCE  = 50
