@@ -30,11 +30,19 @@ module.exports = class SliderView
    */
    
   item: -> @node-group
+  
+  /* select-at (pos) : bool
+  select-at: (pos) ->
+    if @node-group.layer.data.locked
+      return true
+    else
+      @_set-sticky !@sticky
+      return false
     
   /* set-sticky (b) : void
    * Sets toggle sticky to b
    */
-  set-sticky: (@sticky) !->
+  _set-sticky: (@sticky) !->
    
   /* private set-toggle (b) : void
    * Sets the value of the toggle

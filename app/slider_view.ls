@@ -35,11 +35,19 @@ module.exports = class SliderView
    */
    
   item: -> @node-group
+   
+  /* select-at (pos) : bool
+  select-at: (pos) ->
+    if @node-group.layer.data.locked
+      return true
+    else
+      @_set-sticky !@sticky
+      return false
     
-  /* set-sticky (b) : void
+  /* private set-sticky (b) : void
    * Sets slider sticky to b
    */
-  set-sticky: (@sticky) !->
+  _set-sticky: (@sticky) !->
    
   /* private move-slider (pos) : void
    * Move the slider to the position and return the percentage to the owner
