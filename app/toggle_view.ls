@@ -19,7 +19,7 @@ module.exports = class SliderView
    * create view at pos
    */
    
-  (@pos) ->
+  (@pos, ref) ->
     @value = 0
     @sticky = true
     @is-selected = false

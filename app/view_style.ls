@@ -220,3 +220,5 @@ export view-styles-for-type = (type) ->
   | \Numerical => [numerical-free, numerical-busy]
   | \Standard  => [standard-busy, standard-free]
   | otherwise  => [other-type, other-type]
+  
+export slider-colours = [Colour.blossom-pink, Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple]

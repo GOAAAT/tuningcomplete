@@ -21,7 +21,7 @@ module.exports = class SliderView
    * create view at pos
    */
    
-  (@pos) ->
+  (@pos, ref) ->
     @value = 0.5
     @sticky = true
     @is-selected = false
@@ -29,6 +29,7 @@ module.exports = class SliderView
     @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
     @slider-pos = @slider-pos.subtract @offset
     @_make-node!
+    @colour = VS.slider-colours[ref]
     
   /* item() : Group
    * return the node group
@@ -105,6 +106,7 @@ module.exports = class SliderView
     # Make Slider
     @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, NODE_SIZE * 2, NODE_SIZE / 2
     @slider-path.style = VS.slider-path
+    @slider-path.fill-color = @colour
 
     @node-group = new paper.Group [@slider-track, @slider-path]
     @node-group.data.obj = this

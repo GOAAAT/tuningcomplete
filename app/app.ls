@@ -175,4 +175,5 @@ module.exports = class App
       console.log "New Node #name, #{Node.desc}"
 
       new-node = new Node paper.view.center, @actx
-      new-node.add-to-window @window
+      unless new-node.add-to-window @window
+        new-node.view!remove!

@@ -34,3 +34,12 @@ export pink-cupcake   = \#E45E9D
 export fire-engine-red = \#F62817
 export oz-green       = \#5FFB17
 
+export blossom-pink   = \#F9B7FF
+export scarlet        = \#FF2400
+export construction-cone-orange = \#F87431
+export rubber-ducky-yellow = \#FFD801
+export alien-green    = \#6CC417
+export blue-ribbon    = \#306EFF
+export indigo         = \#4B0082
+export lovely-purple  = \#7F38EC
+
