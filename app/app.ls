@@ -52,13 +52,6 @@ module.exports = class App
 
       @osc.connect @actx.destination
 
-      GOAAAT.load-sound (arraybuffer) ~>
-        @actx.decode-audio-data arraybuffer, (buf) ~>
-          @source = @actx.create-buffer-source!
-          @source.buffer = buf
-          @source.connect @actx.destination
-          @source.start 5
-
       # New Node List
       @node-list = new FilterList @window
       @node-list.set-visible false
