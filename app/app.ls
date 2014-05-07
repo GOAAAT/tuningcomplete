@@ -82,6 +82,8 @@ module.exports = class App
       modes =
         * name:  \DESIGN
           color: Color.red
+        * name:  \SETUP
+          color: Color.yellow
         * name:  \PERFORM
           color: Color.green
 
@@ -110,16 +112,17 @@ module.exports = class App
       @window.insert-ui [ @node-list.view! ]
       @window?force-update!
 
+    /** Modes */
+    const MODE_DESIGN  = 0
+    const MODE_SETUP   = 1
+    const MODE_PERFORM = 2
+
     /** Button properties */
-    const BTN_DEFAULT = 0
+    const BTN_DEFAULT = MODE_DESIGN
     const BTN_WIDTH   = 80px
     const BTN_OFF     = 70px
     const BTN_PAD     = 20px
     const BTN_Y       = 70px
-
-    /** Modes */
-    const MODE_DESIGN  = 0
-    const MODE_PERFORM = 1
 
     /** Node List Properties */
     const NL_WIDTH    = BTN_WIDTH * 4 + BTN_PAD * 3
@@ -148,8 +151,10 @@ module.exports = class App
      * Node List is not visible) when the mode is changed.
      */
     change-mode: (mode, state) !->
-      @current-mode = if state then mode else BTN_DEFAULT
-      @window.show-perform @current-mode == MODE_PERFORM
+      @current-mode = if state then mode else MODE_DESIGN
+
+      @window.show-perform @current-mode != MODE_DESIGN
+      @window.lock-perform @current-mode == MODE_PERFORM
 
       @add-node-btn.trigger false
       @mode-btns |> each (btn) !~>

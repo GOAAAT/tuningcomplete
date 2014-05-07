@@ -30,6 +30,7 @@ module.exports = class Window extends CursorResponder
 
     @view-layer.activate!
     @perform-layer.visible = false
+    @perform-layer.data.locked = false
 
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
@@ -109,7 +110,17 @@ module.exports = class Window extends CursorResponder
    *
    * Set the performance layer as visible or not.
    */
-  show-perform: (@perform-layer.visible) !-> @force-update!
+  show-perform: (@perform-layer.visible) !->
+    @perform-responder = null
+    @force-update!
+
+  /** lock-perform : void
+   *  state : Boolean
+   *
+   * Set the performance layer as locked or not. If it is locked, the
+   * 'stickiness' of its UI elements cannot be modified.
+   */
+  lock-perform: (@perform-layer.data.locked) !->
 
   /** CursorResponder methods */
 
@@ -171,9 +182,11 @@ module.exports = class Window extends CursorResponder
    */
   pointer-down: (pt) !->
     if @perform-layer.visible
-      @_find-item pt, @perform-layer ?.item
-        |> @_find-significant-parent
-        |> (?pointer-down pt)
+      @perform-responder =
+        @_find-item pt, @perform-layer ?.item
+          |> @_find-significant-parent
+
+      @perform-responder?pointer-down pt
       return
 
     view =
@@ -191,9 +204,17 @@ module.exports = class Window extends CursorResponder
    */
   pointer-moved: (pt) !->
     if @perform-layer.visible
-      @_find-item pt, @perform-layer ?.item
-        |> @_find-significant-parent
-        |> (?pointer-moved pt)
+      new-responder =
+        @_find-item pt, @perform-layer ?.item
+          |> @_find-significant-parent
+
+      if new-responder != @perform-responder
+        @perform-responder?pointer-up pt
+        new-responder?pointer-down pt
+        @perform-responder = new-responder
+      else
+        @perform-responder?pointer-moved pt
+
       return
 
     @current-wire?active-view.set-end pt
@@ -206,9 +227,8 @@ module.exports = class Window extends CursorResponder
    */
   pointer-up: (pt) !->
     if @perform-layer.visible
-      @_find-item pt, @perform-layer ?.item
-        |> @_find-significant-parent
-        |> (?pointer-up pt)
+      @perform-responder?pointer-up pt
+      @perform-responder = null
       return
 
     view =
