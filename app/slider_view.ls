@@ -23,6 +23,7 @@ module.exports = class SliderView
    
   (@owner, @pos) ->
     @value = 0.5
+    @sticky = true
     @is-selected = false
     @slider-pos = @pos
     @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
@@ -35,6 +36,11 @@ module.exports = class SliderView
    
   item: -> @node-group
     
+  /* set-sticky (b) : void
+   * Sets slider sticky to b
+   */
+  set-sticky: (@sticky) !->
+   
   /* private move-slider (pos) : void
    * Move the slider to the position and return the percentage to the owner
    */
@@ -69,6 +75,8 @@ module.exports = class SliderView
       @slider-path.stroke-color = VS.selected
     else
       @slider-path.stroke-color = VS.slider-path.stroke-color
+      if !sticky 
+        @_move-slider @slider-track.bounds.bottom
     
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
