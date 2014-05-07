@@ -6,7 +6,7 @@ PointInfo = require \point_info
 
 #Set how slowly a pointer needs to move to select somewhere, same for hands when starting to zoom.
 # Note its the square that is compared to this, so 1000 equates to ~30mm per second
-const SENSITIVITY = 200
+const SENSITIVITY = 4000
 
 #Set how accurately gesture directions need to be
 #Used in pointer-down finger direction and zooming for hands facing each other
@@ -21,7 +21,7 @@ const ALIGN = 50
 const ACTIVE-REGION = -20
 #Offset the active region for panning to avoid command mixup
 #Must be non-zero (for normalisation purposes when passing z information to CursorResponder)
-const PAN-OFFSET = 60
+const PAN-OFFSET = 20
 
 #Scale to determine how many px per mm in the real world
 const SCALE = 4
