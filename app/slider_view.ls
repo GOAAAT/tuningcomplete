@@ -24,12 +24,8 @@ module.exports = class SliderView
   (@owner, @pos) ->
     @value = 0.5
     @slider-pos = @pos
-    console.log @slider-pos
     @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
     @slider-pos = @slider-pos.subtract @offset
-    console.log @pos
-    console.log @offset
-    console.log @slider-pos
     @_make-node!
     
   /* item() : Group
@@ -71,7 +67,6 @@ module.exports = class SliderView
     # Make Slider
     @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, NODE_SIZE * 2, NODE_SIZE / 2
     @slider-path.style = VS.slider-path
-    console.log @slider-path
 
     @node-group = new paper.Group
     @node-group.add-child @slider-track
