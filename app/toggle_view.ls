@@ -11,15 +11,13 @@ VS = require \view_style
  * - moves the node to pos
  */
 
-const NODE_SIZE = 50
-
 module.exports = class SliderView
 
-  /* SliderView (pos) : void
+  /* SliderView (pos, node-size, ref) : void
    * create view at pos
    */
    
-  (@pos, ref) ->
+  (@pos, @node-size, ref) ->
     @value = 0
     @sticky = true
     @is-selected = false
@@ -94,7 +92,7 @@ module.exports = class SliderView
   _make-node: !->
     
     # Make Toggle Path
-    @toggle-path = new paper.Path.Circle @pos, NODE_SIZE
+    @toggle-path = new paper.Path.Circle @pos, @node-size
     @toggle-path.style = VS.toggle-up
 
     @node-group = new paper.Group [@toggle-path]

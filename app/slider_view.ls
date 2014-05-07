@@ -13,20 +13,18 @@ VS = require \view_style
  * - moves the node to pos
  */
 
-const NODE_SIZE = 30
-
 module.exports = class SliderView
 
   /* SliderView (pos) : void
    * create view at pos
    */
    
-  (@pos, ref) ->
+  (@pos, @node-size, ref) ->
     @value = 0.5
     @sticky = true
     @is-selected = false
     @slider-pos = @pos
-    @offset = new paper.Point NODE_SIZE, NODE_SIZE / 4
+    @offset = new paper.Point @node-size, @node-size / 4
     @slider-pos = @slider-pos.subtract @offset
     @_make-node!
     @colour = VS.slider-colours[ref]
@@ -100,11 +98,11 @@ module.exports = class SliderView
   _make-node: !->
     
     # Make Slider Track
-    @slider-track = new paper.Path.Line [@pos.x, @pos.y - (NODE_SIZE * 2)], [@pos.x, @pos.y + (NODE_SIZE * 2)]
+    @slider-track = new paper.Path.Line [@pos.x, @pos.y - (@node-size * 2)], [@pos.x, @pos.y + (@node-size * 2)]
     @slider-track.style = VS.slider-track
     
     # Make Slider
-    @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, NODE_SIZE * 2, NODE_SIZE / 2
+    @slider-path = new paper.Path.Rectangle @slider-pos.x, @slider-pos.y, @node-size * 2, @node-size / 2
     @slider-path.style = VS.slider-path
     @slider-path.fill-color = @colour
 
