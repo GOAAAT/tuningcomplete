@@ -7,6 +7,7 @@ Input = require \input
 PointInfo = require \point_info
 VS = require \view_style
 Button = require \button
+PerformLayout = require \perform_layout
 {map, each} = prelude
 
 module.exports = class Window extends CursorResponder
@@ -21,25 +22,17 @@ module.exports = class Window extends CursorResponder
 
     @sf = 1
 
-    @view-layer    = @ctx.project.active-layer
-    @perform-layer = new @ctx.Layer!
-    @ui-layer      = new @ctx.Layer!
-    @cursor-layer  = new @ctx.Layer!
+    @view-layer     = @ctx.project.active-layer
+    @perform-layout = new PerformLayout @ctx
+    @ui-layer       = new @ctx.Layer!
+    @cursor-layer   = new @ctx.Layer!
 
     @moveable-layers = [@view-layer]
 
     @view-layer.activate!
-    @perform-layer.visible = false
-    @perform-layer.data.locked = false
 
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
-
-    perform-bg = new paper.Shape.Rectangle @ctx.view.bounds
-    perform-bg.fill-color = new paper.Color 0.3 0.8
-    @insert-perform [perform-bg], 0
-
-    @ctx.view.on \resize ~> perform-bg.bounds = @ctx.view.bounds
 
   /** activate : void
    *
@@ -73,16 +66,6 @@ module.exports = class Window extends CursorResponder
   insert-cursor: (sub, pos = 0) ->
     @cursor-layer?insert-children pos, sub
 
-  /** insert-perform : [paper.Item]
-   *  sub : [paper.Item]
-   *  pos : Int
-   *
-   * Add children `sub` to the perform layer at position `pos`, returns the
-   * inserted items, or null on failure.
-   */
-  insert-perform: (sub, pos = 1) ->
-    @perform-layer?insert-children pos, sub
-
   /** insert-children : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -110,8 +93,8 @@ module.exports = class Window extends CursorResponder
    *
    * Set the performance layer as visible or not.
    */
-  show-perform: (@perform-layer.visible) !->
-    @perform-responder = null
+  show-perform: (state) !->
+    @perform-layout.show state
     @force-update!
 
   /** lock-perform : void
@@ -120,7 +103,7 @@ module.exports = class Window extends CursorResponder
    * Set the performance layer as locked or not. If it is locked, the
    * 'stickiness' of its UI elements cannot be modified.
    */
-  lock-perform: (@perform-layer.data.locked) !->
+  lock-perform: (locked) !-> @perform-layout.lock locked
 
   /** CursorResponder methods */
 
@@ -138,11 +121,7 @@ module.exports = class Window extends CursorResponder
       button.trigger true
       return
 
-    if @perform-layer.visible
-      @_find-item pt, @perform-layer ?.item
-        |> @_find-significant-parent
-        |> (?select-at pt)
-      return false
+    return false unless @perform-layout.select-at pt
 
     selected =
       @_find-item pt ?.item
@@ -183,13 +162,7 @@ module.exports = class Window extends CursorResponder
    * If the pointer goes down near an output, start a new wire.
    */
   pointer-down: (pt) ->
-    if @perform-layer.visible
-      @perform-responder =
-        @_find-item pt, @perform-layer ?.item
-          |> @_find-significant-parent
-
-      @perform-responder?pointer-down pt
-      return false
+    return false unless @perform-layout.pointer-down pt
 
     view =
       @_find-item pt ?.item
@@ -207,19 +180,7 @@ module.exports = class Window extends CursorResponder
    * Update the end of the currently active wire.
    */
   pointer-moved: (pt) ->
-    if @perform-layer.visible
-      new-responder =
-        @_find-item pt, @perform-layer ?.item
-          |> @_find-significant-parent
-
-      if new-responder != @perform-responder
-        @perform-responder?pointer-up pt
-        new-responder?pointer-down pt
-        @perform-responder = new-responder
-      else
-        @perform-responder?pointer-moved pt
-
-      return false
+    return false unless @perform-layout.pointer-moved pt
 
     @current-wire?active-view.set-end pt
     return false
@@ -231,10 +192,7 @@ module.exports = class Window extends CursorResponder
    * on the wire to this Node
    */
   pointer-up: (pt) ->
-    if @perform-layer.visible
-      @perform-responder?pointer-up pt
-      @perform-responder = null
-      return false
+    return false unless @perform-layout.pointer-up pt
 
     view =
       @_find-item pt ?.item
