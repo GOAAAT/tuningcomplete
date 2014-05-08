@@ -12,6 +12,7 @@ module.exports = class PointInfo
   *       = \finger => pointable object
   *       = \zoom => hand while zooming
   *       = \pan => hand while panning
+  *       = \drag => finger while dragging
   *  pt is just a paper.Point representing x, y coords (in px)
   *  z is a normalised value, with positive direction aay form the screen, 0 at activeregion boundary, 1 at panning region boundary
   */

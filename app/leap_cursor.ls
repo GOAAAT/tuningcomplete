@@ -119,7 +119,7 @@ module.exports = class LeapCursor extends Cursor
       return
     if @_dragging
       ptr = []
-      ptr[0] = @_point-info frame.pointable(@_object-id[0]).stabilized-tip-position, \finger
+      ptr[0] = @_point-info frame.pointable(@_object-id[0]).stabilized-tip-position, \drag
       @delegate.pointers-changed ptr
       return
     if @_zooming
