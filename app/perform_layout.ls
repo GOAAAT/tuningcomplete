@@ -118,6 +118,7 @@ module.exports = class PerformLayout extends CursorResponder
         toggle
       | \XY-Slider =>
         xy-slider = @xyslider
+        @xyslider = null
         xy-slider?item!visible = true
         xy-slider
       | otherwise => null

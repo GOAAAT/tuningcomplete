@@ -48,28 +48,6 @@ module.exports = class ToggleView
   */
   set-owner: (@owner) !->
 
-  /* set-sticky (b) : void
-   * Sets toggle sticky.
-   */
-  _set-sticky: (@sticky) !->
-    if !@sticky then
-      @toggle-path.stroke-color = VS.selected.stroke-color
-    else
-      @toggle-path.style = @_style!
-
-  /* (private) _style : Object
-   *
-   * Returns what the current style should be.
-   */
-  _style: -> if @value then VS.toggle-down else VS.toggle-up with fill-color = @colour
-
-  /* private set-toggle (b) : void
-   * Sets the value of the toggle
-   */
-  _set-toggle: (+!!@value) ->
-    @toggle-path.style = @_style!
-    @owner.set-value @value
-
   /* pointer-down
   */
   pointer-down: (pos) ->
@@ -92,6 +70,35 @@ module.exports = class ToggleView
    */
   set-node-pos: (pos) !-> @node-group.set-position pos
 
+  /* private set-sticky (b) : void
+   * Sets toggle sticky.
+   */
+  _set-sticky: (@sticky) !->
+    if !@sticky then
+      @toggle-path.stroke-color = VS.selected.stroke-color
+    else
+      @toggle-path.stroke-color = VS.toggle.stroke-color
+
+  /* private _style : Object
+   *
+   * Returns what the current style should be.
+   */
+  _style: -> 
+    if @value
+      VS.toggle-down 
+    else 
+      style = VS.toggle-up
+      style.fill-color = @colour
+      style
+
+  /* private set-toggle (b) : void
+   * Sets the value of the toggle
+   */
+  _set-toggle: (+!!@value) ->
+    @toggle-path.style = @_style!
+    @_set-sticky @sticky
+    @owner.set-value @value
+
   /* private make-path () : void
    * make the path, replacing the previous one
    */
@@ -99,7 +106,7 @@ module.exports = class ToggleView
 
     # Make Toggle Path
     @toggle-path = new paper.Path.Rectangle pos, @node-size.multiply 0.75
-    @toggle-path.style = VS.toggle-up
+    @toggle-path.style = VS.toggle-down
     @toggle-path.fill-color = @colour
 
     @node-group = new paper.Group [@toggle-path]
