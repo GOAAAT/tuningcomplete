@@ -3,6 +3,8 @@ VS = require \view_style
 
 module.exports = class OscillatorNode extends Audio
   @desc = "produces note of a given pitch"
+
+  const FREQ_A = 440
   /** OscillatorNode
    *  pos : paper.Point
    *  actx : AudioContext
@@ -13,7 +15,7 @@ module.exports = class OscillatorNode extends Audio
     super 0 1, pos
     @active-view.set-node-style VS.oscillator
     @osc-node = actx.create-oscillator!
-    @osc-node.frequency.value = 440
+    @receive-for-ref 0 0.5
     @osc-node.start 0
 
   /** (override) receive-for-ref : void
@@ -23,7 +25,7 @@ module.exports = class OscillatorNode extends Audio
    * Receive the pitch value from the input.
    */
   receive-for-ref: (ref, value) !->
-    @osc-node.frequency.value = 440 + 200*value
+    @osc-node.frequency.value = FREQ_A * 2 ^ (value - 0.75)
 
   /** (protected override) _connect : void
    *  input : Input

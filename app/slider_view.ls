@@ -70,7 +70,7 @@ module.exports = class SliderView
     {top, bottom, height} = @slider-track.bounds
     @slider-path.position.y = min bottom, (max pos.y, top)
 
-    @value = (bottom - @_center!) / height
+    @value = (bottom - @slider-path.position.y) / height
     @owner.set-value @value
 
   /* pointer-down
