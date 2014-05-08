@@ -2,6 +2,9 @@ CursorResponder = require \cursor_responder
 SliderView = require \slider_view
 ToggleView = require \toggle_view
 XYSliderView = require \xy-slider_view
+PointInfo = require \point_info
+
+{map, filter, each, head, empty} = prelude
 
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
@@ -72,6 +75,7 @@ module.exports = class PerformLayout extends CursorResponder
         [slider-dim.width*SLIDERS, OFFSET/4]
         xy-slider-dim
         0
+    @responders = []
 
     @xyslider.item!visible = false
     @layer.add-child @xyslider.item!
@@ -140,14 +144,7 @@ module.exports = class PerformLayout extends CursorResponder
    * The pointer has gone down at the given position.
    */
   pointer-down: (pt) ->
-    return true unless @layer.visible
-
-    @responder =
-      @_find-item pt ?.item
-        |> @_find-significant-parent
-
-    @responder?pointer-down pt
-    return false
+    return !@layer.visible
 
   /** pointer-moved : Boolean
    *  pt : paper.Point
@@ -155,20 +152,7 @@ module.exports = class PerformLayout extends CursorResponder
    * The pointer has moved to the given position.
    */
   pointer-moved: (pt) ->
-    return true unless @layer.visible
-
-    new-responder =
-      @_find-item pt ?.item
-        |> @_find-significant-parent
-
-    if new-responder != @responder
-      @responder?pointer-up pt
-      new-responder?pointer-down pt
-      @responder = new-responder
-    else
-      @responder?pointer-moved pt
-
-    return false
+    return !@layer.visible
 
   /** pointer-up : Boolean
    *  pt : paper.Point
@@ -176,11 +160,48 @@ module.exports = class PerformLayout extends CursorResponder
    * The pointer was released at the given position.
    */
   pointer-up: (pt) ->
-    return true unless @layer.visible
+    return !@layer.visible
 
-    @responder?pointer-up pt
-    @responder = null
-    return false
+  /** pointers-changed (pt-infos: [PointInfo]) : void
+   *
+   *
+   */
+  pointers-changed: (pt-infos) ->
+    return true unless @layer.visible
+    #list of selected responders e.g sliders
+    new-responders = pt-infos
+      |> map (pt-info) ~>
+        if pt-info.z < 6
+          responder =
+            @_find-item pt-info.pt ?.item
+              |> @_find-significant-parent
+          if responder?
+            return new Responder responder, pt-info.pt
+        else return new Responder undefined, undefined
+      |> filter (?)
+      |> filter (.responder?)
+
+
+    #call pointer-moved/pointer-down on each of the currently selected responders
+    new-responders
+      |> each (responder) !~>
+        prev-responder = @responders
+          |> filter (.responder == responder.responder)
+          |> filter (.up)
+          |> each (old-responder) !-> old-responder.up = false
+          |> head
+        if prev-responder?
+          responder.responder.pointer-moved responder.pt
+        else
+          responder.responder.pointer-down responder.pt
+
+    #update previous frame responders if they're no longer selected
+    @responders
+      |> each (responder) !->
+        if responder.up
+          responder.responder.pointer-up responder.pt
+
+    @responders = new-responders
 
   /** Private methods */
   const HIT_TOLERANCE = 50
@@ -207,3 +228,8 @@ module.exports = class PerformLayout extends CursorResponder
       item = item.parent
 
     item?data?obj
+
+
+  class Responder
+    (@responder,@pt)->
+      @up = true
