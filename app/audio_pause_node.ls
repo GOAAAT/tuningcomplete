@@ -1,7 +1,7 @@
 MP3Node = require \mp3_node
 
 module.exports = class AudioPauseNode extends MP3Node
-  @desc = "Play an MP3 and start/stop it"
+  @desc = "Play an MP3 and start/pause it"
 
   /** AudioPauseNode
    *  pos : paper.Point
