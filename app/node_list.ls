@@ -17,6 +17,10 @@ nodes =
     node: require \toggle
   * name: \xyslider
     node: require \xy-slider
+  * name: \audioresetnode
+    node: require \audio_reset_node
+  * name: \audiopausenode
+    node: require \audio_pause_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
