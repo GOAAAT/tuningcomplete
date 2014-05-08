@@ -4,7 +4,7 @@ ToggleView = require \toggle_view
 
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
-  const SLIDERS   = 5
+  const SLIDERS   = 8
   const TOGGLES   = [12 12]
 
   const SLIDER_DIM = [0.1   0.6]
@@ -49,18 +49,19 @@ module.exports = class PerformLayout extends CursorResponder
     
     @toggles = []
     
-    for j, row in TOGGLES
-      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j + 0.5)
-      for i from 0 til row
+    for j from 0 til 2
+      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j - 0.5)
+      for i from 0 til TOGGLES[j]
         toggle =
           new ToggleView do
-            [toggle-dim.width*(i+0.5), toggle-y]
+            [toggle-dim.width*(i+0.25), toggle-y]
             toggle-dim
             i
       
         toggle.item!visible = false
         @layer.add-child toggle.item!
         @toggles.push toggle
+        console.log \TOGGLE i, j, toggle
       
     console.log \TOGGLES @toggles
 

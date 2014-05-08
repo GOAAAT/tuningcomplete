@@ -19,7 +19,7 @@ module.exports = class ToggleView
    
   (pos, @node-size, ref) ->
     @value = 0
-    @sticky = true
+    @sticky = false
     @is-selected = false
     @_make-node pos
     
@@ -64,7 +64,7 @@ module.exports = class ToggleView
   */
   pointer-down: (pos) !-> 
     @_selected true
-    @_set-toggle true
+    @_set-toggle !@value
   
   /* pointer-up
   */
@@ -83,7 +83,7 @@ module.exports = class ToggleView
       @toggle-path.stroke-color = VS.selected
     else
       @toggle-path.stroke-color = VS.toggle.stroke-color
-      if !sticky 
+      if !@sticky 
         @_set-toggle false
     
   /* set-node-pos(location : Paper.Point) : void
@@ -97,7 +97,7 @@ module.exports = class ToggleView
   _make-node: (pos) !->
     
     # Make Toggle Path
-    @toggle-path = new paper.Path.Circle pos, @node-size
+    @toggle-path = new paper.Path.Rectangle pos, @node-size.multiply 0.5
     @toggle-path.style = VS.toggle-up
 
     @node-group = new paper.Group [@toggle-path]
