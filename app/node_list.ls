@@ -17,10 +17,10 @@ nodes =
     node: require \toggle
   * name: \xyslider
     node: require \xy-slider
-  * name: \audioresetnode
-    node: require \audio_reset
-  * name: \audiopausenode
-    node: require \audio_pause
+  * name: \audioreset
+    node: require \audio_reset_node
+  * name: \audiopause
+    node: require \audio_pause_node
   * name: \constant
     node: require \constant
 
