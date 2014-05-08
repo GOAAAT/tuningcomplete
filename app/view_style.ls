@@ -20,11 +20,6 @@ Colour = require \color
  *  Standard Idle
  *
  *  **Pointer Styles**
- *  Finger pointers
- *   -active
- *   -close
- *   -other
- *  Hand Pointers
  *  Zoom Pointers
  *  Pan Pointers
  *
@@ -125,26 +120,11 @@ export wire-selected =
 
 /** Pointers **/
 
-export active-pointer =
-  fill-color: \red
-
-export close-pointer =
-  fill-color: \orange
-
-export finger-pointer =
-  fill-color: \yellow
-
-export hand-pointer =
-  fill-color: \green
-
-export close-hand-pointer =
-  fill-color: \darkGreen
-
 export zoom-pointer =
-  fill-color: \blue
+  fill-color: Colour.dark-blue
 
 export pan-pointer =
-  fill-color: \blue
+  fill-color: Colour.dark-blue
 
 /** Catch all **/
 
@@ -154,25 +134,35 @@ export other-type =
   fill-color: Colour.black
 
 export view-style-for-pointers = (pt-info) ->
+  ui-unit = 10
   switch pt-info.type
   | \finger =>
     pt = new paper.Shape.Circle do
       center: pt-info.pt,
       radius: 10
     if pt-info.z < 0
-      pt.style = active-pointer
-    else if pt-info.z < 4
-      pt.style = close-pointer
-    else pt.style = finger-pointer
+      pt.style =
+        fill-color: new paper.Color 1, 0, 0
+    else if pt-info.z < ui-unit
+      pt.style =
+        fill-color: new paper.Color 1, pt-info.z / ui-unit, 0
+    else
+      pt.style =
+        fill-color: new paper.Color 1, 1, 0
     pt
   | \hand =>
     pt = new paper.Shape.Circle do
       center: pt-info.pt,
       radius: 20
     if pt-info.z < 1
-      pt.style = close-hand-pointer
+      pt.style =
+        fill-color: new paper.Color 0, 0.2, 0
+    else if pt-info.z < ui-unit + 1
+      pt.style =
+        fill-color: new paper.Color 0, 0.2 + 0.8 * (pt-info.z - 1) / ui-unit, 0
     else
-      pt.style = hand-pointer
+      pt.style =
+        fill-colour: new paper.Color 0, 1, 0
     pt
   | \zoom =>
     pt = new paper.Shape.Circle do
@@ -185,6 +175,13 @@ export view-style-for-pointers = (pt-info) ->
       center: pt-info.pt,
       radius: 20
     pt.style = pan-pointer
+    pt
+  | \drag =>
+    pt = new paper.Shape.Circle do
+      center: pt-info.pt,
+      radius: 10
+    pt.style =
+      fill-color: Colour.light-grey
     pt
 
 export view-styles-for-type = (type) ->
