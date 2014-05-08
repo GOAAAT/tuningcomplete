@@ -126,6 +126,8 @@ module.exports = class Window extends CursorResponder
         |> @_find-significant-parent
 
     if button?
+      @active-node-view?deselect!
+      @active-wire-view?deselect!
       button.trigger true
       return
 
