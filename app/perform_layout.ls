@@ -11,7 +11,7 @@ module.exports = class PerformLayout extends CursorResponder
   const TOGGLE_PAD = 1 / 8
 
   const SLIDER_DIM = [0.1   0.6]
-  const XY_DIM     = [0.5   0.6]
+  const XY_DIM     = [0.5   0.575]
   const TOGGLE_DIM = [1/TOGGLES[0], 0.2]
 
   const OFFSET = 101
@@ -38,7 +38,7 @@ module.exports = class PerformLayout extends CursorResponder
 
     toggle-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply TOGGLE_DIM
 
-    xy-slider-dim = ctx.view.bounds.size.subtract [OFFSET, 0] .multiply XY_DIM
+    xy-slider-dim = ctx.view.bounds.size.subtract [OFFSET/2, 0] .multiply XY_DIM
     console.log \XYSLIDERDIM xy-slider-dim
 
     @sliders =
@@ -70,7 +70,7 @@ module.exports = class PerformLayout extends CursorResponder
 
     @xyslider =
       new XYSliderView do
-        [slider-dim.width*SLIDERS, 50]
+        [slider-dim.width*SLIDERS, OFFSET/4]
         xy-slider-dim
         0
 

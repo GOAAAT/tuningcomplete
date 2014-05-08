@@ -9,12 +9,21 @@ module.exports = class XYSlider
    * Construct a new XYSlider node
    */
 
-  (pos) ->
+  (_pos) ->
+    console.log _pos
     @xval = 0
     @yval = 0
 
+    pos = new paper.Point _pos
+
     @xnode = new NumericalNode 0, 0, pos
     @ynode = new NumericalNode 0, 0, pos
+
+    x-node-pos = pos.add [0, -5 - @xnode.view!bounds.height / 2]
+    y-node-pos = pos.add [0, 5 + @ynode.view!bounds.height / 2]
+
+    @xnode.active-view.node-group.position = x-node-pos
+    @ynode.active-view.node-group.position = y-node-pos
     
     @xnode.active-view.set-node-style VS.x-slider
     @ynode.active-view.set-node-style VS.y-slider
@@ -26,14 +35,13 @@ module.exports = class XYSlider
     win.insert-children [@xnode.view!, @ynode.view!]
     @input-view = win.request-input-view-for-type "XY-Slider"
     @input-view?set-owner @
-    console.log @input-view
     return @input-view?
 
   /* set-value (val) : void
    * Set the value then send it
    */
   set-value: (@xval, @yval) !->
-    @xnode.set-value @xval
-    @ynode.set-value @yval
+    @xnode.value = @xval
+    @ynode.value = @yval
     @xnode.send!
     @ynode.send!

@@ -23,7 +23,6 @@ module.exports = class XYSliderView
     @xval = 0
     @yval = 0
     @is-selected = false
-    console.log \NODEVIEW pos, @node-size, ref
     @_make-node pos
     
   /* item() : Group
@@ -45,40 +44,36 @@ module.exports = class XYSliderView
    * Move the slider to the position and return the percentage to the owner
    */
   _move-slider: (pos) ->
-    {top, bottom} = @slider-bed.bounds
+    {top, bottom, left, right} = @slider-bed.bounds
 
-    @slider-path-c.position.x = min left, (max pos.x, right)
-    @slider-path-v.position.x = @slider-path.c.position.x
-    @slider-path-c.position.y = min bottom, (max pos.y, top)
+    x = min right, (max pos.x, left)
+    y = min bottom, (max pos.y, top)
+
+    @slider-path-c.position = new paper.Point x, y
+    @slider-path-v.position.x = @slider-path-c.position.x
     @slider-path-h.position.y = @slider-path-c.position.y
     
-    @xval = (@slider-pos.x - left) / @slider-bed.bounds.width
-    @yval = (@slider-pos.y - top) / @slider-bed.bounds.width
+    @xval = (x - left) / @slider-bed.bounds.width
+    @yval = (y - top) / @slider-bed.bounds.width
     
     @owner.set-value @xval, @yval
   
   /* pointer-down 
   */
   pointer-down: (pos) !-> 
-    @_selected true
     @_move-slider pos
+    @slider-path-h.style = VS.xy-slider-line-active
+    @slider-path-v.style = VS.xy-slider-line-active
   
   /* pointer-up 
   */
-  pointer-up: (pos) !-> @_selected false
+  pointer-up: (pos) !->
+    @slider-path-h.style = VS.xy-slider-line-idle
+    @slider-path-v.style = VS.xy-slider-line-idle
     
   /* pointer-moved 
   */
   pointer-moved: (pos) !-> @_move-slider pos
-    
-  /* private selected (b) : void
-   * Sets the path to either selected or not
-   */
-  _selected: (@is-selected) !->
-    if @is-selected
-      @slider-bed.stroke-color = VS.selected
-    else
-      @slider-bed.stroke-color = VS.slider-bed.stroke-color
     
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
@@ -93,14 +88,15 @@ module.exports = class XYSliderView
     # Make Slider Track
     @slider-bed = new paper.Path.Rectangle pos, @node-size
     @slider-bed.style = VS.xy-slider-bed
-    console.log \SLIDERBED @slider-bed
-    
+
     # Make Slider
-    @slider-path-h = new paper.Path.Line (new paper.Point @slider-bed.bounds.left, pos.y), (new paper.Point @slider-bed.bounds.right, pos.y)
-    @slider-path-h.style = VS.xy-slider-line
-    @slider-path-v = new paper.Path.Line (new paper.Point pos.x, @slider-bed.bounds.top), (new paper.Point pos.x, @slider-bed.bounds.bottom)
-    @slider-path-v.style = VS.xy-slider-line
-    @slider-path-c = new paper.Path.Circle pos, 10
+    _pos = new paper.Point pos
+    slider-pos = _pos.add [50, 50]
+    @slider-path-h = new paper.Path.Line [_pos.x, slider-pos.y], [_pos.x + @node-size.width, slider-pos.y]
+    @slider-path-h.style = VS.xy-slider-line-idle
+    @slider-path-v = new paper.Path.Line [slider-pos.x, _pos.y], [slider-pos.x, _pos.y + @node-size.height]
+    @slider-path-v.style = VS.xy-slider-line-idle
+    @slider-path-c = new paper.Path.Circle slider-pos, 10
     @slider-path-c.style = VS.xy-slider-centre
 
     @node-group = new paper.Group [@slider-bed, @slider-path-h, @slider-path-v, @slider-path-c]
