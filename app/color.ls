@@ -19,6 +19,7 @@ export dark-grey  = \#111
 export grey       = \#222
 export light-grey = \#999
 export white      = \#FFF
+export vampire-grey = \#565051
 
 /** "Dulux" colours for node decor 
  * 

@@ -15,17 +15,18 @@ module.exports = class XYSlider
 
     @xnode = new NumericalNode 0, 0, pos
     @ynode = new NumericalNode 0, 0, pos
-
-    @xnode.set-node-style VS.x-slider
-    @ynode.set-node-style VS.y-slider
-
+    
+    @xnode.active-view.set-node-style VS.x-slider
+    @ynode.active-view.set-node-style VS.y-slider
+    
   /* add-to-window (window) : void
    * add the node to the window
    */
-  add-to-window: (win) ->
-    super win
+  add-to-window: (win) -> 
+    win.insert-children [@xnode.view!, @ynode.view!]
     @input-view = win.request-input-view-for-type "XY-Slider"
     @input-view?set-owner @
+    console.log @input-view
     return @input-view?
 
   /* set-value (val) : void
