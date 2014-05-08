@@ -7,9 +7,11 @@ module.exports = class PerformLayout extends CursorResponder
   const SLIDERS   = 8
   const TOGGLES   = [12 12]
 
+  const TOGGLE_PAD = 1 / 8
+
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.6]
-  const TOGGLE_DIM = [0.125 0.2]
+  const TOGGLE_DIM = [1/TOGGLES[0], 0.2]
   
   const OFFSET = 101
 
@@ -30,10 +32,10 @@ module.exports = class PerformLayout extends CursorResponder
 
     ctx.view.on \resize -> bg.bounds = ctx.view.bounds
 
-    slider-dim = ctx.view.bounds.size.multiply SLIDER_DIM
+    slider-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply SLIDER_DIM
     slider-y   = (slider-dim.height / 2) + OFFSET
     
-    toggle-dim = ctx.view.bounds.size.multiply TOGGLE_DIM
+    toggle-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply TOGGLE_DIM
 
     @sliders =
       for i from 0 til SLIDERS
@@ -50,18 +52,17 @@ module.exports = class PerformLayout extends CursorResponder
     @toggles = []
     
     for j from 0 til 2
-      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j - 0.5)
+      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j)
       for i from 0 til TOGGLES[j]
         toggle =
           new ToggleView do
-            [toggle-dim.width*(i+0.25), toggle-y]
+            [toggle-dim.width*(i+TOGGLE_PAD), toggle-y]
             toggle-dim
             i
       
         toggle.item!visible = false
         @layer.add-child toggle.item!
         @toggles.push toggle
-        console.log \TOGGLE i, j, toggle
       
     console.log \TOGGLES @toggles
 
@@ -149,6 +150,7 @@ module.exports = class PerformLayout extends CursorResponder
     if new-responder != @responder
       @responder?pointer-up pt
       new-responder?pointer-down pt
+      @responder = new-responder
     else
       @responder?pointer-moved pt
 

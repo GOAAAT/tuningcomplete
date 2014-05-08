@@ -230,3 +230,6 @@ export view-styles-for-type = (type) ->
   | otherwise  => [other-type, other-type]
   
 export slider-colours = [Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple, Colour.blossom-pink]
+
+export label =
+  fill-color: Colour.black

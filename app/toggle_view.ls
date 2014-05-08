@@ -62,18 +62,22 @@ module.exports = class ToggleView
   
   /* pointer-down
   */
-  pointer-down: (pos) !-> 
+  pointer-down: (pos) -> 
     @_selected true
-    @_set-toggle !@value
+    if !@sticky
+      @_set-toggle true
+    false
   
   /* pointer-up
   */
-  pointer-up: (pos) !-> 
+  pointer-up: (pos) -> 
     @_selected false
+    @_set-toggle @sticky or !@value
+    false
     
   /* pointer-moved
   */
-  pointer-moved: (pos) !->
+  pointer-moved: (pos) -> false
     
   /* private selected (b) : void
    * Sets the path to either selected or not
@@ -97,7 +101,7 @@ module.exports = class ToggleView
   _make-node: (pos) !->
     
     # Make Toggle Path
-    @toggle-path = new paper.Path.Rectangle pos, @node-size.multiply 0.5
+    @toggle-path = new paper.Path.Rectangle pos, @node-size.multiply 0.75
     @toggle-path.style = VS.toggle-up
 
     @node-group = new paper.Group [@toggle-path]
