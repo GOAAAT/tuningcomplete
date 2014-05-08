@@ -28,12 +28,13 @@ module.exports = class Node
 
   /** add-to-window : void
    *  win : Window
+   *  cb  : Boolean -> ()
    *
-   * Adds this classes view to the window
+   * Adds this classes view to the window. Pass the result on to the callback
    */
-  add-to-window: (win) -> 
+  add-to-window: (win, cb) !->
     win.insert-children [@view!]
-    return true
+    cb true
 
   /** find-input : Input
   * nodetype : NodeType

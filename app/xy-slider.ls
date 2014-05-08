@@ -23,18 +23,18 @@ module.exports = class XYSlider
 
     @xnode.active-view.node-group.position = x-node-pos
     @ynode.active-view.node-group.position = y-node-pos
-    
+
     @xnode.active-view.set-node-style VS.x-slider
     @ynode.active-view.set-node-style VS.y-slider
-    
+
   /* add-to-window (window) : void
    * add the node to the window
    */
-  add-to-window: (win) -> 
+  add-to-window: (win, cb) !->
     win.insert-children [@xnode.view!, @ynode.view!]
     @input-view = win.request-input-view-for-type "XY-Slider"
     @input-view?set-owner @
-    return @input-view?
+    cb @input-view?
 
   /* set-value (val) : void
    * Set the value then send it
