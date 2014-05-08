@@ -11,9 +11,9 @@ VS = require \view_style
  * - moves the node to pos
  */
 
-module.exports = class SliderView
+module.exports = class ToggleView
 
-  /* SliderView (pos, node-size, ref) : void
+  /* ToggleView (pos, node-size, ref) : void
    * create view at pos
    */
    
