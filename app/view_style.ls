@@ -123,7 +123,7 @@ export x-slider =
 export y-slider =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
-  fill-color: Colour.vampire-grey
+  fill-color: Colour.alpha-white
 
 export constant = 
   stroke-color: LINE_COLOUR,

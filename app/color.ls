@@ -25,6 +25,7 @@ export welsh-grey = \#6D7B8D
 /** See-through colours **/
 
 export alpha-black = new paper.Color 0, 0, 0, 0.5
+export alpha-white = new paper.Color 1, 1, 1, 0.5
 
 /** "Dulux" colours for node decor 
  * 
