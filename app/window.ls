@@ -235,6 +235,7 @@ module.exports = class Window extends CursorResponder
    * Update the position of the cursors on screen.
    */
   pointers-changed: (pt-infos) ->
+    @perform-layout.pointers-changed pt-infos
     @cursor-layer.remove-children!
     pt-infos
       |> map VS.view-style-for-pointers
