@@ -21,7 +21,7 @@ module.exports = class SliderView
 
   (pos, @node-size, ref) ->
     @value = 0.5
-    @sticky = false
+    @sticky = true
     @is-selected = false
     pos = new paper.Point pos
     @node-size = @node-size.multiply 3/4
