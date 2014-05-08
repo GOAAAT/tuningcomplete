@@ -100,22 +100,35 @@ export toggle-down =
 export xy-slider-bed =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
-  fill-color: Colour.black
+  fill-color: Colour.alpha-black
 
-export xy-slider-line =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.alien-green
+export xy-slider-line-idle =
+  stroke-color: Colour.black,
+  stroke-width: 5
 
-export xy-slider-line =
+export xy-slider-line-active =
+  stroke-color: Colour.alien-green
+  stroke-width: 5
+
+export xy-slider-centre =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.oz-green
 
-export constant = 
+export x-slider =
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.alpha-black
+
+export y-slider =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
   fill-color: Colour.vampire-grey
+
+export constant = 
+  stroke-color: LINE_COLOUR,
+  stroke-width: 5,
+  fill-color: Colour.welsh-grey
   
 export selected =
   stroke-color: Colour.elsa-blue
