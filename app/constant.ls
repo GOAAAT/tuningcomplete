@@ -1,5 +1,6 @@
 NumericalNode = require \numerical_node
 VS = require \view_style
+{min, max} = prelude
 
 module.exports = class Constant extends NumericalNode
   @desc = "Get constant value from user"
@@ -29,7 +30,9 @@ module.exports = class Constant extends NumericalNode
   /* set-value (val) : void
    * Set the value then send it
    */
-  set-value: (+@value) !-> @send!
+  set-value: (+@value) !-> 
+    @value = min 1, (max @value, 0)
+    @send!
 
   register-output: (wire) !->
     super wire
