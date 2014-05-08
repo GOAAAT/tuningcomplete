@@ -5,12 +5,12 @@ Window     = require \window
 Button     = require \button
 FilterList = require \filter_list
 NodeList   = require \node_list
-Node       = require \node
-Numerical  = require \numerical_node
-Audio      = require \audio_node
-Slider     = require \slider
-Wire       = require \wire
-GOAAAT     = require \goaaat
+#Node       = require \node
+#Numerical  = require \numerical_node
+#Audio      = require \audio_node
+#Slider     = require \slider
+#Wire       = require \wire
+#GOAAAT     = require \goaaat
 
 DestinationNode = require \destination_node
 

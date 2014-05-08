@@ -27,6 +27,12 @@ module.exports = class XYSlider
     @xnode.active-view.set-node-style VS.x-slider
     @ynode.active-view.set-node-style VS.y-slider
 
+  /* view () : Group
+   * return a group representing the nodes
+   */
+  view: ->
+    new paper.Group [@xnode.view!, @ynode.view!]
+
   /* add-to-window (window) : void
    * add the node to the window
    */
