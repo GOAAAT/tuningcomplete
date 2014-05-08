@@ -42,22 +42,26 @@ module.exports = class ToggleView
   set-owner: (@owner) !->
 
   /* set-sticky (b) : void
-   * Sets toggle sticky to b
+   * Sets toggle sticky.
    */
   _set-sticky: (@sticky) !->
+    if !@sticky then
+      @toggle-path.stroke-color = VS.selected.stroke-color
+    else
+      @toggle-path.style = @_style!
+
+  /* (private) _style : Object
+   *
+   * Returns what the current style should be.
+   */
+  _style: -> if @value then VS.toggle-down else VS.toggle-up
 
   /* private set-toggle (b) : void
    * Sets the value of the toggle
    */
   _set-toggle: (+!!@value) ->
-    @toggle-path.style =
-      if @value
-        VS.toggle-down
-      else
-        VS.toggle-up
-
+    @toggle-path.style = @_style!
     @owner.set-value @value
-
 
   /* pointer-down
   */

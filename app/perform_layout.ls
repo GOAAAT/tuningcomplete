@@ -12,7 +12,7 @@ module.exports = class PerformLayout extends CursorResponder
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.6]
   const TOGGLE_DIM = [1/TOGGLES[0], 0.2]
-  
+
   const OFFSET = 101
 
   /** PerformLayout
@@ -34,7 +34,7 @@ module.exports = class PerformLayout extends CursorResponder
 
     slider-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply SLIDER_DIM
     slider-y   = (slider-dim.height / 2) + OFFSET
-    
+
     toggle-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply TOGGLE_DIM
 
     @sliders =
@@ -48,9 +48,9 @@ module.exports = class PerformLayout extends CursorResponder
         slider.item!visible = false
         @layer.add-child slider.item!
         slider
-    
+
     @toggles = []
-    
+
     for j from 0 til 2
       toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j)
       for i from 0 til TOGGLES[j]
@@ -59,12 +59,11 @@ module.exports = class PerformLayout extends CursorResponder
             [toggle-dim.width*(i+TOGGLE_PAD), toggle-y]
             toggle-dim
             i
-      
+
         toggle.item!visible = false
         @layer.add-child toggle.item!
         @toggles.push toggle
-      
-    console.log \TOGGLES @toggles
+
 
   /** show : void
    *  visible : Boolean

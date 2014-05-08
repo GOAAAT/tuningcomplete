@@ -52,6 +52,16 @@ module.exports = class SliderView
    * Sets slider sticky to b
    */
   _set-sticky: (@sticky) !->
+    if !@sticky
+      @slider-path.stroke-color = VS.selected.stroke-color
+    else
+      @slider-path.style = VS.slider-path
+
+  /* (private) _center : paper.Point
+   *
+   * Get the center of the slider track.
+   */
+  _center: -> @slider-track.position
 
   /* private move-slider (pos) : void
    * Move the slider to the position and return the percentage to the owner
@@ -60,33 +70,22 @@ module.exports = class SliderView
     {top, bottom, height} = @slider-track.bounds
     @slider-path.position.y = min bottom, (max pos.y, top)
 
-    @value = (bottom - @slider-path.position.y) / height
+    @value = (bottom - @_center!) / height
     @owner.set-value @value
 
   /* pointer-down
    */
   pointer-down: (pos) !->
-    @_selected true
     @_move-slider pos
 
   /* pointer-up
   */
-  pointer-up: (pos) !-> @_selected false
+  pointer-up: (pos) !->
+    @_move-slider (if @sticky then pos else @_center!)
 
   /* pointer-moved
   */
   pointer-moved: (pos) !-> @_move-slider pos
-
-  /* private selected (b) : void
-   * Sets the path to either selected or not
-   */
-  _selected: (@is-selected) !->
-    if @is-selected
-      @slider-path.stroke-color = VS.selected
-    else
-      @slider-path.stroke-color = VS.slider-path.stroke-color
-      if !@sticky
-        @_move-slider @slider-track.position
 
   /* set-node-pos(location : Paper.Point) : void
    * Sets the position of the node
@@ -132,4 +131,3 @@ module.exports = class SliderView
 
     @node-group = new paper.Group [zero-label, one-label, half-label, @slider-track, @slider-path]
     @node-group.data.obj = this
-    console.log @node-group
