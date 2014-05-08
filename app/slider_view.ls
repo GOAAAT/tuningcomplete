@@ -111,21 +111,21 @@ module.exports = class SliderView
       content: 0,
       font-family: \Helvetica
       font-weight: \bold
-      font-size: 18pt
+      font-size: \18pt
     zero-label.position = [pos.x + 15, pos.y + (@node-size.height / 2)]
     zero-label.fill-color = VS.label.fill-color
     one-label = new paper.PointText do
       content: 1,
       font-family: \Helvetica
       font-weight: \bold
-      font-size: 18pt
+      font-size: \18pt
     one-label.position = [pos.x + 15, pos.y - (@node-size.height / 2)]
     one-label.fill-color = VS.label.fill-color
     half-label = new paper.PointText do
       content: 0.5,
       font-family: \Helvetica
       font-weight: \bold
-      font-size: 14pt
+      font-size: \10pt
     half-label.position = [pos.x + 15, pos.y]
     half-label.fill-color = VS.label.fill-color
 

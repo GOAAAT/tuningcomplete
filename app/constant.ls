@@ -12,7 +12,7 @@ module.exports = class Constant extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.constant
-    
+
   /* add-to-window (win, cb) : void
    * add the node to the window
    */
@@ -22,7 +22,7 @@ module.exports = class Constant extends NumericalNode
       content: @value,
       font-family: \Helvetica
       font-weight: \bold
-      font-size: 32pt
+      font-size: \32pt
     label.position = @view!children.0.position
     @view!add-child label
     super win, cb
@@ -30,7 +30,7 @@ module.exports = class Constant extends NumericalNode
   /* set-value (val) : void
    * Set the value then send it
    */
-  set-value: (+@value) !-> 
+  set-value: (+@value) !->
     @value = min 1, (max @value, 0)
     @send!
 
