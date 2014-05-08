@@ -4,6 +4,7 @@ VS = require \view_style
 SliderView = require \slider_view
 
 module.exports = class Slider extends NumericalNode
+  @desc = "Produces a value in [0,1]"
 
   /* Slider (pos) : void
    * Construct a new slider node

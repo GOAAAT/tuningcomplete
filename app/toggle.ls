@@ -4,6 +4,7 @@ VS = require \view_style
 ToggleView = require \toggle_view
 
 module.exports = class Toggle extends NumericalNode
+  @desc = "Press = 1. Release = 0"
 
   /* Toggle (pos) : void
    * Construct a new toggle node
@@ -11,7 +12,7 @@ module.exports = class Toggle extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.toggle
-    
+
   /* add-to-window (window) : void
    * add the node to the window
    */
@@ -20,8 +21,8 @@ module.exports = class Toggle extends NumericalNode
     if @input-view?
       @input-view.set-owner @
       return super win
-    return false  
-    
+    return false
+
   /* set-value (val) : void
    * Set the value then send it
    */
