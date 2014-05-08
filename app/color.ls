@@ -42,6 +42,7 @@ export fire-engine-red = \#F62817
 export oz-green       = \#5FFB17
 export brown-bear     = \#835C3B
 export toilet-cleaning-sign-yellow = \#FFFF00
+export red-base       = new paper.Color 1, 0, 0
 
 export blossom-pink   = \#F9B7FF
 export scarlet        = \#FF2400

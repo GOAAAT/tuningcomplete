@@ -10,7 +10,6 @@ module.exports = class XYSlider
    */
 
   (_pos) ->
-    console.log _pos
     @xval = 0
     @yval = 0
 

@@ -9,7 +9,6 @@ module.exports = class Slider extends NumericalNode
   /* Slider (pos) : void
    * Construct a new slider node
    */
-
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.slider

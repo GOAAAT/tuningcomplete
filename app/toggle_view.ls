@@ -20,6 +20,13 @@ module.exports = class ToggleView
   (pos, @node-size, ref) ->
     @value = 0
     @sticky = true
+
+    if ref < 12 
+      @colour = new paper.Color 1, 0, (ref/12)
+    else
+      @colour = new paper.Color 1, (ref-12)/12, 1-((ref-12)/12)
+
+    # CALL THIS LAST ALWAYS
     @_make-node pos
 
   /* item() : Group
@@ -54,7 +61,7 @@ module.exports = class ToggleView
    *
    * Returns what the current style should be.
    */
-  _style: -> if @value then VS.toggle-down else VS.toggle-up
+  _style: -> if @value then VS.toggle-down else VS.toggle-up with fill-color = @colour
 
   /* private set-toggle (b) : void
    * Sets the value of the toggle
@@ -93,6 +100,7 @@ module.exports = class ToggleView
     # Make Toggle Path
     @toggle-path = new paper.Path.Rectangle pos, @node-size.multiply 0.75
     @toggle-path.style = VS.toggle-up
+    @toggle-path.fill-color = @colour
 
     @node-group = new paper.Group [@toggle-path]
     @node-group.data.obj = this

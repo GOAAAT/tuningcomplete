@@ -62,7 +62,7 @@ module.exports = class PerformLayout extends CursorResponder
           new ToggleView do
             [toggle-dim.width*(i+TOGGLE_PAD), toggle-y]
             toggle-dim
-            i
+            i + (j * TOGGLES[0])
 
         toggle.item!visible = false
         @layer.add-child toggle.item!

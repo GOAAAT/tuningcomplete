@@ -20,6 +20,9 @@ module.exports = class Toggle extends NumericalNode
     @input-view = win.request-input-view-for-type "Toggle"
     if @input-view?
       @input-view.set-owner @
+      @active-view.set-node-style do
+        @active-view.node-style with
+          fill-color: @input-view.colour
       return super win
     return false
 

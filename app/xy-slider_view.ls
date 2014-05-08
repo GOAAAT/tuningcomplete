@@ -54,7 +54,7 @@ module.exports = class XYSliderView
     @slider-path-h.position.y = @slider-path-c.position.y
     
     @xval = (x - left) / @slider-bed.bounds.width
-    @yval = (top - y) / @slider-bed.bounds.width
+    @yval = 1 - ((y - top) / @slider-bed.bounds.height)
     
     @owner.set-value @xval, @yval
   
