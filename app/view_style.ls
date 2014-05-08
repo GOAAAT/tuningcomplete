@@ -89,12 +89,12 @@ export toggle =
   
 export toggle-up = 
   stroke-color: LINE_COLOUR,
-  stroke-width: 10,
+  stroke-width: 5,
   fill-color: Colour.fire-engine-red
 
 export toggle-down =
   stroke-color: LINE_COLOUR,
-  stroke-width: 10,
+  stroke-width: 5,
   fill-color: Colour.oz-green
   
 export selected =
@@ -229,4 +229,4 @@ export view-styles-for-type = (type) ->
   | \Standard  => [standard-busy, standard-free]
   | otherwise  => [other-type, other-type]
   
-export slider-colours = [Colour.blossom-pink, Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple]
+export slider-colours = [Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple, Colour.blossom-pink]
