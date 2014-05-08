@@ -154,7 +154,7 @@ export wire-selected = wire with
   stroke-color: Colour.red
   
 export wire-tuning-complete = wire with
-  stroke-color: Colour.love-red,
+  stroke-color: Colour.love-red
 
 /** Pointers **/
 
