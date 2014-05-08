@@ -171,6 +171,7 @@ module.exports = class PerformLayout extends CursorResponder
     return false unless @layer.data.locked
     #list of selected responders e.g sliders
     new-responders = pt-infos
+      |> filter (pt-info) -> pt-info.type == \finger || pt-info.type == \drag
       |> map (pt-info) ~>
         if pt-info.z < 6
           responder =
