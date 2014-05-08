@@ -7,7 +7,6 @@ Colour = require \color
  *  **Node Styles**
  *
  *  Maths Nodes
- *  Instrument Nodes
  *  Oscillator Nodes
  *  Standard Nodes
  *
@@ -40,157 +39,123 @@ LINE_COLOUR = Colour.black
 
 /** Nodes **/
 
-export maths =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.blue
-
-export instrument =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.bee-yellow
-
-export oscillator =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.purpleMonster
-
-export destination =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.black
-
-export mixer = instrument
-
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
-  fill-color: Colour.cyan
+  fill-color: Colour.white
 
-export slider =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export constant = standard with
+  fill-color: Colour.welsh-grey
+
+export delay-gain = standard with
+  fill-color: Colour.butterfly-blue
+
+export destination = standard with
+  fill-color: Colour.black
+
+export gain = standard with
+  fill-color: Colour.elsa-blue
+
+export maths = standard with
+  fill-color: Colour.blue
+
+export mixer = standard with
+  fill-color: Colour.bee-yellow
+
+export oscillator = standard with
+  fill-color: Colour.purpleMonster
+
+export slider = standard with
   fill-color: Colour.love-red
 
-export slider-path =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export slider-path = standard with
   fill-color: Colour.love-red
   
-export slider-track = 
-  stroke-color: LINE_COLOUR,
+export slider-track = standard with
   stroke-width: 10,
   fill-color: Colour.black
   
-export toggle =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export toggle = standard with
   fill-color: Colour.pink-cupcake
+
+export toggle-down = standard with
+  fill-color: Colour.oz-green
   
-export toggle-up = 
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export toggle-up = standard with
   fill-color: Colour.fire-engine-red
 
-export toggle-down =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.oz-green
-
-export xy-slider-bed =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export x-slider = standard with
   fill-color: Colour.alpha-black
 
-export xy-slider-line-idle =
-  stroke-color: Colour.black,
-  stroke-width: 5
-
-export xy-slider-line-active =
-  stroke-color: Colour.alien-green
-  stroke-width: 5
-
-export xy-slider-centre =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.oz-green
-
-export x-slider =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.alpha-black
-
-export y-slider =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
+export y-slider = standard with
   fill-color: Colour.alpha-white
 
-export constant = 
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.welsh-grey
+export xy-slider-bed = standard with
+  fill-color: Colour.alpha-black
+
+export xy-slider-centre = standard with
+  fill-color: Colour.oz-green
+
+export xy-slider-line-idle = standard
+
+export xy-slider-line-active = standard with
+  stroke-color: Colour.alien-green
   
-export selected =
+export selected = standard with
   stroke-color: Colour.elsa-blue
 
 /** Numerical ports **/
 
-export numerical-busy =
+export port = standard with
+  stroke-width: 3
+
+export numerical-busy = port with
   stroke-color: Colour.green,
-  stroke-width: 3,
   fill-color: Colour.yellow
 
-export numerical-free =
+export numerical-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.yellow
 
 /** Audio ports **/
 
-export audio-busy =
+export audio-busy = port with
   stroke-color: Colour.green,
-  stroke-width: 3,
   fill-color: Colour.blue
 
-export audio-free =
+export audio-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.blue
 
 /** Standard Inports **/
 
-export standard-busy  =
+export standard-busy  = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.love-red
 
-export standard-free =
+export standard-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.red
 
 /** Wires **/
 
-export wire-idle =
-  stroke-color: Colour.white,
+export wire =
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   stroke-cap: \round
 
-export wire-active =
-  stroke-color: Colour.green,
-  stroke-width: 3,
-  stroke-cap: \round
+export wire-active = wire with
+  stroke-color: Colour.green
 
-export wire-selected =
-  stroke-color: Colour.red,
-  stroke-width: 3,
-  stroke-cap: \round
+export wire-idle = wire with
+  stroke-color: Colour.white
+
+export wire-selected = wire with
+  stroke-color: Colour.red
   
-export wire-tuning-complete =
+export wire-tuning-complete = wire with
   stroke-color: Colour.love-red,
-  stroke-width: 3,
-  stroke-cap: \round
-  
+
 /** Pointers **/
 
 export active-pointer =
@@ -199,25 +164,24 @@ export active-pointer =
 export close-pointer =
   fill-color: \orange
 
+export close-hand-pointer =
+  fill-color: \darkGreen
+
 export finger-pointer =
   fill-color: \yellow
 
 export hand-pointer =
   fill-color: \green
 
-export close-hand-pointer =
-  fill-color: \darkGreen
+export pan-pointer =
+  fill-color: \blue
 
 export zoom-pointer =
   fill-color: \blue
 
-export pan-pointer =
-  fill-color: \blue
-
 /** Catch all **/
 
-export other-type =
-  stroke-color: LINE_COLOUR,
+export other-type = standard with
   stroke-width: 3,
   fill-color: Colour.black
 

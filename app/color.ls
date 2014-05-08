@@ -36,13 +36,14 @@ export alpha-white = new paper.Color 1, 1, 1, 0.5
 export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
 export love-red       = \#E41B17
-export elsa-blue      = \#00FFFF
+export elsa-blue      = \#00FFFD
 export pink-cupcake   = \#E45E9D
 export fire-engine-red = \#F62817
 export oz-green       = \#5FFB17
 export brown-bear     = \#835C3B
 export toilet-cleaning-sign-yellow = \#FFFF00
 export red-base       = new paper.Color 1, 0, 0
+export butterfly-blue = \#38ACEC
 
 export blossom-pink   = \#F9B7FF
 export scarlet        = \#FF2400

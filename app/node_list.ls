@@ -18,9 +18,9 @@ nodes =
   * name: \xyslider
     node: require \xy-slider
   * name: \audioresetnode
-    node: require \audio_reset_node
+    node: require \audio_reset
   * name: \audiopausenode
-    node: require \audio_pause_node
+    node: require \audio_pause
   * name: \constant
     node: require \constant
 
