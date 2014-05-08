@@ -39,7 +39,6 @@ module.exports = class PerformLayout extends CursorResponder
     toggle-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply TOGGLE_DIM
 
     xy-slider-dim = ctx.view.bounds.size.subtract [OFFSET/2, 0] .multiply XY_DIM
-    console.log \XYSLIDERDIM xy-slider-dim
 
     @sliders =
       for i from 0 til SLIDERS
@@ -73,6 +72,9 @@ module.exports = class PerformLayout extends CursorResponder
         [slider-dim.width*SLIDERS, OFFSET/4]
         xy-slider-dim
         0
+
+    @xyslider.item!visible = false
+    @layer.add-child @xyslider.item!
 
   /** show : void
    *  visible : Boolean
