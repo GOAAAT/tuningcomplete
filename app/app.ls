@@ -42,7 +42,7 @@ module.exports = class App
       @cursor.activate!
 
       # Destination Node
-      destination = new DestinationNode (new paper.Point 200, 200), @actx
+      destination = new DestinationNode (paper.view.bounds.right-center.add DEST_OFF), @actx
       @window.insert-children [destination.view!]
 
       # Web Audio test
@@ -122,6 +122,8 @@ module.exports = class App
     const NL_WIDTH    = BTN_WIDTH * 4 + BTN_PAD * 3
     const NL_X        = BTN_OFF - BTN_WIDTH/2 + NL_WIDTH/2
     const NL_Y        = BTN_Y + BTN_WIDTH + 50px
+
+    const DEST_OFF    = [-100px 0px]
 
     /** Button Callbacks */
 
