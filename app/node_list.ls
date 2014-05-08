@@ -11,11 +11,11 @@ nodes =
     node: require \gain_node
   * name: \mixer
     node: require \mixer_node
-  * name: \aslider
+  * name: \slider
     node: require \slider
-  * name: \atoggle
+  * name: \toggle
     node: require \toggle
-  * name: \axyslider
+  * name: \xyslider
     node: require \xy-slider
 
 nodes |> each ({name, node}) !-> data.insert name, node
