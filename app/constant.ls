@@ -25,7 +25,6 @@ module.exports = class Constant extends NumericalNode
     label.position = @view!children.0.position
     @view!add-child label
     super win, cb
-    console.log @
 
   /* set-value (val) : void
    * Set the value then send it
