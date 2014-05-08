@@ -20,6 +20,11 @@ export grey       = \#222
 export light-grey = \#999
 export white      = \#FFF
 export vampire-grey = \#565051
+export welsh-grey = \#6D7B8D
+
+/** See-through colours **/
+
+export alpha-black = new paper.Color 0, 0, 0, 0.5
 
 /** "Dulux" colours for node decor 
  * 
@@ -34,6 +39,8 @@ export elsa-blue      = \#00FFFF
 export pink-cupcake   = \#E45E9D
 export fire-engine-red = \#F62817
 export oz-green       = \#5FFB17
+export brown-bear     = \#835C3B
+export toilet-cleaning-sign-yellow = \#FFFF00
 
 export blossom-pink   = \#F9B7FF
 export scarlet        = \#FF2400
