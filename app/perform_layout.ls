@@ -163,11 +163,11 @@ module.exports = class PerformLayout extends CursorResponder
     return !@layer.visible
 
   /** pointers-changed (pt-infos: [PointInfo]) : void
-   *
-   *
+   *  Moves sliders/activates buttons in perform stage
    */
   pointers-changed: (pt-infos) ->
     return true unless @layer.visible
+    return false unless @layer.data.locked
     #list of selected responders e.g sliders
     new-responders = pt-infos
       |> map (pt-info) ~>
@@ -180,7 +180,6 @@ module.exports = class PerformLayout extends CursorResponder
         else return new Responder undefined, undefined
       |> filter (?)
       |> filter (.responder?)
-
 
     #call pointer-moved/pointer-down on each of the currently selected responders
     new-responders
