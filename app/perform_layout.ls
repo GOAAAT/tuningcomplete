@@ -9,7 +9,7 @@ PointInfo = require \point_info
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
   const SLIDERS   = 5
-  const TOGGLES   = [12 12 12]
+  const TOGGLES   = [12]
 
   const TOGGLE_PAD = 1 / 8
 

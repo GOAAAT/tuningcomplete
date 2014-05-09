@@ -252,5 +252,5 @@ export slider-colours = [Colour.scarlet, Colour.construction-cone-orange, Colour
 export label =
   fill-color: Colour.black
 
-export white-label = Colour.white
-export black-label = Colour.black
+export white-label = Colour.alpha-white
+export black-label = Colour.alpha-black
