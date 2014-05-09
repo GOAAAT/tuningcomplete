@@ -46,6 +46,16 @@ module.exports = class Window extends CursorResponder
    */
   force-update: !-> @ctx.view.draw!
 
+  /** deselect: void
+   *  Deselect any selected nodes/wires
+   */
+  deselect: !->
+    console.log \hi
+    @active-node-view?deselect!
+    @active-node-view = undefined
+    @active-wire-view?deselect!
+    @active-wire-view = undefined
+
   /** insert-ui : [paper.Item]
    *  sub : [paper.Item],
    *  pos : Int
@@ -126,8 +136,7 @@ module.exports = class Window extends CursorResponder
         |> @_find-significant-parent
 
     if button?
-      @active-node-view?deselect!
-      @active-wire-view?deselect!
+      @deselect!
       button.trigger true
       return
 
@@ -137,8 +146,7 @@ module.exports = class Window extends CursorResponder
       @_find-item pt ?.item
         |> @_find-significant-parent
 
-    @active-node-view?deselect!
-    @active-wire-view?deselect!
+    @deselect!
 
     @active-node-view =
       if selected instanceof NodeView then selected else undefined

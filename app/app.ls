@@ -141,6 +141,7 @@ module.exports = class App
      * Node List is not visible) when the mode is changed.
      */
     change-mode: (mode, state) !->
+      @window.deselect!
       @current-mode = if state then mode else MODE_DESIGN
 
       @window.show-perform @current-mode != MODE_DESIGN
