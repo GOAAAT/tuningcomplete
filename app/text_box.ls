@@ -78,7 +78,7 @@ module.exports = class TextBox
           |> @set-text
       else
         char = String.from-char-code e.key-code .to-lower-case!
-        if \a <= char <= \z
+        if \a <= char <= \z or char == ' '
           @set-text content + char
 
       @_on-change? @text.content
