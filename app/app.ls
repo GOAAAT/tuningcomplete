@@ -36,8 +36,8 @@ module.exports = class App
       @cursor.activate!
 
       # Destination Node
-      destination = new DestinationNode (paper.view.bounds.right-center.add DEST_OFF), @actx
-      @window.insert-children [destination.view!]
+      @destination = new DestinationNode (paper.view.bounds.right-center.add DEST_OFF), @actx
+      @window.insert-children [@destination.view!]
 
       # Web Audio test
       @osc = @actx.create-oscillator!
@@ -99,6 +99,7 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
       @window?force-update!
+      
 
     /** Modes */
     const MODE_DESIGN  = 0
@@ -171,3 +172,22 @@ module.exports = class App
           new-node.view!visible = true
         else
           new-node.view!remove!
+          
+    theremin: ->
+      Wire = require \wire
+      Osc = require \oscillator_node
+      XY = require \xy-slider
+      Gain = require \gain_node
+      (o1 = new Osc [990px 550px], @actx).add-to-window @window, (success) !->
+      (xy = new XY [700px 400px], @actx).add-to-window @window, (success) !->
+      xy.xnode.active-view.node-group.position = [990px 250px]
+      xy.ynode.active-view.node-group.position = [760px 550px] 
+      (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
+      (new Wire g).connect @destination
+      (new Wire xy.ynode).connect o1
+      (new Wire xy.xnode).connect g
+      (new Wire o1).connect g
+      @window.force-update!
+
+    piano: ->
+      
