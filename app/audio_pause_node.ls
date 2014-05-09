@@ -13,9 +13,9 @@ module.exports = class AudioPauseNode extends MP3Node
    */
   (pos, @actx) ->
     super pos, @actx
+    @started = false
     @start-time = 0
     @start-off  = 0
-    console.log \PAUSESTYLE VS.audio-pause
     @active-view.set-node-style VS.audio-pause
     l = new paper.PointText do
       content: "||"
@@ -32,10 +32,14 @@ module.exports = class AudioPauseNode extends MP3Node
    */
   receive-for-ref: (ref, value) !->
     if !!value
-      @start-time = @actx.current-time
-      @audio-node.start 0, @start-off % @audio-node.buffer.duration
+      unless @started
+        @started = true
+        @start-time = @actx.current-time
+        @audio-node.start 0, @start-off % @audio-node.buffer.duration
     else
-      @audio-node.stop 0
-      @start-off += @actx.current-time - @start-time
-      @current-time = @audio-node.current-time
-      @_refresh-node!
+      if @started
+        @audio-node.stop 0
+        @start-off += @actx.current-time - @start-time
+        @current-time = @audio-node.current-time
+        @_refresh-node!
+        @started = false

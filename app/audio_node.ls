@@ -14,6 +14,7 @@ module.exports = class Audio extends Node
    */
   (audioin, numin, pos) ->
     super \Audio audioin, numin, pos
+    @active-view.set-node-style VS.instrument
 
   /** (override) register-output : void
    *  wire : Wire
