@@ -15,7 +15,7 @@ module.exports = class PerformLayout extends CursorResponder
 
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.575]
-  const TOGGLE_DIM = [1/TOGGLES[0], 0.4 * 1 / TOGGLES.length]
+  const TOGGLE_DIM = [1/TOGGLES[0], 0.3 * 1 / TOGGLES.length]
 
   const OFFSET = 101
 
@@ -205,7 +205,7 @@ module.exports = class PerformLayout extends CursorResponder
     @responders = new-responders
 
   /** Private methods */
-  const HIT_TOLERANCE = 50
+  const HIT_TOLERANCE = 5
 
   /** (private) _find-item : paper.HitResult
    *  pt : paper.Point
