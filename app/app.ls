@@ -99,7 +99,7 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
       @window?force-update!
-      
+
 
     /** Modes */
     const MODE_DESIGN  = 0
@@ -175,7 +175,7 @@ module.exports = class App
           new-node.view!visible = true
         else
           new-node.view!remove!
-          
+
     theremin: ->
       Wire = require \wire
       Osc = require \oscillator_node
@@ -184,7 +184,7 @@ module.exports = class App
       (o1 = new Osc [990px 550px], @actx).add-to-window @window, (success) !->
       (xy = new XY [700px 400px], @actx).add-to-window @window, (success) !->
       xy.xnode.active-view.node-group.position = [990px 250px]
-      xy.ynode.active-view.node-group.position = [760px 550px] 
+      xy.ynode.active-view.node-group.position = [760px 550px]
       (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
       (new Wire g).connect @destination
       (new Wire xy.ynode).connect o1
@@ -193,4 +193,62 @@ module.exports = class App
       @window.force-update!
 
     piano: ->
-      
+      Wire = require \wire
+      Constant = require \constant_node
+      Osc = require \oscillator_node
+      Audio = require \audio_reset_node
+      DelayGain = require \delay_gain_node
+      Toggle = require \toggle
+      Inverter = require \inverter
+      AudioReset = require \audio_reset_node
+      Mixer = require \mixer_node
+      load-sound = require \load_sound
+
+      notes = ['a','b','c','d','e','f','g']
+      top = -150
+      y = 210
+
+      dgs = []
+      mxs = []
+      (c = new Constant [-350px top + 3*y], @actx).set-value 1
+
+      for i til 7
+        a = new AudioReset [200px top + i*y], @actx
+        file = "sounds/"+notes[i]+"-note.wav"
+        load-sound "sounds/goaaat.mp3" (buff) -> a.audio-node.buffer = buff
+
+        dg = new DelayGain [800px top + i*y], @actx
+        dgs[i] = dg
+        t = new Toggle [350px top - 70 + i*y], @actx
+        t.add-to-window @window, (success) !->
+          t.input-view._set-sticky false
+        i = new Inverter [650px top - 100 + i*y], @actx
+
+        (new Wire c).connect a
+        (new Wire a).connect dg
+        (new Wire t).connect dg
+        (new Wire t).connect i
+        (new Wire i).connect dg
+
+      for i til 3
+        m = new Mixer [1100px top + y/2 + 2*i*y], @actx
+        mxs[i] = m
+        (new Wire dgs[i*2+1]).connect m
+        (new Wire dgs[i*2]).connect m
+
+      mxs[3] = dgs[6]
+
+      for i til 2
+        mxs[i+4] = new Mixer [1400px top + 1.5*y+ 4*i*y], @actx
+        (new Wire mxs[i*2+1]).connect mxs[i+4]
+        (new Wire mxs[i*2]).connect mxs[i+4]
+
+      m = new Mixer [1700px top + 3.5*y], @actx
+      (new Wire mxs[5]).connect m
+      (new Wire mxs[4]).connect m
+
+      @destination.active-view.node-group.position = [2000px top + 3.5*y ]
+      (new Wire m).connect @destination
+
+      @window.force-update!
+      @window.scale-by 0.5
