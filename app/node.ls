@@ -19,6 +19,7 @@ module.exports = class Node
     @send-list = []
 
     @active-view = new NodeView this, pos, VS.standard, @output-type, @inputs
+    @active-view.set-label "ε", \16pt, false
 
   /** view : paper.Item
    *

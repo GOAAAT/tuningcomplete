@@ -18,6 +18,7 @@ module.exports = class DelayGainNode extends Audio
   (pos, @actx) ->
     super 1 2 pos
     @active-view.set-node-style VS.delay-gain
+    @active-view.set-label "DG", \32pt
 
     @gain-node = actx.create-gain-node!
     @inputs.0.audio-node = @gain-node

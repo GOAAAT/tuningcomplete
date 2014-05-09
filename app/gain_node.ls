@@ -13,6 +13,7 @@ module.exports = class GainNode extends Audio
   (pos, actx) ->
     super 1 1 pos
     @active-view.set-node-style VS.gain
+    @active-view.set-label "G", \40pt
 
     @gain-node = actx.create-gain!
     @inputs.0.audio-node = @gain-node

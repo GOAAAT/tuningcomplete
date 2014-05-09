@@ -13,7 +13,7 @@ module.exports = class DelayNode extends Audio
   (pos, actx) ->
     super 1 1 pos
     @active-view.set-node-style VS.delay
-    @active-view.set-label "D", \40pt, false
+    @active-view.set-label "D", \40pt
 
     @max-delay = 5
     @delay-node = actx.create-delay @max-delay
@@ -24,7 +24,6 @@ module.exports = class DelayNode extends Audio
    *  value : Float
    */
   receive-for-ref: (ref, value) !->
-    console.log \DELAY value
     @delay-node.delay-time.value = @max-delay*value
 
   /** (override protected) _connect : void

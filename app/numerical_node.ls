@@ -17,6 +17,7 @@ module.exports = class Numerical extends Node
 
     @value = 0
     @active-view.set-node-style VS.maths
+    @active-view.set-label "№", \40pt
 
   /** send : void
    *

@@ -15,12 +15,7 @@ module.exports = class AudioResetNode extends MP3Node
     super pos, actx
     @started = false
     @active-view.set-node-style VS.audio-reset
-    l = new paper.PointText do
-      content: "R"
-      font-family: \Helvetica
-      font-weight: \bold
-      font-size: \40pt
-    @active-view.set-label "R", \40pt, false
+    @active-view.set-label "R", \40pt
 
   /** (override) receive-for-ref : void
    *  ref : Int

@@ -29,8 +29,9 @@ module.exports = class XYSlider
 
     @group = new paper.Group [@xnode.view!, @ynode.view!]
 
-    @xnode.active-view.set-label "X", \40pt, true
-    @ynode.active-view.set-label "Y", \40pt, false
+    @xnode.active-view.set-label "X", \40pt
+    @xnode.active-view.label.fill-color = VS.white-label
+    @ynode.active-view.set-label "Y", \40pt
 
   /* view () : Group
    * return a group representing the nodes

@@ -12,6 +12,7 @@ module.exports = class Toggle extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.toggle
+    @active-view.set-label "T", \40pt
 
   /* add-to-window (win, cb) : void
    * add the node to the window, passes the result on to the callback

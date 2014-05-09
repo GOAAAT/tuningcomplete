@@ -9,6 +9,8 @@ module.exports = class InverterNode extends NumericalNode
   (pos) ->
     super 0 1 pos
     @active-view.set-node-style VS.inverter
+    @active-view.set-label "¬", \40pt
+    @active-view.label.fill-color = VS.white-label
 
   /** (override) receive-for-ref : void
    *  ref : Int

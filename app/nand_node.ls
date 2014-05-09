@@ -8,6 +8,7 @@ module.exports = class NandNode extends NumericalNode
   (pos) ->
     super 0 2 pos
     @active-view.set-node-style VS.nand-node
+    @active-view.set-label "☠", \40pt
     @val1 = 0
     @val2 = 0
     @value = 1

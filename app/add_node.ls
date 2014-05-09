@@ -8,6 +8,8 @@ module.exports = class AddNode extends NumericalNode
   (pos) ->
     super 0 2 pos
     @active-view.set-node-style VS.add-node
+    @active-view.set-label "+", \40pt
+
     @val1 = 0
     @val2 = 0
 

@@ -12,6 +12,7 @@ module.exports = class Slider extends NumericalNode
   (pos) ->
     super 0, 0, pos
     @active-view.set-node-style VS.slider
+    @active-view.set-label "S", \40pt
 
   /* add-to-window (win, cb) : void
    * add the node to the window and passes the results to the callback

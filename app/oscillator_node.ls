@@ -14,6 +14,9 @@ module.exports = class OscillatorNode extends Audio
   (pos, actx) ->
     super 0 1, pos
     @active-view.set-node-style VS.oscillator
+    @active-view.set-label "O", \40pt
+    @active-view.label.fill-color = VS.white-label
+
     @osc-node = actx.create-oscillator!
     @receive-for-ref 0 0.5
     @osc-node.start 0
