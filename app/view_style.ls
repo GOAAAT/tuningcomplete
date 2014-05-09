@@ -56,11 +56,17 @@ export audio-reset = standard with
 export constant = standard with
   fill-color: Colour.welsh-grey
 
+export delay = standard with
+  fill-color: Colour.olive
+
 export delay-gain = standard with
   fill-color: Colour.butterfly-blue
 
 export destination = standard with
   fill-color: Colour.black
+
+export dev = standard with
+  stroke-color: Colour.blue
 
 export gain = standard with
   fill-color: Colour.cyan

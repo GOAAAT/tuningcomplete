@@ -49,6 +49,7 @@ export butterfly-blue = \#38ACEC
 export velvet-maroon  = \#7E354D
 export rosy-brown     = \#B38481
 export midnight-blue  = \#151B54
+export olive          = \#808000
 
 export blossom-pink   = \#F9B7FF
 export scarlet        = \#FF2400

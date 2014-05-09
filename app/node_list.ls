@@ -29,6 +29,8 @@ nodes =
     node: require \add_node
   * name: \inverter
     node: require \inverter
+  * name: \delay
+    node: require \delay_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
