@@ -1,4 +1,4 @@
-{empty, split-at, join} = prelude
+{keys, empty, head, tail, split-at, join, sort} = prelude
 
 module.exports = class PrefixTree
   /** PrefixTree
@@ -96,7 +96,12 @@ class PTreeIterator
    */
   (tree) ->
     @version = tree.version
-    @call-stack = new Array {pref: tree.init-str, sub: \a tree: tree}
+    @call-stack = new Array {
+      pref: tree.init-str
+      subs: @_keys tree
+      tree: tree
+    }
+
     @_find-next! unless tree.obj?
 
   /** next : Object
@@ -129,17 +134,21 @@ class PTreeIterator
    */
   _find-next: !->
     last_t = @_end!
+    popped = false
     do
-      {pref, sub, tree} = @call-stack[*-1]
-      if tree?sub-tree[sub]?
-        @call-stack.push do
-          pref: pref + sub
-          sub:  \a
-          tree: tree.sub-tree[sub]
+      {pref, subs, tree} = @call-stack[*-1]
+      popped = empty subs
+      if popped
+        @call-stack.pop!
       else
-        @call-stack.pop! if sub == \z
+        key  = subs.0
+        next = tree.sub-tree[key]
         @_step-head!
-    until @is-done! or @_end!obj? and @_end! != last_t
+        @call-stack.push do
+          pref: pref + key
+          subs: @_keys next
+          tree: next
+    until @is-done! or @_end!obj? and @_end! != last_t and not popped
 
   /** (private) _begin : PrefixTree
    *
@@ -158,10 +167,11 @@ class PTreeIterator
    * Move the current iterator forward by one character.
    */
   _step-head: !->
-    @call-stack[*-1]?sub = @_inc @call-stack[*-1]?sub
+    @call-stack[*-1]?subs.shift!
 
-  /** (private) _inc : String
+  /** (private) _keys : [String]
+   *  tree : PrefixTree
    *
-   * Returns the character following the first character of `k`.
+   * Returns the keys for the PrefixTree in alphabetic order.
    */
-  _inc: (k) -> k?char-code-at 0 |> (1+) |> String.from-char-code
+  _keys: (tree) -> sort keys tree.sub-tree
