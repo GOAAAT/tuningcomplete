@@ -47,6 +47,9 @@ export standard =
 export nand-node =
   fill-color: Colour.burgundy
 
+export add-node = standard with
+  fill-color: Colour.chocolate
+
 export constant = standard with
   fill-color: Colour.welsh-grey
 

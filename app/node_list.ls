@@ -25,6 +25,8 @@ nodes =
     node: require \constant_node
   * name: \nand
     node: require \nand_node
+  * name: \add
+    node: require \add_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 

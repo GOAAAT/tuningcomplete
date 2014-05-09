@@ -33,6 +33,7 @@ export alpha-white = new paper.Color 1, 1, 1, 0.5
  *
 **/
 
+export chocolate      = \#C85A17
 export burgundy       = \#8C001A
 export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
