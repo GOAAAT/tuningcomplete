@@ -212,19 +212,25 @@ module.exports = class NodeView
       content: "",
       font-family: \Helvetica,
       font-weight: \bold,
-      font-size: \40pt
-    @label.position = @node-path.position
+      font-size: \20pt
+      leading: 40px
     @node-group.add-child @label
 
     # Mark node as not selected
     @deselect!
 
 
-  /* set-label (value, size, white) : void
-  * Puts a label "value" with font-size size, ontop of the node with and adds it
-  * to the group.  If white then display in white
+  /* set-label (value) : void
+  * Puts a label "value" on the node
   */
-  set-label: (value, size) !->
+  set-label: (value) !->
+    {p-width, p-height} = @node-path.bounds
+    {l-width, l-height} = @label.bounds
+
     @label.content = value
-    @label.font-size = size
+    if p-height > p-width
+      @label.scale ( @node-path.bounds.height - 0 ) / @label.bounds.height
+    else
+      @label.scale ( @node-path.bounds.width - 40 ) / @label.bounds.width
     @label.position = @node-path.position
+    @label.selected = true

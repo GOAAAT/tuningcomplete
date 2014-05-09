@@ -21,10 +21,10 @@ module.exports = class ToggleView
     @value = 0
     @sticky = true
 
-    if ref < 12 
-      @colour = new paper.Color 1, 0, (ref/12)
+    if ref < 6 
+      @colour = new paper.Color 1, 0, (ref/6)
     else
-      @colour = new paper.Color 1, (ref-12)/12, 1-((ref-12)/12)
+      @colour = new paper.Color 1, (ref-6)/6, 1-((ref-6)/6)
 
     # CALL THIS LAST ALWAYS
     @_make-node pos
