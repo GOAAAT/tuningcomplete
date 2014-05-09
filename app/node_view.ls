@@ -210,10 +210,16 @@ module.exports = class NodeView
     @deselect!
 
 
-  /* set-label (label) : void
-  * Puts a label ontop of the node and adds it
-  * to the group
+  /* set-label (value, size, white) : void
+  * Puts a label "value" with font-size size, ontop of the node with and adds it
+  * to the group.  If white then display in white
   */
-  set-label: (label) !->
+  set-label: (value, size, white) !->
+    label = new paper.PointText do
+      content: value,
+      font-family: \Helvetica,
+      font-weight: \bold,
+      font-size: size
+    if white then label.fill-color = VS.white-label else label.fill-color = VS.label
     label.position = @node-path.position
     @node-group.add-child label

@@ -20,7 +20,7 @@ module.exports = class AudioResetNode extends MP3Node
       font-family: \Helvetica
       font-weight: \bold
       font-size: \40pt
-    @active-view.set-label l
+    @active-view.set-label "R", \40pt, false
 
   /** (override) receive-for-ref : void
    *  ref : Int

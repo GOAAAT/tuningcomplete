@@ -18,12 +18,7 @@ module.exports = class Constant extends NumericalNode
    */
   add-to-window: (win, cb) !->
     @set-value prompt "Enter a value"
-    label = new paper.PointText do
-      content: @value
-      font-family: \Helvetica
-      font-weight: \bold
-      font-size: \32pt
-    @active-view.set-label label
+    @active-view.set-label @value, \32pt, false
     super win, cb
 
   /* set-value (val) : void

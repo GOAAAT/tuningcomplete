@@ -17,12 +17,7 @@ module.exports = class AudioPauseNode extends MP3Node
     @start-time = 0
     @start-off  = 0
     @active-view.set-node-style VS.audio-pause
-    l = new paper.PointText do
-      content: "||"
-      font-family: \Helvetica
-      font-weight: \bold
-      font-size: \40pt
-    @active-view.set-label l
+    @active-view.set-label "||", \40pt, false
 
   /** (override) receive-for-ref : void
    *  ref : Int
