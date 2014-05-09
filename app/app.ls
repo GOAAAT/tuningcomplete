@@ -5,11 +5,6 @@ Window     = require \window
 Button     = require \button
 FilterList = require \filter_list
 NodeList   = require \node_list
-Node       = require \node
-Numerical  = require \numerical_node
-Audio      = require \audio_node
-Wire       = require \wire
-GOAAAT     = require \goaaat
 
 DestinationNode = require \destination_node
 
@@ -41,8 +36,8 @@ module.exports = class App
       @cursor.activate!
 
       # Destination Node
-      destination = new DestinationNode paper.view.center, @actx
-      @window.insert-children [destination.view!]
+      @destination = new DestinationNode (paper.view.bounds.right-center.add DEST_OFF), @actx
+      @window.insert-children [@destination.view!]
 
       # Web Audio test
       @osc = @actx.create-oscillator!
@@ -104,9 +99,15 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
       @window?force-update!
+      
+
+    /** Modes */
+    const MODE_DESIGN  = 0
+    const MODE_SETUP   = 1
+    const MODE_PERFORM = 2
 
     /** Button properties */
-    const BTN_DEFAULT = 0
+    const BTN_DEFAULT = MODE_DESIGN
     const BTN_WIDTH   = 80px
     const BTN_OFF     = 70px
     const BTN_PAD     = 20px
@@ -117,6 +118,8 @@ module.exports = class App
     const NL_X        = BTN_OFF - BTN_WIDTH/2 + NL_WIDTH/2
     const NL_Y        = BTN_Y + BTN_WIDTH + 50px
 
+    const DEST_OFF    = [-100px 0px]
+
     /** Button Callbacks */
 
     /** add-node : void
@@ -126,6 +129,7 @@ module.exports = class App
      */
     add-node: (_, state) !->
       @node-list.set-visible state
+      @window.lock true
 
     /** change-mode : void
      *  mode : Integer
@@ -139,9 +143,14 @@ module.exports = class App
      * Node List is not visible) when the mode is changed.
      */
     change-mode: (mode, state) !->
-      @current-mode = if state then mode else BTN_DEFAULT
+      @window.deselect!
+      @current-mode = if state then mode else MODE_DESIGN
+
+      @window.show-perform @current-mode != MODE_DESIGN
+      @window.lock-perform @current-mode == MODE_PERFORM
 
       @add-node-btn.trigger false
+      @window.lock false
       @mode-btns |> each (btn) !~>
         btn.trigger btn.tag == @current-mode, false
 
@@ -156,7 +165,32 @@ module.exports = class App
      */
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
+      @window.lock false
       console.log "New Node #name, #{Node.desc}"
 
       new-node = new Node paper.view.center, @actx
-      @window.insert-children [new-node.view!]
+      new-node.view!visible = false
+      new-node.add-to-window @window, (success) ->
+        if success
+          new-node.view!visible = true
+        else
+          new-node.view!remove!
+          
+    theremin: ->
+      Wire = require \wire
+      Osc = require \oscillator_node
+      XY = require \xy-slider
+      Gain = require \gain_node
+      (o1 = new Osc [990px 550px], @actx).add-to-window @window, (success) !->
+      (xy = new XY [700px 400px], @actx).add-to-window @window, (success) !->
+      xy.xnode.active-view.node-group.position = [990px 250px]
+      xy.ynode.active-view.node-group.position = [760px 550px] 
+      (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
+      (new Wire g).connect @destination
+      (new Wire xy.ynode).connect o1
+      (new Wire xy.xnode).connect g
+      (new Wire o1).connect g
+      @window.force-update!
+
+    piano: ->
+      

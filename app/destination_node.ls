@@ -14,6 +14,8 @@ module.exports = class DestinationNode extends Audio
     super 1 0 pos
     @inputs.0.audio-node = @actx.destination
     @active-view.set-node-style VS.destination
+    @active-view.set-label "►", \40pt
+    @active-view.label.fill-color = VS.white-label
 
   /** (override) has-output : Boolean
    *

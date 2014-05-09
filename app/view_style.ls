@@ -4,119 +4,234 @@ Colour = require \color
  *  for nodes.
  *  Please do expand it!
  *
- *  **Node Styles**
+ *  **** Node Styles ****
+ *  standard
+ *  destination
+ *  dev
+ *  selected
  *
- *  Maths Nodes
- *  Instrument Nodes
- *  Oscillator Nodes
- *  Standard Nodes
+ *  ** Audio **
+ *  audio-pause
+ *  audio-reset
+ *  delay
+ *  delay-gain
+ *  gain
+ *  mixer
+ *  oscillator
  *
- *  **Inport and outport styles**
- *  Audio
- *  Numerical
- *  Standard
+ *  ** Numerical **
+ *  add-node
+ *  constant
+ *  subtracter
+ *  multiplier
+ *  inverter
+ *  slider
+ *    slider
+ *    slider-path
+ *    slider-track
+ *  toggle
+ *    toggle
+ *    toggle-down
+ *    toggle-up
+ *  xy-slider
+ *    x-slider
+ *    xy-slider-bed
+ *    xy-slider-centre
+ *    xy-slider-line-active
+ *    xy-slider-line-idle
+ *    y-slider
  *
- *  **Wire Styles**
- *  Standard Idle
+ *  **** Ports ****
+ *  port
  *
- *  **Pointer Styles**
- *  Zoom Pointers
- *  Pan Pointers
+ *  ** Numerical **
+ *  numerical-busy
+ *  numerical-free
  *
- *  Methods:
+ *  ** Audio **
+ *  audio-busy
+ *  audio-free
+ *
+ *  ** Standard **
+ *  standard-busy
+ *  standard-free
+ *
+ *  **** Wires ****
+ *  wire
+ *  wire-active
+ *  wire-idle
+ *  wire-selected
+ *  wire-tuning-complete
+ *
+ *  **** Pointers ****
+ *  pan-pointer
+ *  zoom-pointer
+ *
+ *  **** Catch-All ****
+ *  other-type
+ *
+ *  **** Methods ****
  *  view-style-for-pointers(pt-info: PointInfo): paper.Shape
  *    returns the appropriate styling given a type of point.
  *
  *  view-styles-for-type(type : String) : (Style, Style)
  *    returns the standard and busy styles for a given data type
+ *
+ *  **** Other ****
+ *  slider-colours
+ *  label
+ *  black-label
+ *  white-label
  */
 
 LINE_COLOUR = Colour.black
 
 /** Nodes **/
 
-export maths =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.blue
-
-export instrument =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.bee-yellow
-
-export oscillator =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.purpleMonster
-
-export destination =
-  stroke-color: LINE_COLOUR,
-  stroke-width: 5,
-  fill-color: Colour.black
-
-export mixer = instrument
-
 export standard =
   stroke-color: LINE_COLOUR,
   stroke-width: 5,
-  fill-color: Colour.cyan
+  fill-color: Colour.white
 
-export selected =
+export destination = standard with
+  fill-color: Colour.black
+
+export dev = standard with
   stroke-color: Colour.blue
+
+export selected = standard with
+  stroke-color: Colour.elsa-blue
+
+/** Audio **/
+export audio-pause = standard with
+  fill-color: Colour.cinnamon-orange
+
+export audio-reset = standard with
+  fill-color: Colour.cinnamon-orange
+
+export delay = standard with
+  fill-color: Colour.butterfly-blue
+
+export delay-gain = standard with
+  fill-color: Colour.white
+
+export gain = standard with
+  fill-color: Colour.white
+
+export mixer = standard with
+  fill-color: Colour.bee-yellow
+
+export oscillator = standard with
+  fill-color: Colour.purpleMonster
+
+/** Numerical **/
+export add-node = standard with
+  fill-color: Colour.midnight-blue
+
+export constant = standard with
+  fill-color: Colour.welsh-grey
+  
+export inverter = standard with
+  fill-color: Colour.midnight-blue
+
+export mult-node = standard with
+  fill-color: Colour.midnight-blue
+
+export slider = standard with
+  fill-color: Colour.love-red
+
+export slider-path = standard with
+  fill-color: Colour.love-red
+
+export slider-track = standard with
+  stroke-width: 10,
+  fill-color: Colour.black
+
+export sub-node = standard with
+  fill-color: Colour.midnight-blue
+
+export toggle = standard with
+  fill-color: Colour.pink-cupcake
+
+export toggle-down = standard with
+  fill-color: Colour.oz-green
+  
+export toggle-up = standard with
+  fill-color: Colour.fire-engine-red
+
+export toggle-up = standard with
+  fill-color: Colour.fire-engine-red
+
+export x-slider = standard with
+  fill-color: Colour.alpha-black
+
+export xy-slider-bed = standard with
+  fill-color: Colour.alpha-black
+
+export xy-slider-centre = standard with
+  fill-color: Colour.oz-green
+
+export xy-slider-line-idle = standard
+
+export xy-slider-line-active = standard with
+  stroke-color: Colour.alien-green
+
+export y-slider = standard with
+  fill-color: Colour.alpha-white
+
+/** Ports **/
+
+export port = standard with
+  stroke-width: 3
 
 /** Numerical ports **/
 
-export numerical-busy =
+export numerical-busy = port with
   stroke-color: Colour.green,
-  stroke-width: 3,
   fill-color: Colour.yellow
 
-export numerical-free =
+export numerical-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.yellow
 
 /** Audio ports **/
 
-export audio-busy =
+export audio-busy = port with
   stroke-color: Colour.green,
-  stroke-width: 3,
   fill-color: Colour.blue
 
-export audio-free =
+export audio-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.blue
 
-/** Standard Inports **/
+/** Standard ports **/
 
-export standard-busy  =
+export standard-busy  = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.love-red
 
-export standard-free =
+export standard-free = port with
   stroke-color: LINE_COLOUR,
-  stroke-width: 3,
   fill-color: Colour.red
 
 /** Wires **/
 
-export wire-idle =
-  stroke-color: Colour.white,
+export wire =
+  stroke-color: LINE_COLOUR,
   stroke-width: 3,
   stroke-cap: \round
 
-export wire-active =
-  stroke-color: Colour.green,
-  stroke-width: 3,
-  stroke-cap: \round
+export wire-active = wire with
+  stroke-color: Colour.green
 
-export wire-selected =
-  stroke-color: Colour.red,
-  stroke-width: 3,
-  stroke-cap: \round
+export wire-idle = wire with
+  stroke-color: Colour.white
+
+export wire-selected = wire with
+  stroke-color: Colour.red
+
+export wire-tuning-complete = wire with
+  stroke-color: Colour.love-red
 
 /** Pointers **/
 
@@ -128,8 +243,7 @@ export pan-pointer =
 
 /** Catch all **/
 
-export other-type =
-  stroke-color: LINE_COLOUR,
+export other-type = standard with
   stroke-width: 3,
   fill-color: Colour.black
 
@@ -190,3 +304,23 @@ export view-styles-for-type = (type) ->
   | \Numerical => [numerical-free, numerical-busy]
   | \Standard  => [standard-busy, standard-free]
   | otherwise  => [other-type, other-type]
+
+/** Other **/
+
+export slider-colours = 
+  [ 
+    Colour.scarlet,
+    Colour.construction-cone-orange, 
+    Colour.rubber-ducky-yellow, 
+    Colour.alien-green, 
+    Colour.blue-ribbon, 
+    Colour.indigo, 
+    Colour.lovely-purple, 
+    Colour.blossom-pink
+  ]
+
+export label =
+  fill-color: Colour.black
+
+export black-label = Colour.alpha-black
+export white-label = Colour.alpha-white

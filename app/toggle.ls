@@ -1,30 +1,29 @@
 NumericalNode = require \numerical_node
 Node = require \node
 VS = require \view_style
-SliderView = require \slider_view
+ToggleView = require \toggle_view
 
-module.exports = class Slider extends NumericalNode
-  @desc = "Produces a value in [0,1]"
+module.exports = class Toggle extends NumericalNode
+  @desc = "Press = 1. Release = 0"
 
-  /* Slider (pos) : void
-   * Construct a new slider node
+  /* Toggle (pos) : void
+   * Construct a new toggle node
    */
   (pos) ->
     super 0, 0, pos
-    @active-view.set-node-style VS.slider
-    @active-view.set-label "S", \40pt
+    @active-view.set-node-style VS.toggle
+    @active-view.set-label "T", \40pt
 
   /* add-to-window (win, cb) : void
-   * add the node to the window and passes the results to the callback
+   * add the node to the window, passes the result on to the callback
    */
   add-to-window: (win, cb) !->
-    @input-view = win.request-input-view-for-type "Slider"
+    @input-view = win.request-input-view-for-type "Toggle"
     if @input-view?
       @input-view.set-owner @
       @active-view.set-node-style do
         @active-view.node-style with
           fill-color: @input-view.colour
-
       super win, cb
     else
       cb false

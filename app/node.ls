@@ -11,16 +11,31 @@ module.exports = class Node
   */
   (@output-type, audio, numerical, pos) ->
     @inputs = []
-    for i from 1 to audio
+    for i from 0 til audio
       new AudioInput this, i |> @inputs.push
-    for i from 1 to numerical
-      new NumericalInput this, i+audio |> @inputs.push
+    for i from audio til numerical+audio
+      new NumericalInput this, i |> @inputs.push
 
     @send-list = []
 
     @active-view = new NodeView this, pos, VS.standard, @output-type, @inputs
+    @active-view.set-label "ε", \16pt, false
 
+  /** view : paper.Item
+   *
+   * Returns the PaperJS object that represents this controller.
+   */
   view: -> @active-view?item!
+
+  /** add-to-window : void
+   *  win : Window
+   *  cb  : Boolean -> ()
+   *
+   * Adds this classes view to the window. Pass the result on to the callback
+   */
+  add-to-window: (win, cb) !->
+    win.insert-children [@view!]
+    cb true
 
   /** find-input : Input
   * nodetype : NodeType

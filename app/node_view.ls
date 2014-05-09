@@ -1,4 +1,5 @@
 VS = require \view_style
+Colour = require \color
 Input = require \input
 
 /**  Public Methods Summary
@@ -206,5 +207,30 @@ module.exports = class NodeView
       @inputs[i]?input-view?set-size (NODE_SIZE / PORT_RATIO)
       @node-group.add-child @inputs[i]?input-view?item!
 
+    # Set up label
+    @label = new paper.PointText do
+      content: "",
+      font-family: \Helvetica,
+      font-weight: \bold,
+      font-size: \20pt
+      leading: 40px
+    @label.fill-color = VS.black-label
+    @node-group.add-child @label
+
     # Mark node as not selected
     @deselect!
+
+
+  /* set-label (value) : void
+  * Puts a label "value" on the node
+  */
+  set-label: (value) !->
+    {p-width, p-height} = @node-path.bounds
+    {l-width, l-height} = @label.bounds
+
+    @label.content = value
+    if p-height > p-width
+      @label.scale ( @node-path.bounds.height - 0 ) / @label.bounds.height
+    else
+      @label.scale ( @node-path.bounds.width - 40 ) / @label.bounds.width
+    @label.position = @node-path.position
