@@ -26,8 +26,8 @@ module.exports = class MixerNode extends Audio
    *  value : Float
    */
   receive-for-ref: (ref, value) !->
-    @gain-left.gain.value = sin(value * pi/2)^2
-    @gain-right.gain.value = sin((1-value)*pi/2)^2
+    @gain-left.gain.value = sin(value)^2
+    @gain-right.gain.value = cos(value)^2
 
   /** (override protected) _connect : void
    *  input : Input

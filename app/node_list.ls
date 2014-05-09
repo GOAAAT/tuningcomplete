@@ -22,7 +22,7 @@ nodes =
   * name: \audiopause
     node: require \audio_pause_node
   * name: \constant
-    node: require \constant
+    node: require \constant_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
