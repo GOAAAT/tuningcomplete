@@ -129,6 +129,7 @@ module.exports = class App
      */
     add-node: (_, state) !->
       @node-list.set-visible state
+      @window.lock true
 
     /** change-mode : void
      *  mode : Integer
@@ -149,6 +150,7 @@ module.exports = class App
       @window.lock-perform @current-mode == MODE_PERFORM
 
       @add-node-btn.trigger false
+      @window.lock false
       @mode-btns |> each (btn) !~>
         btn.trigger btn.tag == @current-mode, false
 
@@ -163,6 +165,7 @@ module.exports = class App
      */
     new-node: (_, [name, Node]) ->
       @add-node-btn.trigger false
+      @window.lock false
       console.log "New Node #name, #{Node.desc}"
 
       new-node = new Node paper.view.center, @actx

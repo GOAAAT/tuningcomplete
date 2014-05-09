@@ -20,6 +20,7 @@ module.exports = class Window extends CursorResponder
     @ctx = new paper.PaperScope!
     @ctx.setup canvas
 
+    @locked = false
     @sf = 1
 
     @view-layer     = @ctx.project.active-layer
@@ -33,6 +34,12 @@ module.exports = class Window extends CursorResponder
 
     @wire-group = new @ctx.Group!
     @insert-children [@wire-group], 0
+
+  /** lock (locked) : void
+   *
+   * Lock the window to prevent pan and scale
+   */
+  lock: (@locked) !->
 
   /** activate : void
    *
@@ -169,10 +176,11 @@ module.exports = class Window extends CursorResponder
    * Scale about the given position `pt` by the provided scale factor `sf`.
    */
   scale-by: (sf, pt) ->
-    @sf *= sf
-    @moveable-layers |> map (l) -> l.scale sf, pt
-    @force-update!
-    return false
+    unless @locked
+      @sf *= sf
+      @moveable-layers |> map (l) -> l.scale sf, pt
+      @force-update!
+      return false
 
   /** pointer-down : Boolean
    *  pt : paper.Point
@@ -230,14 +238,15 @@ module.exports = class Window extends CursorResponder
    * Scroll the entire view by the given vector
    */
   pan-by: (delta) ->
-    dn = delta.negate!
-    if @active-node-view?
-      @active-node-view.owner.translate dn
-    else
-      @moveable-layers |> map (.translate dn)
+    unless @locked
+      dn = delta.negate!
+      if @active-node-view?
+        @active-node-view.owner.translate dn
+      else
+        @moveable-layers |> map (.translate dn)
 
-    @force-update!
-    return false
+      @force-update!
+      return false
 
   /** pointers-changed : Boolean
    *  pt-infos : [PointInfo]
