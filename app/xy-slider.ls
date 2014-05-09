@@ -27,7 +27,7 @@ module.exports = class XYSlider
     @xnode.active-view.set-node-style VS.x-slider
     @ynode.active-view.set-node-style VS.y-slider
 
-    @g = new paper.Group [@xnode.view!, @ynode.view!]
+    @group = new paper.Group [@xnode.view!, @ynode.view!]
 
     @xlabel = new paper.PointText do
       content: "X"
@@ -47,13 +47,13 @@ module.exports = class XYSlider
   /* view () : Group
    * return a group representing the nodes
    */
-  view: -> @g
+  view: -> @group
 
   /* add-to-window (window) : void
    * add the node to the window
    */
   add-to-window: (win, cb) !->
-    win.insert-children [@xnode.view!, @ynode.view!]
+    win.insert-children [@group]
     @input-view = win.request-input-view-for-type "XY-Slider"
     @input-view?set-owner @
     cb @input-view?

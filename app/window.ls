@@ -50,7 +50,6 @@ module.exports = class Window extends CursorResponder
    *  Deselect any selected nodes/wires
    */
   deselect: !->
-    console.log \hi
     @active-node-view?deselect!
     @active-node-view = undefined
     @active-wire-view?deselect!
@@ -146,7 +145,8 @@ module.exports = class Window extends CursorResponder
       @_find-item pt ?.item
         |> @_find-significant-parent
 
-    @deselect!
+    @active-node-view?deselect!
+    @active-wire-view?deselect!
 
     @active-node-view =
       if selected instanceof NodeView then selected else undefined

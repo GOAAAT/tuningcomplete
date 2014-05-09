@@ -1,4 +1,5 @@
 MP3Node = require \mp3_node
+VS = require \view_style
 
 module.exports = class AudioPauseNode extends MP3Node
   @desc = "Play an MP3 and start/pause it"
@@ -14,6 +15,14 @@ module.exports = class AudioPauseNode extends MP3Node
     super pos, @actx
     @start-time = 0
     @start-off  = 0
+    console.log \PAUSESTYLE VS.audio-pause
+    @active-view.set-node-style VS.audio-pause
+    l = new paper.PointText do
+      content: "||"
+      font-family: \Helvetica
+      font-weight: \bold
+      font-size: \40pt
+    @active-view.set-label l
 
   /** (override) receive-for-ref : void
    *  ref : Int

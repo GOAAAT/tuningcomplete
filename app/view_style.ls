@@ -44,11 +44,18 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.white
 
-export nand-node =
+
+export nand-node = standard with
   fill-color: Colour.burgundy
 
 export add-node = standard with
   fill-color: Colour.chocolate
+
+export audio-pause = standard with
+  fill-color: Colour.velvet-maroon
+
+export audio-reset = standard with
+  fill-color: Colour.rosy-brown
 
 export constant = standard with
   fill-color: Colour.welsh-grey
