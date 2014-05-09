@@ -214,6 +214,7 @@ module.exports = class NodeView
       font-weight: \bold,
       font-size: \20pt
       leading: 40px
+    @label.fill-color = VS.black-label
     @node-group.add-child @label
 
     # Mark node as not selected
