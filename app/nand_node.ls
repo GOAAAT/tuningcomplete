@@ -23,7 +23,7 @@ module.exports = class NandNode extends NumericalNode
     if (@val1 != 0 && @val2 != 0)
       @value = 0
     else value = 1
-    send!
+    @send!
 
   register-output: (wire) !->
     super wire

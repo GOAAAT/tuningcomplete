@@ -23,6 +23,7 @@ module.exports = class AddNode extends NumericalNode
     @value = @val1 + @val2
     if @value < 0 then @value = 0
     else if @value > 1 then @value = 1
+    @send!
 
   register-output: (wire) !->
     super wire
