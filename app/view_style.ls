@@ -160,6 +160,9 @@ export toggle = standard with
 
 export toggle-down = standard with
   fill-color: Colour.oz-green
+  
+export toggle-up = standard with
+  fill-color: Colour.fire-engine-red
 
 export toggle-up = standard with
   fill-color: Colour.fire-engine-red
