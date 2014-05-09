@@ -45,7 +45,7 @@ export standard =
   fill-color: Colour.white
 
 
-export nand-node =
+export nand-node = standard with
   fill-color: Colour.burgundy
 
 export audio-pause = standard with
