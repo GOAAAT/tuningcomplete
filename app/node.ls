@@ -11,10 +11,10 @@ module.exports = class Node
   */
   (@output-type, audio, numerical, pos) ->
     @inputs = []
-    for i from 1 to audio
+    for i from 0 til audio
       new AudioInput this, i |> @inputs.push
-    for i from 1 to numerical
-      new NumericalInput this, i+audio |> @inputs.push
+    for i from audio til numerical+audio
+      new NumericalInput this, i |> @inputs.push
 
     @send-list = []
 
