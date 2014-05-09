@@ -9,13 +9,13 @@ PointInfo = require \point_info
 module.exports = class PerformLayout extends CursorResponder
   const XYSLIDERS = 1
   const SLIDERS   = 5
-  const TOGGLES   = [12 12]
+  const TOGGLES   = [12 12 12]
 
   const TOGGLE_PAD = 1 / 8
 
   const SLIDER_DIM = [0.1   0.6]
   const XY_DIM     = [0.5   0.575]
-  const TOGGLE_DIM = [1/TOGGLES[0], 0.2]
+  const TOGGLE_DIM = [1/TOGGLES[0], 0.4 * 1 / TOGGLES.length]
 
   const OFFSET = 101
 
@@ -57,7 +57,7 @@ module.exports = class PerformLayout extends CursorResponder
 
     @toggles = []
 
-    for j from 0 til 2
+    for j from 0 til TOGGLES.length
       toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j)
       for i from 0 til TOGGLES[j]
         toggle =
