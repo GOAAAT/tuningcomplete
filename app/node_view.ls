@@ -208,3 +208,12 @@ module.exports = class NodeView
 
     # Mark node as not selected
     @deselect!
+
+
+  /* set-label (label) : void
+  * Puts a label ontop of the node and adds it
+  * to the group
+  */
+  set-label: (label) !->
+    label.position = @node-path.position
+    @node-group.add-child label

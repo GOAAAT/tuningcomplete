@@ -29,6 +29,21 @@ module.exports = class XYSlider
 
     @g = new paper.Group [@xnode.view!, @ynode.view!]
 
+    @xlabel = new paper.PointText do
+      content: "X"
+      font-family: \Helvetica
+      font-weight: \bold
+      font-size: \40pt
+
+    @ylabel = new paper.PointText do
+      content: "Y"
+      font-family: \Helvetica
+      font-weight: \bold
+      font-size: \40pt
+
+    @xnode.active-view.set-label @xlabel
+    @ynode.active-view.set-label @ylabel
+
   /* view () : Group
    * return a group representing the nodes
    */

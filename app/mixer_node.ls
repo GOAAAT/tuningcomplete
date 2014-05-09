@@ -1,6 +1,6 @@
 Audio = require \audio_node
 VS = require \view_style
-{sin, pi, pow} = prelude
+{sin, cos, pi, pow} = prelude
 
 module.exports = class MixerNode extends Audio
   @desc = "Alters the ratio of two audio sources"
@@ -26,8 +26,8 @@ module.exports = class MixerNode extends Audio
    *  value : Float
    */
   receive-for-ref: (ref, value) !->
-    @gain-left.gain.value = sin(value * pi/2)^2
-    @gain-right.gain.value = sin((1-value)*pi/2)^2
+    @gain-left.gain.value = cos(value*pi/2)^2
+    @gain-right.gain.value = sin(value*pi/2)^2
 
   /** (override protected) _connect : void
    *  input : Input

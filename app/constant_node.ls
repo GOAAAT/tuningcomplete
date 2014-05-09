@@ -19,12 +19,11 @@ module.exports = class Constant extends NumericalNode
   add-to-window: (win, cb) !->
     @set-value prompt "Enter a value"
     label = new paper.PointText do
-      content: @value,
+      content: @value
       font-family: \Helvetica
       font-weight: \bold
       font-size: \32pt
-    label.position = @view!children.0.position
-    @view!add-child label
+    @active-view.set-label label
     super win, cb
 
   /* set-value (val) : void
@@ -34,6 +33,9 @@ module.exports = class Constant extends NumericalNode
     @value = min 1, (max @value, 0)
     @send!
 
+  /* OW/ register-output (wire) : void
+  *  Adds the power to send on the value
+  */
   register-output: (wire) !->
     super wire
     @send!
