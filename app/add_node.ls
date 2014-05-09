@@ -9,6 +9,7 @@ module.exports = class AddNode extends NumericalNode
     super 0 2 pos
     @active-view.set-node-style VS.add-node
     @active-view.set-label "ADD", \40pt
+    @active-view.label.fill-color = VS.white-label
 
     @val1 = 0
     @val2 = 0

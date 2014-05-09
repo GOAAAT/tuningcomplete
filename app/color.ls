@@ -50,6 +50,7 @@ export velvet-maroon  = new paper.Color \#7E354D
 export rosy-brown     = new paper.Color \#B38481
 export midnight-blue  = new paper.Color \#151B54
 export olive          = new paper.Color \#808000
+export cinnamon-orange = new paper.Color \#C58917
 
 export blossom-pink   = new paper.Color \#F9B7FF
 export scarlet        = new paper.Color \#FF2400

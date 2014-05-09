@@ -15,7 +15,7 @@ module.exports = class AudioResetNode extends MP3Node
     super pos, actx
     @started = false
     @active-view.set-node-style VS.audio-reset
-    @active-view.set-label "R", \40pt
+    @active-view.set-label "↺", \40pt
 
   /** (override) receive-for-ref : void
    *  ref : Int

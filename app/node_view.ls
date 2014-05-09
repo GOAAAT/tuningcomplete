@@ -233,4 +233,3 @@ module.exports = class NodeView
     else
       @label.scale ( @node-path.bounds.width - 40 ) / @label.bounds.width
     @label.position = @node-path.position
-    @label.selected = true

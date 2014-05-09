@@ -17,7 +17,7 @@ module.exports = class AudioPauseNode extends MP3Node
     @start-time = 0
     @start-off  = 0
     @active-view.set-node-style VS.audio-pause
-    @active-view.set-label "ll", \40pt
+    @active-view.set-label "PAUSE", \40pt
 
   /** (override) receive-for-ref : void
    *  ref : Int

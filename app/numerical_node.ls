@@ -16,7 +16,7 @@ module.exports = class Numerical extends Node
     super \Numerical audioin, numin, pos
 
     @value = 0
-    @active-view.set-node-style VS.maths
+    @active-view.set-node-style VS.dev
     @active-view.set-label "№", \40pt
 
   /** send : void
