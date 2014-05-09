@@ -63,7 +63,7 @@ export destination = standard with
   fill-color: Colour.black
 
 export gain = standard with
-  fill-color: Colour.elsa-blue
+  fill-color: Colour.cyan
   
 export inverter = standard with
   fill-color: Colour.midnight-blue
