@@ -44,6 +44,9 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.white
 
+export nand-node =
+  fill-color: Colour.burgundy
+
 export constant = standard with
   fill-color: Colour.welsh-grey
 
@@ -70,17 +73,17 @@ export slider = standard with
 
 export slider-path = standard with
   fill-color: Colour.love-red
-  
+
 export slider-track = standard with
   stroke-width: 10,
   fill-color: Colour.black
-  
+
 export toggle = standard with
   fill-color: Colour.pink-cupcake
 
 export toggle-down = standard with
   fill-color: Colour.oz-green
-  
+
 export toggle-up = standard with
   fill-color: Colour.fire-engine-red
 
@@ -100,7 +103,7 @@ export xy-slider-line-idle = standard
 
 export xy-slider-line-active = standard with
   stroke-color: Colour.alien-green
-  
+
 export selected = standard with
   stroke-color: Colour.elsa-blue
 
@@ -152,7 +155,7 @@ export wire-idle = wire with
 
 export wire-selected = wire with
   stroke-color: Colour.red
-  
+
 export wire-tuning-complete = wire with
   stroke-color: Colour.love-red
 
@@ -225,7 +228,7 @@ export view-styles-for-type = (type) ->
   | \Numerical => [numerical-free, numerical-busy]
   | \Standard  => [standard-busy, standard-free]
   | otherwise  => [other-type, other-type]
-  
+
 export slider-colours = [Colour.scarlet, Colour.construction-cone-orange, Colour.rubber-ducky-yellow, Colour.alien-green, Colour.blue-ribbon, Colour.indigo, Colour.lovely-purple, Colour.blossom-pink]
 
 export label =

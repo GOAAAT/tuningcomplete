@@ -23,6 +23,8 @@ nodes =
     node: require \audio_pause_node
   * name: \constant
     node: require \constant
+  * name: \nand
+    node: require \nand_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 

@@ -27,12 +27,13 @@ export welsh-grey = \#6D7B8D
 export alpha-black = new paper.Color 0, 0, 0, 0.5
 export alpha-white = new paper.Color 1, 1, 1, 0.5
 
-/** "Dulux" colours for node decor 
- * 
+/** "Dulux" colours for node decor
+ *
  * (Colour names and codes taken from www.computerhope.com/htmcolor.htm)
- * 
+ *
 **/
 
+export burgundy       = \#8C001A
 export bee-yellow     = \#E9AB17
 export purple-monster = \#461B7E
 export love-red       = \#E41B17
