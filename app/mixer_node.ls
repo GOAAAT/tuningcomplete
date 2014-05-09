@@ -1,6 +1,6 @@
 Audio = require \audio_node
 VS = require \view_style
-{sin, pi, pow} = prelude
+{sin, cos, pi, pow} = prelude
 
 module.exports = class MixerNode extends Audio
   @desc = "Alters the ratio of two audio sources"
