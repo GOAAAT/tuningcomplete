@@ -9,6 +9,8 @@ nodes =
     node: require \oscillator_node
   * name: \gain
     node: require \gain_node
+  * name: \delaygain
+    node: require \delay_gain_node
   * name: \mixer
     node: require \mixer_node
   * name: \slider
