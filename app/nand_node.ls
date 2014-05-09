@@ -10,6 +10,7 @@ module.exports = class NandNode extends NumericalNode
     @active-view.set-node-style VS.nand-node
     @val1 = 0
     @val2 = 0
+    @value = 1
 
   /** (override) receive-for-ref : void
    *  ref : Int
@@ -19,7 +20,7 @@ module.exports = class NandNode extends NumericalNode
    */
   receive-for-ref: (ref, value) !->
     if ref == 0 then @val1 = value
-    else @val2 = value
+    else if ref == 1 then @val2 = value
     if (@val1 != 0 && @val2 != 0)
       @value = 0
     else value = 1
