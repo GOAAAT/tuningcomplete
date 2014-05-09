@@ -33,6 +33,10 @@ nodes =
     node: require \inverter
   * name: \delay
     node: require \delay_node
+  * name: \multiply
+    node: require \mult_node
+  * name: \subtract
+    node: require \sub_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 

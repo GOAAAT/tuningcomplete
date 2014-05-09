@@ -139,6 +139,9 @@ export constant = standard with
 export inverter = standard with
   fill-color: Colour.midnight-blue
 
+export mult-node = standard with
+  fill-color: Colour.midnight-blue
+
 export slider = standard with
   fill-color: Colour.love-red
 
@@ -148,6 +151,9 @@ export slider-path = standard with
 export slider-track = standard with
   stroke-width: 10,
   fill-color: Colour.black
+
+export sub-node = standard with
+  fill-color: Colour.midnight-blue
 
 export toggle = standard with
   fill-color: Colour.pink-cupcake
