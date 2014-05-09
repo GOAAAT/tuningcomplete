@@ -48,6 +48,7 @@ export red-base       = new paper.Color 1, 0, 0
 export butterfly-blue = \#38ACEC
 export velvet-maroon  = \#7E354D
 export rosy-brown     = \#B38481
+export midnight-blue  = \#151B54
 
 export blossom-pink   = \#F9B7FF
 export scarlet        = \#FF2400

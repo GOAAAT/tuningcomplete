@@ -27,6 +27,8 @@ nodes =
     node: require \nand_node
   * name: \add
     node: require \add_node
+  * name: \inverter
+    node: require \inverter
 
 nodes |> each ({name, node}) !-> data.insert name, node
 

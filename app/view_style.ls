@@ -44,10 +44,6 @@ export standard =
   stroke-width: 5,
   fill-color: Colour.white
 
-
-export nand-node = standard with
-  fill-color: Colour.burgundy
-
 export add-node = standard with
   fill-color: Colour.chocolate
 
@@ -68,6 +64,9 @@ export destination = standard with
 
 export gain = standard with
   fill-color: Colour.elsa-blue
+  
+export inverter = standard with
+  fill-color: Colour.midnight-blue
 
 export maths = standard with
   fill-color: Colour.blue
@@ -75,8 +74,14 @@ export maths = standard with
 export mixer = standard with
   fill-color: Colour.bee-yellow
 
+export nand-node = standard with
+  fill-color: Colour.burgundy
+
 export oscillator = standard with
   fill-color: Colour.purpleMonster
+
+export selected = standard with
+  stroke-color: Colour.elsa-blue
 
 export slider = standard with
   fill-color: Colour.love-red
@@ -113,9 +118,6 @@ export xy-slider-line-idle = standard
 
 export xy-slider-line-active = standard with
   stroke-color: Colour.alien-green
-
-export selected = standard with
-  stroke-color: Colour.elsa-blue
 
 /** Numerical ports **/
 
