@@ -40,7 +40,7 @@ module.exports = class Wire
   * from view. True unless failure
   */
   disconnect: ->
-     @input?remove-input!
+     @input?remove-input this
      @origin?rem-output this
      @active-view?remove!
      true
