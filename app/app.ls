@@ -178,18 +178,26 @@ module.exports = class App
 
     theremin: ->
       Wire = require \wire
-      Osc = require \oscillator_node
-      XY = require \xy-slider
+      Osc  = require \oscillator_node
+      XY   = require \xy-slider
       Gain = require \gain_node
+
       (o1 = new Osc [990px 550px], @actx).add-to-window @window, (success) !->
       (xy = new XY [700px 400px], @actx).add-to-window @window, (success) !->
+      (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
+
       xy.xnode.active-view.node-group.position = [990px 250px]
       xy.ynode.active-view.node-group.position = [760px 550px]
-      (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
-      (new Wire g).connect @destination
-      (new Wire xy.ynode).connect o1
-      (new Wire xy.xnode).connect g
-      (new Wire o1).connect g
+
+      g-d   = new Wire g;        g-d.connect @destination
+      xyy-o = new Wire xy.ynode; xyy-o.connect o1
+      xyx-g = new Wire xy.xnode; xyx-g.connect g
+      o1-g  = new Wire o1;       o1-g.connect g
+
+      [g-d, xyy-o, xyx-g, o1-g]
+        |> map (.view!)
+        |> @window.insert-wire
+
       @window.force-update!
 
     piano: ->
