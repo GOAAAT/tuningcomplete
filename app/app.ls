@@ -193,62 +193,58 @@ module.exports = class App
       @window.force-update!
 
     piano: ->
-      Wire = require \wire
-      Constant = require \constant_node
-      Osc = require \oscillator_node
-      Audio = require \audio_reset_node
-      DelayGain = require \delay_gain_node
+      Wire   = require \wire
+      Osc    = require \oscillator_node
+      Gain   = require \gain_node
       Toggle = require \toggle
-      Inverter = require \inverter
-      AudioReset = require \audio_reset_node
-      Mixer = require \mixer_node
-      load-sound = require \load_sound
+      Mixer  = require \mixer_node
+      notes  = [0, 2, 4, 5, 7]
 
-      notes = ['a','b','c','d','e','f','g']
       top = -150
-      y = 210
+      y   = 210
 
-      dgs = []
+      gs  = []
       mxs = []
-      (c = new Constant [-350px top + 3*y], @actx).set-value 1
 
-      for i til 7
-        a = new AudioReset [200px top + i*y], @actx
-        file = "sounds/"+notes[i]+"-note.wav"
-        load-sound "sounds/goaaat.mp3" (buff) -> a.audio-node.buffer = buff
+      # Leaf layer
+      for note, i in notes
+        osc = new Osc    [200px  top + i*y],       @actx
+        g   = new Gain   [800px  top + i*y],       @actx
+        tog = new Toggle [350px  top + i*y - 70],  @actx
+        gs[i] = g
 
-        dg = new DelayGain [800px top + i*y], @actx
-        dgs[i] = dg
-        t = new Toggle [350px top - 70 + i*y], @actx
-        t.add-to-window @window, (success) !->
-          t.input-view._set-sticky false
-        i = new Inverter [650px top - 100 + i*y], @actx
+        osc.receive-for-ref 0, note/12
+        tog.add-to-window @window, !->
+          tog.input-view._set-sticky false
 
-        (new Wire c).connect a
-        (new Wire a).connect dg
-        (new Wire t).connect dg
-        (new Wire t).connect i
-        (new Wire i).connect dg
+        osc-g = new Wire osc; osc-g.connect g
+        tog-g = new Wire tog; tog-g.connect g
 
-      for i til 3
-        m = new Mixer [1100px top + y/2 + 2*i*y], @actx
-        mxs[i] = m
-        (new Wire dgs[i*2+1]).connect m
-        (new Wire dgs[i*2]).connect m
-
-      mxs[3] = dgs[6]
+        [osc-g, tog-g]
+          |> map (.view!)
+          |> @window.insert-wire
 
       for i til 2
-        mxs[i+4] = new Mixer [1400px top + 1.5*y+ 4*i*y], @actx
-        (new Wire mxs[i*2+1]).connect mxs[i+4]
-        (new Wire mxs[i*2]).connect mxs[i+4]
+        mxs[i] = new Mixer [1100px top + (2*i + 0.5)*y], @actx
+        g1-m   = new Wire gs[i*2+1]; g1-m.connect mxs[i]
+        g2-m   = new Wire gs[i*2];   g2-m.connect mxs[i]
 
-      m = new Mixer [1700px top + 3.5*y], @actx
-      (new Wire mxs[5]).connect m
-      (new Wire mxs[4]).connect m
+        [g1-m, g2-m]
+          |> map (.view!)
+          |> @window.insert-wire
 
-      @destination.active-view.node-group.position = [2000px top + 3.5*y ]
-      (new Wire m).connect @destination
+      m  = new Mixer [1400px top + 1.5*y], @actx
+      mr = new Mixer [1700px top + 3.5*y], @actx
+
+      mx1-m = new Wire mxs.1; mx1-m.connect m
+      mx0-m = new Wire mxs.0; mx0-m.connect m
+      g4-mr = new Wire gs.4;  g4-mr.connect mr
+      m-mr  = new Wire m;     m-mr.connect mr
+      mr-d  = new Wire mr;    mr-d.connect @destination
+
+      [mx1-m, mx0-m, g4-mr, m-mr, mr-d]
+        |> map (.view!)
+        |> @window.insert-wire
 
       @window.force-update!
       @window.scale-by 0.5
