@@ -203,15 +203,10 @@ module.exports = class App
       top = -150
       y   = 210
 
-      gs  = []
-      mxs = []
-
-      # Leaf layer
       for note, i in notes
         osc = new Osc    [200px  top + i*y],       @actx
         g   = new Gain   [800px  top + i*y],       @actx
         tog = new Toggle [350px  top + i*y - 70],  @actx
-        gs[i] = g
 
         osc.receive-for-ref 0, note/12
         tog.add-to-window @window, !->
@@ -219,32 +214,11 @@ module.exports = class App
 
         osc-g = new Wire osc; osc-g.connect g
         tog-g = new Wire tog; tog-g.connect g
+        g-d   = new Wire g;   g-d.connect @destination
 
-        [osc-g, tog-g]
+        [osc-g, tog-g, g-d]
           |> map (.view!)
           |> @window.insert-wire
-
-      for i til 2
-        mxs[i] = new Mixer [1100px top + (2*i + 0.5)*y], @actx
-        g1-m   = new Wire gs[i*2+1]; g1-m.connect mxs[i]
-        g2-m   = new Wire gs[i*2];   g2-m.connect mxs[i]
-
-        [g1-m, g2-m]
-          |> map (.view!)
-          |> @window.insert-wire
-
-      m  = new Mixer [1400px top + 1.5*y], @actx
-      mr = new Mixer [1700px top + 3.5*y], @actx
-
-      mx1-m = new Wire mxs.1; mx1-m.connect m
-      mx0-m = new Wire mxs.0; mx0-m.connect m
-      g4-mr = new Wire gs.4;  g4-mr.connect mr
-      m-mr  = new Wire m;     m-mr.connect mr
-      mr-d  = new Wire mr;    mr-d.connect @destination
-
-      [mx1-m, mx0-m, g4-mr, m-mr, mr-d]
-        |> map (.view!)
-        |> @window.insert-wire
 
       @window.force-update!
       @window.scale-by 0.5
