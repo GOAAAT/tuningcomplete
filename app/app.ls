@@ -204,17 +204,40 @@ module.exports = class App
       Wire   = require \wire
       Osc    = require \oscillator_node
       Gain   = require \gain_node
+      Delay  = require \delay_node
       Toggle = require \toggle
+      XY     = require \xy-slider
       Mixer  = require \mixer_node
       notes  = [0, 2, 4, 5, 7]
 
-      top = -150
-      y   = 210
+      top  = -70
+      left = 0
+      y    = 210
+      x    = 150
+
+      xy    = new XY    [left + 3*y,   top + y]   @actx
+      delay = new Delay [left + 4.5*y, top + y]   @actx
+      mixer = new Mixer [left + 4.5*y, top + y*2] @actx
+      gain  = new Gain  [left + 3.5*y, top + y*2] @actx
+
+      xy.add-to-window @window, (_) !->
+
+      x-gn   = new Wire xy.xnode; x-gn.connect gain
+      y-dly  = new Wire xy.ynode; y-dly.connect delay
+      gn-mx  = new Wire gain;     gn-mx.connect mixer
+      dly-mx = new Wire delay;    dly-mx.connect mixer
+      mx-dly = new Wire mixer;    mx-dly.connect delay
+      mx-d   = new Wire mixer;    mx-d.connect @destination
+      gain.receive-for-ref 0 0
+
+      [x-gn, y-dly, gn-mx, dly-mx, mx-dly, mx-d]
+        |> map (.view!)
+        |> @window.insert-wire
 
       for note, i in notes
-        osc = new Osc    [200px  top + i*y],       @actx
-        g   = new Gain   [800px  top + i*y],       @actx
-        tog = new Toggle [350px  top + i*y - 70],  @actx
+        osc = new Osc    [left,       top + i*y]      @actx
+        g   = new Gain   [left + 2*x, top + i*y]      @actx
+        tog = new Toggle [left +   x, top + i*y - 70] @actx
 
         osc.receive-for-ref 0, note/12
         tog.add-to-window @window, !->
@@ -222,9 +245,9 @@ module.exports = class App
 
         osc-g = new Wire osc; osc-g.connect g
         tog-g = new Wire tog; tog-g.connect g
-        g-d   = new Wire g;   g-d.connect @destination
+        g-gn  = new Wire g;   g-gn.connect  gain
 
-        [osc-g, tog-g, g-d]
+        [osc-g, tog-g, g-gn]
           |> map (.view!)
           |> @window.insert-wire
 
