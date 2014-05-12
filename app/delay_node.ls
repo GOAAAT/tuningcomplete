@@ -1,7 +1,7 @@
-Audio = require \audio_node
+FanIn = require \fanin_node
 VS = require \view_style
 
-module.exports = class DelayNode extends Audio
+module.exports = class DelayNode extends FanIn
   @desc = "Alters the delay of a given node from [0..5]s"
   /** DelayNode
    *  pos : paper.Point
@@ -11,13 +11,13 @@ module.exports = class DelayNode extends Audio
    * of its numerical input.
    */
   (pos, actx) ->
-    super 1 1 pos
+    @max-delay = 5
+    @delay-node = actx.create-delay @max-delay
+    super 1 pos, @delay-node
+
     @active-view.set-node-style VS.delay
     @active-view.set-label "D", \40pt
 
-    @max-delay = 5
-    @delay-node = actx.create-delay @max-delay
-    @inputs.0.audio-node = @delay-node
 
   /** (override) receive-for-ref : void
    *  ref : Int
