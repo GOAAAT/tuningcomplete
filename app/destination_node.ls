@@ -1,7 +1,7 @@
-Audio = require \audio_node
+FanIn = require \fanin_node
 VS    = require \view_style
 
-module.exports = class DestinationNode extends Audio
+module.exports = class DestinationNode extends FanIn
   /** DestinationNode
    *  pos : paper.Point
    *  actx : AudioContext
@@ -11,8 +11,8 @@ module.exports = class DestinationNode extends Audio
    * will be positioned at `pos`.
    */
   (pos, @actx) ->
-    super 1 0 pos
-    @inputs.0.audio-node = @actx.destination
+    super 0 pos, @actx.destination
+
     @active-view.set-node-style VS.destination
     @active-view.set-label "►", \40pt
     @active-view.label.fill-color = VS.white-label

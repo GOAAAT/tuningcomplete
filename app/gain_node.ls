@@ -1,7 +1,7 @@
-Audio = require \audio_node
+FanIn = require \fanin_node
 VS = require \view_style
 
-module.exports = class GainNode extends Audio
+module.exports = class GainNode extends FanIn
   @desc = "Alters the gain of a given node"
   /** GainNode
    *  pos : paper.Point
@@ -11,12 +11,11 @@ module.exports = class GainNode extends Audio
    * of its numerical input.
    */
   (pos, actx) ->
-    super 1 1 pos
+    @gain-node = actx.create-gain!
+    super 1 pos, @gain-node
+
     @active-view.set-node-style VS.gain
     @active-view.set-label "G", \40pt
-
-    @gain-node = actx.create-gain!
-    @inputs.0.audio-node = @gain-node
 
   /** (override) receive-for-ref : void
    *  ref : Int

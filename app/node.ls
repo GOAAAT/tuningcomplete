@@ -73,14 +73,8 @@ module.exports = class Node
    */
   translate: (pt) !->
     @view!translate pt
-
-    @inputs |> each (input) ->
-      input.wire?active-view.wire-end!?add pt
-        |> input.wire?active-view.set-end
-
-    @send-list |> each (wire) ->
-      wire?active-view.wire-start!?add pt
-        |> wire?active-view.set-start
+    @_move-input-wires pt
+    @_move-output-wires pt
 
   /** register-output : void
    *  wire : Wire
@@ -99,3 +93,23 @@ module.exports = class Node
   rem-output: (node) !->
     @send-list = filter (!= node), @send-list
     @active-view.free-out! if empty @send-list
+
+  /** _move-input-wires : void
+   *  pt : paper.Point
+   *
+   * Move the wires connected to the inputs.
+   */
+  _move-input-wires: (pt) ->
+    @inputs |> each (input) ->
+      input.wire?active-view.wire-end!?add pt
+        |> input.wire?active-view.set-end
+
+  /** _move-output-wires : void
+   *  pt : paper.Point
+   *
+   * Move the wires connected to the outputs.
+   */
+  _move-output-wires: (pt) ->
+    @send-list |> each (wire) ->
+      wire?active-view.wire-start!?add pt
+        |> wire?active-view.set-start

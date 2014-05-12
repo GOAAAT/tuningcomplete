@@ -99,7 +99,7 @@ module.exports = class App
 
       @window.insert-ui [ @node-list.view! ]
       @window?force-update!
-      
+
 
     /** Modes */
     const MODE_DESIGN  = 0
@@ -175,22 +175,81 @@ module.exports = class App
           new-node.view!visible = true
         else
           new-node.view!remove!
-          
+
     theremin: ->
       Wire = require \wire
-      Osc = require \oscillator_node
-      XY = require \xy-slider
+      Osc  = require \oscillator_node
+      XY   = require \xy-slider
       Gain = require \gain_node
+
       (o1 = new Osc [990px 550px], @actx).add-to-window @window, (success) !->
       (xy = new XY [700px 400px], @actx).add-to-window @window, (success) !->
-      xy.xnode.active-view.node-group.position = [990px 250px]
-      xy.ynode.active-view.node-group.position = [760px 550px] 
       (g = new Gain [1270px 409px], @actx).add-to-window @window, (success) !->
-      (new Wire g).connect @destination
-      (new Wire xy.ynode).connect o1
-      (new Wire xy.xnode).connect g
-      (new Wire o1).connect g
+
+      xy.xnode.active-view.node-group.position = [990px 250px]
+      xy.ynode.active-view.node-group.position = [760px 550px]
+
+      g-d   = new Wire g;        g-d.connect @destination
+      xyy-o = new Wire xy.ynode; xyy-o.connect o1
+      xyx-g = new Wire xy.xnode; xyx-g.connect g
+      o1-g  = new Wire o1;       o1-g.connect g
+
+      [g-d, xyy-o, xyx-g, o1-g]
+        |> map (.view!)
+        |> @window.insert-wire
+
       @window.force-update!
 
     piano: ->
-      
+      Wire   = require \wire
+      Osc    = require \oscillator_node
+      Gain   = require \gain_node
+      Delay  = require \delay_node
+      Toggle = require \toggle
+      XY     = require \xy-slider
+      Mixer  = require \mixer_node
+      notes  = [0, 2, 4, 5, 7]
+
+      top  = -70
+      left = 0
+      y    = 210
+      x    = 150
+
+      xy    = new XY    [left + 3*y,   top + y]   @actx
+      delay = new Delay [left + 4.5*y, top + y]   @actx
+      mixer = new Mixer [left + 4.5*y, top + y*2] @actx
+      gain  = new Gain  [left + 3.5*y, top + y*2] @actx
+
+      xy.add-to-window @window, (_) !->
+
+      x-gn   = new Wire xy.xnode; x-gn.connect gain
+      y-dly  = new Wire xy.ynode; y-dly.connect delay
+      gn-mx  = new Wire gain;     gn-mx.connect mixer
+      dly-mx = new Wire delay;    dly-mx.connect mixer
+      mx-dly = new Wire mixer;    mx-dly.connect delay
+      mx-d   = new Wire mixer;    mx-d.connect @destination
+      gain.receive-for-ref 0 0
+
+      [x-gn, y-dly, gn-mx, dly-mx, mx-dly, mx-d]
+        |> map (.view!)
+        |> @window.insert-wire
+
+      for note, i in notes
+        osc = new Osc    [left,       top + i*y]      @actx
+        g   = new Gain   [left + 2*x, top + i*y]      @actx
+        tog = new Toggle [left +   x, top + i*y - 70] @actx
+
+        osc.receive-for-ref 0, note/12
+        tog.add-to-window @window, !->
+          tog.input-view._set-sticky false
+
+        osc-g = new Wire osc; osc-g.connect g
+        tog-g = new Wire tog; tog-g.connect g
+        g-gn  = new Wire g;   g-gn.connect  gain
+
+        [osc-g, tog-g, g-gn]
+          |> map (.view!)
+          |> @window.insert-wire
+
+      @window.force-update!
+      @window.scale-by 0.5

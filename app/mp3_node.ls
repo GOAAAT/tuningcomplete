@@ -27,13 +27,7 @@ module.exports = class MP3Node extends Audio
       fr = new FileReader!
 
       # Wait for the reader to load the file
-      fr.onload = (e) ->
-        # Wait for the context to decode the file data
-        node.actx.decode-audio-data @result,
-          (buf) ->
-            node.audio-node.buffer = buf
-            cb true
-          (e) -> cb false
+      fr.onload = (e) -> node._decode-buffer @result, cb
 
       fr.read-as-array-buffer @files.0
       $uploader.off \change
@@ -62,3 +56,16 @@ module.exports = class MP3Node extends Audio
     @audio-node.loop   = true
     @send-list |> map (.input) |> map @~_connect
 
+  /** (private) _decode-buffer : void
+   *  arr-buff : ArrayBuffer
+   *  cb       : Boolean -> ()
+   *
+   * Decode an ArrayBuffer and set it as the contents of the audio-node
+   * buffer.
+   */
+  _decode-buffer: (arr-buff, cb) ->
+    @actx.decode-audio-data arr-buff,
+      (buf) ~>
+        @audio-node.buffer = buf
+        cb? true
+      (e) ~> cb? false

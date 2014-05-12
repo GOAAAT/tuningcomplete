@@ -1,7 +1,7 @@
-Audio = require \audio_node
+FanIn = require \fanin_node
 VS = require \view_style
 
-module.exports = class DelayGainNode extends Audio
+module.exports = class DelayGainNode extends FanIn
   @desc = "Alters the gain over time with delay"
 
   /** Numerical Input References */
@@ -16,12 +16,11 @@ module.exports = class DelayGainNode extends Audio
    * Both the time and the gain value are modifiable.
    */
   (pos, @actx) ->
-    super 1 2 pos
+    @gain-node = actx.create-gain-node!
+    super 2 pos, @gain-node
+
     @active-view.set-node-style VS.delay-gain
     @active-view.set-label "DG", \32pt
-
-    @gain-node = actx.create-gain-node!
-    @inputs.0.audio-node = @gain-node
 
     @receive-for-ref GAIN,  0.5
     @receive-for-ref DELAY, 1
