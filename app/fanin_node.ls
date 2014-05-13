@@ -26,6 +26,10 @@ module.exports = class FanInNode extends Audio
    *  pt : paper.Point
    */
   _move-input-wires: (pt) ->
+    @inputs[1 to -1] |> each (input) ->
+      input.wire?active-view.wire-end!?add pt
+        |> input.wire?active-view.set-end
+
     @input.sources |> each (source) ->
       source?active-view.wire-end!?add pt
         |> source?active-view.set-end
