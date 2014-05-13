@@ -1,5 +1,6 @@
 NumericalNode = require \numerical_node
 VS = require \view_style
+{min, max} = prelude
 
 module.exports = class MultNode extends NumericalNode
   @desc = "Performs Multiplication logic on two inputs"
