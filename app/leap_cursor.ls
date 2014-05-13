@@ -27,7 +27,11 @@ const PAN-OFFSET = 20
 const SCALE = 4
 
 #Minimum zooming amount
+
 const ZOOM-TOL = 0.05
+
+#Pan initialisation region restriction
+const PAN-RESTRICTION = 200
 
 module.exports = class LeapCursor extends Cursor
   ->
@@ -185,9 +189,7 @@ module.exports = class LeapCursor extends Cursor
     hand = frame.hands
         |> filter (.stabilized-palm-position[2] < ACTIVE-REGION + PAN-OFFSET)
         |> filter (.fingers.map ((finger) -> finger.time-visible > 0.5) .length == 0)
-        |> filter (hand) ->
-          x = hand.stabilized-palm-position[0]
-          -200 < x < 200
+        |> filter (hand) -> -PAN-RESTRICTION < hand.stabilized-palm-position[0] < PAN-RESTRICTION
         |> head
     if hand?
       @_waiting = false
