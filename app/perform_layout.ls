@@ -13,11 +13,12 @@ module.exports = class PerformLayout extends CursorResponder
 
   const TOGGLE_PAD = 1 / 8
 
-  const SLIDER_DIM = [0.1   0.6]
-  const XY_DIM     = [0.5   0.575]
-  const TOGGLE_DIM = [1/TOGGLES[0], 0.3 * 1 / TOGGLES.length]
+  const SLIDER_DIM = [0.1  0.6]
+  const XY_DIM     = [0.48 0.6]
+  const TOGGLE_DIM = [1/TOGGLES[0], 0.3 / TOGGLES.length]
+  const T_OFFSET   = 0.1
 
-  const OFFSET = 101
+  const OFFSET = 120
 
   /** PerformLayout
    *  ctx : paper.PaperScope
@@ -36,12 +37,14 @@ module.exports = class PerformLayout extends CursorResponder
 
     ctx.view.on \resize -> bg.bounds = ctx.view.bounds
 
-    slider-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply SLIDER_DIM
+    screen-dim = ctx.view.bounds.size.subtract [0 OFFSET]
+    slider-dim = screen-dim.multiply SLIDER_DIM
     slider-y   = (slider-dim.height / 2) + OFFSET
 
-    toggle-dim = ctx.view.bounds.size.subtract [0, OFFSET] .multiply TOGGLE_DIM
+    toggle-dim = screen-dim.multiply TOGGLE_DIM
+    t-offset   = T_OFFSET * screen-dim.height
 
-    xy-slider-dim = ctx.view.bounds.size.subtract [OFFSET/2, 0] .multiply XY_DIM
+    xy-slider-dim = screen-dim.multiply XY_DIM
 
     @sliders =
       for i from 0 til SLIDERS
@@ -58,7 +61,7 @@ module.exports = class PerformLayout extends CursorResponder
     @toggles = []
 
     for j from 0 til TOGGLES.length
-      toggle-y = slider-dim.height + OFFSET + toggle-dim.height * (j)
+      toggle-y = t-offset + slider-dim.height + OFFSET + toggle-dim.height*j
       for i from 0 til TOGGLES[j]
         toggle =
           new ToggleView do
@@ -72,7 +75,7 @@ module.exports = class PerformLayout extends CursorResponder
 
     @xyslider =
       new XYSliderView do
-        [slider-dim.width*SLIDERS, OFFSET/4]
+        [slider-dim.width*SLIDERS, OFFSET]
         xy-slider-dim
         0
     @responders = []
