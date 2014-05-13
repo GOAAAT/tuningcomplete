@@ -65,6 +65,8 @@ module.exports = class TextBox
     [ @clip-mask, @bg ] |> each (.scale w/old-w, 1, tc)
     @_fix-text-align!
 
+  const BACKSPACE = 8 # Backspace character code
+
   /** set-first-responder : void
    *
    * Set this text field as the one to respond to keyboard events.
@@ -72,7 +74,7 @@ module.exports = class TextBox
   set-first-responder: !->
     $ document .bind \keydown (e) !~>
       content = @text.content
-      if e.key-code == 8 # Backspace
+      if e.key-code == BACKSPACE
         e.prevent-default!
         content.slice 0 -1
           |> @set-text
