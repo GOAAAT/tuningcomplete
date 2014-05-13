@@ -17,7 +17,7 @@ module.exports = class NandNode extends NumericalNode
    *  ref : Int
    *  value : Float
    *
-   * Receive the pitch value from the input.
+   *  Receive the numerical value from the input.
    */
   receive-for-ref: (ref, value) !->
     if ref == 0 then @val1 = value
