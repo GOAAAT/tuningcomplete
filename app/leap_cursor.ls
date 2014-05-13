@@ -100,7 +100,7 @@ module.exports = class LeapCursor extends Cursor
   _point-info: (v,type) ->
     pt = @_point v
     new PointInfo pt, type, @_z-norm v[2]
-  
+
   /*
   *  Normalises the z component to: activeregion < 0 and < panregion < 1
   */
@@ -185,6 +185,9 @@ module.exports = class LeapCursor extends Cursor
     hand = frame.hands
         |> filter (.stabilized-palm-position[2] < ACTIVE-REGION + PAN-OFFSET)
         |> filter (.fingers.map ((finger) -> finger.time-visible > 0.5) .length == 0)
+        |> filter (hand) ->
+          x = hand.stabilized-palm-position[0]
+          -200 < x < 200
         |> head
     if hand?
       @_waiting = false
