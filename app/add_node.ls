@@ -1,5 +1,6 @@
 NumericalNode = require \numerical_node
 VS = require \view_style
+{min, max} = prelude
 
 module.exports = class AddNode extends NumericalNode
   @desc = "Performs Add logic on two inputs"
