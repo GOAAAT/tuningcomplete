@@ -1,4 +1,6 @@
 module.exports = class CursorResponder
+  /* Interface for a Cursor responder, that receives method calls from a LeapCursor instance.
+   */
   select-at: (pt) -> true
   scale-by: (sf, pt) -> true
 

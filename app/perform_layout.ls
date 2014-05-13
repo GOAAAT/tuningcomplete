@@ -176,7 +176,7 @@ module.exports = class PerformLayout extends CursorResponder
     new-responders = pt-infos
       |> filter (pt-info) -> pt-info.type == \finger || pt-info.type == \drag
       |> map (pt-info) ~>
-        if pt-info.z < 6
+        if pt-info.z < 1
           responder =
             @_find-item pt-info.pt ?.item
               |> @_find-significant-parent

@@ -176,6 +176,11 @@ module.exports = class App
         else
           new-node.view!remove!
 
+    /*  Load up a pre-set theremin layout
+     *  Load by entering:
+     *  javascript:app.theremin()
+     *  into the address bar of the browser.
+     */
     theremin: ->
       Wire = require \wire
       Osc  = require \oscillator_node
@@ -200,6 +205,11 @@ module.exports = class App
 
       @window.force-update!
 
+    /*  Load up a pre-set piano layout
+     *  Load by entering:
+     *  javascript:app.piano()
+     *  into the address bar of the browser.
+     */
     piano: ->
       Wire   = require \wire
       Osc    = require \oscillator_node
