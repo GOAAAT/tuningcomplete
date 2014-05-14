@@ -35,6 +35,8 @@ nodes =
     node: require \mult_node
   * name: "subtract"
     node: require \sub_node
+  * name: "nand"
+    node: require \nand_node
 
 nodes |> each ({name, node}) !-> data.insert name, node
 
