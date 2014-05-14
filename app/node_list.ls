@@ -25,8 +25,6 @@ nodes =
     node: require \audio_pause_node
   * name: "constant"
     node: require \constant_node
-  * name: "nand"
-    node: require \nand_node
   * name: "add"
     node: require \add_node
   * name: "inverter"
