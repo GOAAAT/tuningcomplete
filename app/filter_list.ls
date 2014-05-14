@@ -267,11 +267,9 @@ class SimpleRow
   set-listener: (@_on-select) !->
 
   /*
-  *  Activate the row's select function
+  *  Prevent selection by the Leap behind the row.
   */
   trigger: !->
-    if @_on-select?
-      @_on-select @data
 
   /** build : void
    *  name : String
